@@ -1,0 +1,15 @@
+node {
+  stage('Clone the Git') {
+    git branch: 'main', credentialsId: '2559ce4a-61fa-4a9b-af93-23a90be8dd9b', url: 'http://120.108.204.152:10085/root/test2.git'
+  }
+  stage('SonarQube analysis') {
+    def scannerHome = tool 'sonarqube';
+    withSonarQubeEnv('sonarqube') {
+      sh "${scannerHome}/bin/sonar-scanner \
+      -D sonar.login=admin \
+      -D sonar.password=12345678 \
+      -D sonar.projectKey=sonartest \
+      -D sonar.host.url=http://120.108.204.152:9000/"
+    }
+  }
+}

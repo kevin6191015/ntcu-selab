@@ -1,0 +1,67 @@
+node {
+    stage('Clone the Git') {
+        String url = "http://120.108.204.152:10085/root/"+ env.JOB_BASE_NAME +".git"
+    git branch: 'main', credentialsId: '2559ce4a-61fa-4a9b-af93-23a90be8dd9b', url: url
+  }
+  stage('Prepare testfile'){
+    env.WORKSPACE = pwd()
+    def NAME =  env.JOB_BASE_NAME
+    echo "Project name is ${NAME}"
+    
+    if(fileExists("${env.WORKSPACE}/../testfile")){
+        echo "Directory ${env.WORKSPACE}/../testfile exists."
+    }else{
+        echo " Directory ${env.WORKSPACE}/../testfile doesn't exists. "
+        echo " Create testfile directory. "
+        def file = new File("${env.WORKSPACE}/../testfile")
+        file.mkdir()
+    }
+    
+    if(fileExists("${env.WORKSPACE}/../testfile/${NAME}")){
+        echo "Directory ${env.WORKSPACE}/../testfile/${NAME} exists."
+    }else{
+        echo " Directory ${env.WORKSPACE}/../testfile/${NAME} doesn't exists. "
+        def testfile = new File("${env.WORKSPACE}/../testfile/${NAME}")
+        testfile.mkdir()
+    }
+    
+    def AppTest = new File("${env.WORKSPACE}/../testfile/${NAME}/AppTest.java")
+    AppTest.createNewFile()
+    
+    
+    dir('../'){ 
+        sh "javac -cp json-20220320.jar testfile_generator.java"
+        sh "java -cp '.:json-20220320.jar' testfile_generator ${NAME}"
+    }
+    
+    String testfile = readFile "${env.WORKSPACE}/../testfile/${NAME}/AppTest.java"
+    
+    echo testfile
+    
+    writeFile(file: "${env.WORKSPACE}/src/test/java/com/example/AppTest.java" , text: testfile)
+    sh "cat ${env.WORKSPACE}/src/test/java/com/example/AppTest.java"
+    
+  }
+  
+  stage('Compile'){
+      def mvnHome = tool name: 'maven',type : 'maven'
+      sh "${mvnHome}/bin/mvn clean compile"
+      
+  }
+  stage('Test'){
+    def mvnHome = tool name: 'maven',type : 'maven'
+    try {   
+      sh "${mvnHome}/bin/mvn test"
+    }catch(err){
+        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+        throw err   
+    }
+ }
+  stage('SonarQube analysis') {
+    def scannerHome = tool 'sonarqube';
+    def mvnHome = tool name: 'maven',type : 'maven'
+    withSonarQubeEnv('sonarqube') {
+         sh "${mvnHome}/bin/mvn sonar:sonar"
+    }
+  }
+}
