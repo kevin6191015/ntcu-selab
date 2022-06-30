@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.Consts;
 
 import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
