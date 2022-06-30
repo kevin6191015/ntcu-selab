@@ -89,5 +89,4 @@ public class GitlabConfig {
         }
         throw new Exception("Could not found GITLAB_HOST");
     }
-
 }
