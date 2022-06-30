@@ -3,13 +3,13 @@ package ntcu.selab.SpringServer.service;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.http.HttpClient;
 import java.util.Base64;
 
 import javax.swing.text.AbstractDocument.Content;
@@ -19,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.Consts;
-import org.apache.http.client.methods.HttpPost;
 
 import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
@@ -90,38 +87,45 @@ public class JenkinsService {
     public String getConfig(){
         StringBuilder sb = new StringBuilder();
         String strConfig = null;
-        try (FileInputStream fis = new FileInputStream("pipeline_config.xml");
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("pipeline_config.xml");
             InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
             BufferedReader buf = new BufferedReader(reader);) {
-            while ((strConfig = buf.readLine()) != null) {
-                sb.append(strConfig);
-                sb.append("\n");
-            }
-            buf.close();
+        while ((strConfig = buf.readLine()) != null) {
+            sb.append(strConfig);
+            sb.append("\n");
+        }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
         return sb.toString();
     }
     public void createJob(String jobName){
+        HttpURLConnection conn = null;
         try{
             String crumb = getCrumb();
             String urls = jenkinsRootUrl + "/createItem?name=" + jobName;
-            HttpPost post = new HttpPost(urls);
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            Base64.Encoder encoder = Base64.getEncoder();
+            String account  = jenkinsRootUsername + ":" + jenkinsRootPassword;
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Charset", "UTF-8");
             String xml = getConfig();
-
-            post.addHeader(contentType, "txt/xml");
-            post.addHeader(jenkinsCrumb, crumb);
-
-            StringEntity se = new StringEntity(xml, ContentType.create("text/xml", Consts.UTF_8));
-            se.setChunked(true);
-            post.setEntity(se);
-
-            CloseableHttpClient client = HttpClientBuilder.create().build();
-            client.execute(post);
+            byte[] data = xml.getBytes();
+            conn.setRequestProperty("Content-Length", String.valueOf(data.length));
+            conn.setRequestProperty("Content-Type", "text/xml");
+            conn.setRequestProperty("Jenkins-Crumb", crumb);
+            conn.setRequestProperty("Authorization", "Basic "+ encoder.encodeToString(account.getBytes()));
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            System.out.println(conn.getResponseCode());
         }catch(Exception e){
             logger.error(e.getMessage());
         }
     }
-
 }
