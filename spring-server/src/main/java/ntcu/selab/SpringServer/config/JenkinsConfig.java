@@ -14,7 +14,7 @@ import org.springframework.core.AttributeAccessor;
 
 
 public class JenkinsConfig {
-    private static String PROPERTY_FILE = "/jenkins.properties";
+    private static final String PROPERTY_FILE = "/jenkins.properties";
     private Properties props;
     private static JenkinsConfig object = new JenkinsConfig();
     private static final Logger logger = LoggerFactory.getLogger(JenkinsConfig.class);
@@ -39,7 +39,7 @@ public class JenkinsConfig {
             return jenkinsurl;
         }
         if(props != null){
-            return props.getProperty("JENKINS_HOST_URL").trim();
+            return props.getProperty("JENKINS_HOST").trim();
         }
         throw new Exception("Could not found JENKINS_HOST_URL");
     }
@@ -49,7 +49,7 @@ public class JenkinsConfig {
         if (jenkinsRootUsername != null && !jenkinsRootUsername.equals("")){
             return jenkinsRootUsername;
         }
-        if (props != null){
+        else if (props != null){
             return props.getProperty("JENKINS_ROOT_USERNAME").trim();
         }
         throw new Exception("Could not found JENKINS_ROOT_USERNAME");
