@@ -75,7 +75,7 @@ public class GitlabConfig {
     }
 
     public String getGitlabRootUrl() throws Exception {
-        String gitlabHost = "http://120.108.204.152:10085";
+        String gitlabHost = System.getenv("GITLAB_HOST");
         if (gitlabHost != null && !gitlabHost.equals("")) {
             return gitlabHost.substring(0, gitlabHost.indexOf("//") + 2)
                     + getGitlabRootUsername()
