@@ -14,8 +14,8 @@ public class SpringServerController {
 
     @GetMapping ("/")
     public String hello() throws Exception {
-        JenkinsService temp = new JenkinsService();
-        temp.createJob("jobName");
+        JenkinsService temp = JenkinsService.getObject();
+        temp.createJob("a");
         return "ok";
     }
     /*@GetMapping ("/config")
