@@ -174,7 +174,7 @@ public class JenkinsService {
             HttpPost post = new HttpPost(url);
       
             post.addHeader(contentType, "application/x-www-form-urlencoded");
-            post.addHeader(jenkinsCrumb, crumb);
+            post.addHeader(jenkinsCrumb, "48048c2f646bb31c4fa85f673da6bfe79e4e190bdf08a443774eacc7363f288d");
       
             client.execute(post);
           } catch (Exception e) {
@@ -190,7 +190,7 @@ public class JenkinsService {
           HttpPost post = new HttpPost(url);
     
           post.addHeader(contentType, "application/xml");
-          post.addHeader(crumb, crumb);
+          post.addHeader(crumb, "48048c2f646bb31c4fa85f673da6bfe79e4e190bdf08a443774eacc7363f288d");
     
           List<NameValuePair> params = new ArrayList<>();
           params.add((NameValuePair) new BasicNameValuePair("token", jenkinsApiToken));
@@ -204,5 +204,65 @@ public class JenkinsService {
         } catch (IOException e) {
           logger.error(e.getMessage());
         }
+    }
+
+    public String getCommitMessage(String jobName, int num) {
+        String console = getCompleteConsole(jobName, num);
+        String beginStr = "Commit message: ";
+        String endStr = "\n";
+        int beginIndex = console.indexOf(beginStr) + beginStr.length();
+        int endIndex = console.indexOf(endStr, beginIndex);
+        // extract commit message
+        String message = console.substring(beginIndex, endIndex);
+        return message;
+    }
+
+    public String getCompleteConsole(String jobName, int num) {
+        String consoleUrl = getConsoleUrl(jobName, num);
+        String console = "";
+        HttpURLConnection conn = null;
+        try {
+          if (Thread.interrupted()) {
+            throw new InterruptedException();
+          }
+          URL url = new URL(consoleUrl);
+          conn = (HttpURLConnection) url.openConnection();
+          String input = jenkinsRootUsername + ":" + jenkinsRootPassword;
+          Base64.Encoder encoder = Base64.getEncoder();
+          String encoding = "Basic " + encoder.encodeToString(input.getBytes());
+          conn.setRequestProperty("Authorization", encoding);
+          conn.setReadTimeout(10000);
+          conn.setConnectTimeout(15000);
+          conn.setRequestMethod("GET");
+          conn.connect();
+          if (Thread.interrupted()) {
+            throw new InterruptedException();
+          }
+          try (BufferedReader br = new BufferedReader(
+              new InputStreamReader(conn.getInputStream(), "UTF-8"));) {
+            String str = "";
+            StringBuilder sb = new StringBuilder();
+            while (null != (str = br.readLine())) {
+              sb.append("\n");
+              sb.append(str);
+            }
+            console = sb.toString();
+          }
+        } catch (Exception e) {
+          logger.error(e.getMessage());
+        } finally {
+          if (conn != null) {
+            conn.disconnect();
+          }
+        }
+        return console;
       }
+
+    public String getConsoleUrl(String jobName, int num) {
+        return (jenkinsRootUrl + "/job/" + jobName + "/" + num + "/consoleText");
+    }
+
+    public String getJobName(String username, String projectName) {
+        return username + "_" + projectName;    
+    }
 }
