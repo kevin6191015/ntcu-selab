@@ -10,12 +10,13 @@ router.get('/',QuestionController.getquestionlist);
 router.get('/:num',QuestionController.getQuestionByNum);
 
 //create new question
-router.post('/',QuestionController.createNewQuestion);
+router.post('/add/',QuestionController.createNewQuestion);
 
+router.post('/update/:num',QuestionController.updateQuestion);
 //update question by num
-router.put('/:num',QuestionController.updateQuestion);
+//router.put('/:num',QuestionController.updateQuestion);
 
 //delete question by num
-router.delete('/:num',QuestionController.deleteQuestion);
+router.post('/delete/:num',QuestionController.deleteQuestion);
 
 module.exports = router;

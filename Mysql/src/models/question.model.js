@@ -4,7 +4,6 @@ var Question = function(question){
     this.num = question.num;
     this.question_name = question.question_name;
     this.question_description = question.question_description;
-    this.category = question.category;
     this.image1 = question.image1;
     this.image2 = question.image2;
     this.input1 = question.input1;
@@ -27,6 +26,8 @@ var Question = function(question){
     this.output8 = question.output8;
     this.output9 = question.output9;
     this.output10 = question.output10;
+    this.input_or_not = question.input_or_not;
+    this.id = question.id;
 }
  
  //get all questions
@@ -43,10 +44,10 @@ var Question = function(question){
  }   
    
 //get question by Num 
-  Question.getQuestionByNum = (num,result) =>{
-      dbConn.query('SELECT * FROM question_bank WHERE num=?', num, (err,res)=>{
+  Question.getQuestionByNum = (id,result) =>{
+      dbConn.query('SELECT * FROM question_bank WHERE id=?', id, (err,res)=>{
           if(err){
-              console.log('Error while fetching question by num',err);
+              console.log('Error while fetching question by id',err);
               result(null,err);
           }else{
               result(null,res);
@@ -56,24 +57,39 @@ var Question = function(question){
  
 //create new question
   Question.createQuestion = (questionReqData, result) =>{
-      dbConn.query('INSERT INTO question_bank SET ? ',questionReqData, (err, res)=>{
-          if(err){
-              console.log('Errow while inserting data');
-              result(null,err);
-          }else{
-              console.log('Question created successfully');
-              result(null,res);
-          }
-      })
+    let changequestion = JSON.parse(JSON.stringify(questionReqData));
+    console.log(changequestion);    
+      dbConn.query('SELECT num FROM question_bank WHERE num = (SELECT MAX(num) FROM question_bank)', (err,res)=>{
+        var max_nums = JSON.parse(JSON.stringify(res));
+        var max_num = max_nums[0].num;
+        max_num = max_num+1;
+        changequestion.num = max_num;
+        max_num = padLeft(max_num,4);
+        changequestion.id = 'a' + max_num;
+        console.log(changequestion);
+        //changequestion = JSON.stringify(changequestion);
+        //console.log(changequestion)
+        
+        dbConn.query('INSERT INTO question_bank SET ? ',changequestion, (err, res)=>{
+           if(err){
+                console.log('Errow while inserting data');
+                console.log(err);
+                result(null,err);
+            }else{
+                console.log('Question created successfully');
+                result(null,res);
+            }
+        })
+    })
   }
 
 //update question
-  Question.updateQuestion = (num, questionReqData, result)=>{
-	  dbConn.query("UPDATE question_bank SET question_name=?,question_description=?,category=?,image1=?,image2=?,input1=?,input2=?,input3=?,input4=?,input5=?,input6=?,input7=?,input8=?,input9=?,input10=?,output1=?,output2=?,output3=?,output4=?,output5=?,output6=?,output7=?,output8=?,output9=?,output10=? WHERE num = ?",[questionReqData.question_name,questionReqData.question_description,questionReqData.category,questionReqData.image1,questionReqData.image2,questionReqData.input1,questionReqData.input2,questionReqData.input3,questionReqData.input4,questionReqData.input5,questionReqData.input6,questionReqData.input7,questionReqData.input8,questionReqData.input9,questionReqData.input10,questionReqData.output1,questionReqData.output2,questionReqData.output3,questionReqData.output4,questionReqData.output5,questionReqData.output6,questionReqData.output7,questionReqData.output8,questionReqData.output9,questionReqData.output10,num],(err,res)=>{
+  Question.updateQuestion = (id, questionReqData, result)=>{
+	  dbConn.query("UPDATE question_bank SET input1=?,input2=?,input3=?,input4=?,input5=?,input6=?,input7=?,input8=?,input9=?,input10=?,output1=?,output2=?,output3=?,output4=?,output5=?,output6=?,output7=?,output8=?,output9=?,output10=? WHERE question_name = ?",[questionReqData.input1,questionReqData.input2,questionReqData.input3,questionReqData.input4,questionReqData.input5,questionReqData.input6,questionReqData.input7,questionReqData.input8,questionReqData.input9,questionReqData.input10,questionReqData.output1,questionReqData.output2,questionReqData.output3,questionReqData.output4,questionReqData.output5,questionReqData.output6,questionReqData.output7,questionReqData.output8,questionReqData.output9,questionReqData.output10,id],(err,res)=>{
           if(err){
               console.log('Error while updating the question');
-              result(null,err);
-          }else{
+              result(err);
+          }else{    
               console.log('Question updated sucessfully');
               result(null,res);
           }
@@ -81,8 +97,8 @@ var Question = function(question){
 }
 
 //delete question
-Question.deleteQuestion = (num, result)=>{
-	dbConn.query("DELETE FROM question_bank WHERE num=?",num,(err,res)=>{
+Question.deleteQuestion = (id, result)=>{
+	dbConn.query("DELETE FROM question_bank WHERE id=?",id,(err,res)=>{
 		if(err){
 			console.log('Error while deleting the question');
 			result(null,err);
@@ -90,6 +106,13 @@ Question.deleteQuestion = (num, result)=>{
 			result(null,res);
 		}
 	})
+}
+
+function padLeft(str,lenght){
+    if( str.length >= lenght)
+        return str;
+    else
+        return padLeft("0"+str, lenght);
 }
 
  module.exports = Question;

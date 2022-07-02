@@ -9,7 +9,7 @@ exports.getquestionlist = (req,res)=>{
         console.log('We are here!');
         if(err)
 			res.send(err);
-        console.log('Questions',questions); 
+        //console.log('Questions',questions); 
         res.send(questions);
     })
 }
@@ -20,7 +20,7 @@ exports.getQuestionByNum = (req, res)=>{
     //console.log('get question by num');
     QuestionModel.getQuestionByNum(req.params.num, (err, question)=>{
         if(err)
-        res.send(err);
+            res.send(err);
         console.log('single question',question);
         res.send(question);
     })
@@ -29,7 +29,7 @@ exports.getQuestionByNum = (req, res)=>{
 //create new question
 exports.createNewQuestion = (req,res) =>{
      const questionReqData = new QuestionModel(req.body);
-     console.log('questionReqData',questionReqData);
+     //console.log('questionReqData',questionReqData);
      //check null
      if(req.body.constructor === Object && Object.keys(req.body).length === 0){
          res.send(400).send({success: false, message: 'Please all fields'});
@@ -55,6 +55,7 @@ exports.updateQuestion = (req,res)=>{
          QuestionModel.updateQuestion(req.params.num, questionReqData, (err, question)=>{
              if(err)
              res.send(err);
+             else
              res.json({status: true, message: 'Qusetion updated Successfully',data: question.insertId});
          })
      }
