@@ -72,7 +72,7 @@ public class JenkinsService {
             URL url = new URL(jenkinsRootUrl + "/crumbIssuer/api/json");
             conn = (HttpURLConnection) url.openConnection();
             Base64.Encoder encoder = Base64.getEncoder();
-            String account  = jenkinsRootUsername + ":" + jenkinsRootPassword;
+            String account  = jenkinsRootUsername + ":" + jenkinsApiToken;
             String encoding = "Basic " + encoder.encodeToString(account.getBytes());
             conn.setRequestProperty("Authorization",encoding);
             conn.setReadTimeout(15000);
@@ -95,6 +95,7 @@ public class JenkinsService {
         }
         return jenkinsCrumb;
     }
+
     public String getConfig(){
         StringBuilder sb = new StringBuilder();
         String strConfig = null;
@@ -110,74 +111,39 @@ public class JenkinsService {
         }
         return sb.toString();
     }
+
     public void createJob(String jobName){
         HttpURLConnection conn = null;
         try{
             String crumb = getCrumb();
-            String urls = jenkinsRootUrl + "/createItem?name=" + jobName;
-            // HttpPost post = new HttpPost(urls);
-
-            // post.addHeader(contentType, "application/xml");
-            // post.addHeader(jenkinsCrumb, crumb);
-
-            // String config = getConfig();
-            // StringEntity se = new StringEntity(config, ContentType.create("text/xml", Consts.UTF_8));
-            // se.setChunked(true);
-            // post.setEntity(se);
-
-            // HttpClient client = new DefaultHttpClient();
-            // client.execute(post);
-            
-            // URL url = new URL(urls);
-            // conn = (HttpURLConnection) url.openConnection();
-            // Base64.Encoder encoder = Base64.getEncoder();
-            // String account  = jenkinsRootUsername + ":" + jenkinsRootPassword;
-            // String encoding = encoder.encodeToString(account.getBytes("UTF-8"));
-            // conn.setRequestMethod("POST");
-            // conn.setDoOutput(true);
-            // conn.setDoInput(true);
-            // conn.setRequestProperty("Connection", "Keep-Alive");
-            // conn.setRequestProperty("Charset", "UTF-8");
-            // String xml = getConfig();
-            // byte[] data = xml.getBytes();
-            // conn.setRequestProperty("Content-Length", String.valueOf(data.length));
-            // conn.setRequestProperty("Content-Type", "text/xml");
-            // conn.setRequestProperty("Jenkins-Crumb", crumb);
-            // conn.setRequestProperty("Authorization", "Basic "+ encoding);
-            // conn.setRequestProperty("User-Agent", "PostmanRuntime/7.29.2");
-            // conn.setRequestProperty("Cookie", "JSESSIONID.60fa66d0=node0b6j85h65mm7nkemyjtvtrrmk1697.node0; Path=/; HttpOnly");
-            // conn.connect();
-            // OutputStream out = conn.getOutputStream();
-            // out.write(data);
-            // out.flush();
-            // out.close();
-            // if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-            //     throw new RuntimeException("Failed : HTTP error code : " +
-            //     conn.getResponseCode()+" "+conn.getResponseMessage());
-            // }
-            // BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-            // System.out.println("Output from Server .... \n");
-            // String output;
-            // while (( output = br.readLine()) != null) {
-            //     System.out.println(output);
-            // }
-            // conn.disconnect();
-
-            String cmd = "curl --location --request POST 'http://120.108.204.152:8080/createItem?name=" + jobName + "' ";
-            cmd += "--header 'Content-Type: text/xml' --header 'Jenkins-Crumb: " + getCrumb() + "' ";
-            cmd += "--header 'Authorization: Basic cm9vdDoxMjM0NTY3OA==' --header 'Cookie: JSESSIONID.60fa66d0=node0y0ckg0m0mit91jsh9142kz1gh1851.node0' --data-raw '";
-            cmd += getConfig();
-            cmd += "' ";
-            System.out.println(cmd);
-            Process process = Runtime.getRuntime().exec(cmd);
-            InputStream is = process.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String content = br.readLine();
-            while (content != null) {
-                System.out.println(content);
-                content = br.readLine();
+            String urls = jenkinsRootUrl + "/createItem?name=" + jobName;   
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            Base64.Encoder encoder = Base64.getEncoder();
+            String account  = jenkinsRootUsername + ":" + jenkinsApiToken;
+            String encoding = encoder.encodeToString(account.getBytes("UTF-8"));
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Charset", "UTF-8");
+            String xml = getConfig();
+            byte[] data = xml.getBytes();
+            conn.setRequestProperty("Content-Length", String.valueOf(data.length));
+            conn.setRequestProperty("Content-Type", "text/xml");
+            conn.setRequestProperty("Jenkins-Crumb", crumb);
+            conn.setRequestProperty("Authorization", "Basic "+ encoding);
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
             }
+            conn.disconnect();
+
         }catch(Exception e){
             logger.error(e.getMessage());
         }
@@ -186,14 +152,27 @@ public class JenkinsService {
     public void deleteJob(String jobName){
         try {
             String crumb = getCrumb();
-            HttpClient client = new DefaultHttpClient();
-            String url = jenkinsRootUrl + "/job/" + jobName + "/doDelete";
-            HttpPost post = new HttpPost(url);
-      
-            post.addHeader(contentType, "application/x-www-form-urlencoded");
-            post.addHeader(jenkinsCrumb, "48048c2f646bb31c4fa85f673da6bfe79e4e190bdf08a443774eacc7363f288d");
-      
-            client.execute(post);
+            HttpURLConnection conn = null;
+            String urls = jenkinsRootUrl + "/job/" + jobName + "/doDelete";   
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            Base64.Encoder encoder = Base64.getEncoder();
+            String account  = jenkinsRootUsername + ":" + jenkinsApiToken;
+            String encoding = encoder.encodeToString(account.getBytes("UTF-8"));
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Charset", "UTF-8");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Jenkins-Crumb", crumb);
+            conn.setRequestProperty("Authorization", "Basic "+ encoding);
+            conn.connect();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
           } catch (Exception e) {
             logger.error(e.getMessage());
           }
@@ -201,23 +180,28 @@ public class JenkinsService {
 
     public void buildJob(String jobName) {
         try {
-          String crumb = getCrumb();
-    
-          String url = jenkinsRootUrl + "/job/" + jobName + "/build";
-          HttpPost post = new HttpPost(url);
-    
-          post.addHeader(contentType, "application/xml");
-          post.addHeader(crumb, "48048c2f646bb31c4fa85f673da6bfe79e4e190bdf08a443774eacc7363f288d");
-    
-          List<NameValuePair> params = new ArrayList<>();
-          params.add((NameValuePair) new BasicNameValuePair("token", jenkinsApiToken));
-    
-          UrlEncodedFormEntity ent = null;
-          ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-          post.setEntity(ent);
-    
-          HttpClient client = new DefaultHttpClient();
-          client.execute(post);
+            String crumb = getCrumb();
+            HttpURLConnection conn = null;
+            String urls = jenkinsRootUrl + "/job/" + jobName + "/build";
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            Base64.Encoder encoder = Base64.getEncoder();
+            String account  = jenkinsRootUsername + ":" + jenkinsApiToken;
+            String encoding = encoder.encodeToString(account.getBytes("UTF-8"));
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Charset", "UTF-8");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Jenkins-Crumb", crumb);
+            conn.setRequestProperty("Authorization", "Basic "+ encoding);
+            conn.connect();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
         } catch (IOException e) {
           logger.error(e.getMessage());
         }
@@ -244,7 +228,7 @@ public class JenkinsService {
           }
           URL url = new URL(consoleUrl);
           conn = (HttpURLConnection) url.openConnection();
-          String input = jenkinsRootUsername + ":" + jenkinsRootPassword;
+          String input = jenkinsRootUsername + ":" + jenkinsApiToken;
           Base64.Encoder encoder = Base64.getEncoder();
           String encoding = "Basic " + encoder.encodeToString(input.getBytes());
           conn.setRequestProperty("Authorization", encoding);
