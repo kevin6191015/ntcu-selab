@@ -116,7 +116,7 @@ public class JenkinsService {
         HttpURLConnection conn = null;
         try{
             String crumb = getCrumb();
-            String urls = jenkinsRootUrl + "/createItem?name=" + jobName;   
+            String urls = jenkinsRootUrl + "/createItem?name=" + jobName;
             URL url = new URL(urls);
             conn = (HttpURLConnection) url.openConnection();
             Base64.Encoder encoder = Base64.getEncoder();
