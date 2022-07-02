@@ -62,7 +62,7 @@ public class sonarqube_report_analyzer
           URL url = new URL(urls);
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
           conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); 
-          conn.setRequestProperty("Content-Length", Integer.toString(postDataLength ));
+          conn.setRequestProperty("Content-Length",String.valueOf(postDataLength));
           conn.setRequestProperty("charset", "utf-8");
           conn.setRequestMethod("POST");
 		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
