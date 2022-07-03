@@ -9,26 +9,27 @@ import org.gitlab.api.models.GitlabProject;
 import org.gitlab.api.models.GitlabUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class GitlabService {
     private static final Logger logger = LoggerFactory.getLogger(GitlabConfig.class);
-    private static GitlabService object = new GitlabService();
+    private static final GitlabService object = new GitlabService();
     GitlabConfig gitlabConfig = GitlabConfig.getObject();
-    private GitlabAPI gitlab;
+    private final GitlabAPI gitlab;
     private String hostUrl;
     private String rootUrl;
     private String apiToken;
-    private TokenType tokenType = TokenType.PRIVATE_TOKEN;
-    private AuthMethod authMethod = AuthMethod.URL_PARAMETER;
+    private final TokenType tokenType = TokenType.PRIVATE_TOKEN;
+    private final AuthMethod authMethod = AuthMethod.URL_PARAMETER;
     private static final String API_NAMESPACE = "/api/v4";
 
     public GitlabService() {
@@ -54,14 +55,13 @@ public class GitlabService {
     /*
         Delete a root project
      */
-    public Boolean deleteRootProject(String proName) {
+    public void deleteRootProject(String proName) {
         try {
             GitlabProject gitlabProject = gitlab.getProject("root", proName);
             gitlab.deleteProject(gitlabProject.getId());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return true;
     }
     /*
     delete user by id
@@ -89,7 +89,7 @@ public class GitlabService {
     /**
      Get a private token by GitlabUser
      */
-    public String getPrivateToken(GitlabUser user) {
+    public String getPrivateToken(@NonNull GitlabUser user) {
         String privateToken;
         privateToken = user.getPrivateToken();
         return privateToken;
@@ -98,7 +98,7 @@ public class GitlabService {
     /**
       Get all user's list of projects
      */
-    public List<GitlabProject> getAllProjects() {
+    public List<GitlabProject> listAllProjects() {
         for(GitlabProject gitlabproject : gitlab.getAllProjects()){
             System.out.println(gitlabproject);
         }
@@ -124,7 +124,15 @@ public class GitlabService {
         }
         return gitlabUser;
     }
-
+    public GitlabUser getUserByName(String name) {
+        GitlabUser gitlabUser = new GitlabUser();
+        try {
+            gitlabUser  = gitlab.getUserViaSudo(name);
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return gitlabUser;
+    }
     /*
         get user token by user id
      */
@@ -134,7 +142,7 @@ public class GitlabService {
     /**
      get gitlab project by id
      */
-    public GitlabProject getProjectbyid(int id) {
+    public GitlabProject getProjectById(int id) {
         GitlabProject project = null;
         try {
             project = gitlab.getProject(id);
@@ -158,6 +166,17 @@ public class GitlabService {
         }
         return projects;
     }
+
+    public GitlabProject getRootProject(String proName) {
+        GitlabUser gitlabUser = getUserById(0);
+        GitlabProject projects = new GitlabProject();
+        try {
+            projects = gitlab.getProject("root",proName);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return projects;
+    }
     /*
         get root
      */
@@ -172,50 +191,86 @@ public class GitlabService {
     }
     /**
      * Create a root project
+     *      http://120.108.204.152:10085/api/v4/projects?name=new_test2
+     *      &visibility=private&default_branch=main&initialize_with_readme=true
      */
     public GitlabProject createRootProject(String proName) {
-        GitlabProject project = null;
+        HttpURLConnection conn = null;
         try {
-            project = gitlab.createUserProject(1, proName);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-        return project;
-    }
-
-    /**
-     * set gitlab web hook
-     */
-    public boolean setGitlabWebhook(GitlabProject project, String jobName){
-        try {
-            HttpURLConnection conn = null;
-
-            JenkinsConfig jenkinsConfig = JenkinsConfig.getObject();
-            String jenkinsJobUrl = jenkinsConfig.getJenkinsHostUrl() + "/project/" + jobName;
-
-            // for example,
-            // http://localhost:80/api/v4/projects/3149/hooks?url=http://localhost:8888/project/{jobName}
-            String gitlabWebhookApi = hostUrl + API_NAMESPACE + "/projects/" + project.getId() + "jenkins?jenkins_url="
-                    + jenkinsJobUrl + "&project_name=" + jobName;
-            URL url = new URL(gitlabWebhookApi);
+            String urls = hostUrl + API_NAMESPACE + "/projects?name=" + proName
+                    + "&visibility=private&default_branch=main&initialize_with_readme=true";
+            URL url = new URL(urls);
             conn = (HttpURLConnection) url.openConnection();
-            String input = gitlabConfig.getGitlabRootUsername() + ":" + gitlabConfig.getGitlabRootPassword();
-            Base64.Encoder encoder = Base64.getEncoder();
-            String encoding = "Basic " + encoder.encodeToString(input.getBytes());
+            String input = gitlabConfig.getGitlabApiToken();
+            String encoding = "Bearer " + input;
             conn.setRequestProperty("Authorization", encoding);
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
             InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
             String result = reader.readLine();
         }catch (Exception e) {
             logger.error(e.getMessage());
-            return false;
         }
-        return true;
+        return getRootProject(proName);
     }
+    /**
+     * set gitlab Integrations
+     */
+    public void setGitlabIntegrations(GitlabProject project, String jobName){
+        try {
+            HttpURLConnection conn = null;
+
+            JenkinsConfig jenkinsConfig = JenkinsConfig.getObject();
+            String jenkinsJobUrl = jenkinsConfig.getJenkinsHostUrl();
+
+            // for example,
+            // http://localhost:80/api/v4/projects/3149/hooks?url=http://localhost:8888/project/{jobName}
+            String gitlabWebhookApi = hostUrl + API_NAMESPACE + "/projects/" + project.getId() + "/integrations/jenkins?jenkins_url="
+                    + jenkinsJobUrl + "&project_name=" + jobName+"&username="+jenkinsConfig.getJenkinsRootUsername()+"&password="+jenkinsConfig.getJenkinsRootPassword();
+            URL url = new URL(gitlabWebhookApi);
+            conn = (HttpURLConnection) url.openConnection();
+            String input =gitlabConfig.getGitlabApiToken();
+            String encoding = "Bearer " + input;
+            conn.setRequestProperty("Authorization", encoding);
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("PUT");
+            conn.connect();
+            InputStream stream = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
+            String result = reader.readLine();
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+    /*
+    add member to project
+     */
+    public void addMember(GitlabUser user , String proName){
+        HttpURLConnection conn = null;
+        try {
+            String urls = hostUrl + API_NAMESPACE + "/projects/" + getRootProject(proName).getId()
+                    + "/invitations?access_level=40&user_id="+user.getId()+"&email="+user.getEmail();
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            String input = gitlabConfig.getGitlabApiToken();
+            String encoding = "Bearer " + input;
+            conn.setRequestProperty("Authorization", encoding);
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.connect();
+            InputStream stream = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
+            String result = reader.readLine();
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     /*
     get project url
      */
@@ -227,12 +282,17 @@ public class GitlabService {
       Create a new User
      */
     public GitlabUser createUser(String email, String password, String username, String name) throws Exception {
-        GitlabUser user = new GitlabUser();
-        user = gitlab.createUser(email, password, username, name, "", "", "", "", 100, null, null, "",
-                false, true, true, false);
+        GitlabUser user = null;
+        try {
+            user = new GitlabUser();
+            user = gitlab.createUser(email, password, username, name, "", "", "", "", 100, null, null, "",
+                    false, true, true, false);
 
-        String privateToken = getToken(user.getId());
-        user.setPrivateToken(privateToken);
+            String privateToken = getToken(user.getId());
+            user.setPrivateToken(privateToken);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
         return user;
     }
 
