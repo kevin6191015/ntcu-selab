@@ -152,6 +152,7 @@ public class JenkinsService {
     public void deleteJob(String jobName){
         try {
             String crumb = getCrumb();
+<<<<<<< HEAD
             HttpURLConnection conn = null;
             String urls = jenkinsRootUrl + "/job/" + jobName + "/doDelete";   
             URL url = new URL(urls);
@@ -173,6 +174,16 @@ public class JenkinsService {
                 conn.getResponseCode()+" "+conn.getResponseMessage());
             }
             conn.disconnect();
+=======
+            HttpClient client = new DefaultHttpClient();
+            String url = jenkinsRootUrl + "/job/" + jobName + "/doDelete";
+            HttpPost post = new HttpPost(url);
+      
+            post.addHeader(contentType, "application/x-www-form-urlencoded");
+            post.addHeader(jenkinsCrumb, crumb);
+      
+            client.execute(post);
+>>>>>>> 09dbf9c (jenkins nice!!)
           } catch (Exception e) {
             logger.error(e.getMessage());
           }
@@ -180,6 +191,7 @@ public class JenkinsService {
 
     public void buildJob(String jobName) {
         try {
+<<<<<<< HEAD
             String crumb = getCrumb();
             HttpURLConnection conn = null;
             String urls = jenkinsRootUrl + "/job/" + jobName + "/build";
@@ -202,6 +214,25 @@ public class JenkinsService {
                 conn.getResponseCode()+" "+conn.getResponseMessage());
             }
             conn.disconnect();
+=======
+          String crumb = getCrumb();
+    
+          String url = jenkinsRootUrl + "/job/" + jobName + "/build";
+          HttpPost post = new HttpPost(url);
+    
+          post.addHeader(contentType, "application/xml");
+          post.addHeader(crumb, crumb);
+    
+          List<NameValuePair> params = new ArrayList<>();
+          params.add((NameValuePair) new BasicNameValuePair("token", jenkinsApiToken));
+    
+          UrlEncodedFormEntity ent = null;
+          ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+          post.setEntity(ent);
+    
+          HttpClient client = new DefaultHttpClient();
+          client.execute(post);
+>>>>>>> 09dbf9c (jenkins nice!!)
         } catch (IOException e) {
           logger.error(e.getMessage());
         }

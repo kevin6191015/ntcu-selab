@@ -4,7 +4,6 @@ var Testdata = function(testdata){
     this.num = testdata.num;
     this.question_name = testdata.question_name;
     this.question_description = testdata.question_description;
-    this.category = testdata.category;
     this.image1 = testdata.image1;
     this.image2 = testdata.image2;
     this.input1 = testdata.input1;
@@ -27,11 +26,13 @@ var Testdata = function(testdata){
     this.output8 = testdata.output8;
     this.output9 = testdata.output9;
     this.output10 = testdata.output10
+    this.input_or_not = testdata.input_or_not;
+    this.id = testdata.id;
 }
 
-//get testdata by name
+//get testdata by id (changed from by name)
 Testdata.getTestdatabyName = (question_name,result) =>{
-      dbConn.query('SELECT question_name,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank WHERE question_name=?', question_name, (err,res)=>{
+      dbConn.query('SELECT question_name,id,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank WHERE id=?', question_name, (err,res)=>{
           if(err){
               console.log('Error while fetching question by question_name',err);
               result(null,err);
@@ -40,9 +41,9 @@ Testdata.getTestdatabyName = (question_name,result) =>{
           }
       })
 }
-
+//get all testdata
 Testdata.getAllTestdata = (result)=>{
-	dbConn.query('SELECT question_name,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank', (err,res)=>{
+	dbConn.query('SELECT question_name,id,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank', (err,res)=>{
 		if(err){
 			console.log('Erroe while fetching testdatas', err);
             result(null,err);
