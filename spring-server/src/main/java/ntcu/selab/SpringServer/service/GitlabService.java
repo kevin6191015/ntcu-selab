@@ -66,9 +66,19 @@ public class GitlabService {
     /*
     delete user by id
      */
-    public void deleteUser(int userId) {
+    public void deleteUserByID(int userId) {
         try {
             gitlab.deleteUser(userId);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+    /*
+    delete user by name
+    */
+    public void deleteUserByName(String username) {
+        try {
+            gitlab.deleteUser(getUserByName(username).getId());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
