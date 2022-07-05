@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "fc10a4c6-a314-4e87-9c58-2f70cd6d163c",
+		"name": "Jenkins api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19999264"
+	},
+	"item": [
+		{
+			"name": "get crumb",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "root",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:8080/crumbIssuer/api/json",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "8080",
+					"path": [
+						"crumbIssuer",
+						"api",
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create config.xml",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "root",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:8080/job/FibonacciNumber_109_1_20220514_a001/config.xml",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "8080",
+					"path": [
+						"job",
+						"FibonacciNumber_109_1_20220514_a001",
+						"config.xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create project",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "root",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Jenkins-Crumb",
+						"value": "d2b669e65d1d6f5f1eb4a6b7340f96755b4835a7cd87ba038ad49618c1d934f7",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version='1.1' encoding='UTF-8'?>\r\n<flow-definition plugin=\"workflow-job@1174.vdcb_d054cf74a_\">\r\n    <actions/>\r\n    <description></description>\r\n    <keepDependencies>false</keepDependencies>\r\n    <properties>\r\n        <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin=\"gitlab-plugin@1.5.29\">\r\n            <gitLabConnection>gitlab</gitLabConnection>\r\n            <jobCredentialId>gitlab</jobCredentialId>\r\n            <useAlternativeCredential>false</useAlternativeCredential>\r\n        </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>\r\n        <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>\r\n            <triggers>\r\n                <com.dabsquared.gitlabjenkins.GitLabPushTrigger plugin=\"gitlab-plugin@1.5.29\">\r\n                    <spec></spec>\r\n                    <triggerOnPush>true</triggerOnPush>\r\n                    <triggerToBranchDeleteRequest>false</triggerToBranchDeleteRequest>\r\n                    <triggerOnMergeRequest>true</triggerOnMergeRequest>\r\n                    <triggerOnlyIfNewCommitsPushed>false</triggerOnlyIfNewCommitsPushed>\r\n                    <triggerOnPipelineEvent>false</triggerOnPipelineEvent>\r\n                    <triggerOnAcceptedMergeRequest>false</triggerOnAcceptedMergeRequest>\r\n                    <triggerOnClosedMergeRequest>false</triggerOnClosedMergeRequest>\r\n                    <triggerOnApprovedMergeRequest>true</triggerOnApprovedMergeRequest>\r\n                    <triggerOpenMergeRequestOnPush>never</triggerOpenMergeRequestOnPush>\r\n                    <triggerOnNoteRequest>true</triggerOnNoteRequest>\r\n                    <noteRegex>Jenkins please retry a build</noteRegex>\r\n                    <ciSkip>true</ciSkip>\r\n                    <skipWorkInProgressMergeRequest>true</skipWorkInProgressMergeRequest>\r\n                    <labelsThatForcesBuildIfAdded></labelsThatForcesBuildIfAdded>\r\n                    <setBuildDescription>true</setBuildDescription>\r\n                    <branchFilterType>All</branchFilterType>\r\n                    <includeBranchesSpec></includeBranchesSpec>\r\n                    <excludeBranchesSpec></excludeBranchesSpec>\r\n                    <sourceBranchRegex></sourceBranchRegex>\r\n                    <targetBranchRegex></targetBranchRegex>\r\n                    <pendingBuildName></pendingBuildName>\r\n                    <cancelPendingBuildsOnUpdate>false</cancelPendingBuildsOnUpdate>\r\n                </com.dabsquared.gitlabjenkins.GitLabPushTrigger>\r\n            </triggers>\r\n        </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>\r\n    </properties>\r\n    <definition class=\"org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition\" plugin=\"workflow-cps@2686.v7c37e0578401\">\r\n        <script>node {\r\n    stage(&apos;Clone the Git&apos;) {\r\n        String url = &quot;http://120.108.204.152:10085/root/&quot;+ env.JOB_BASE_NAME +&quot;.git&quot;\r\n    git branch: &apos;main&apos;, credentialsId: &apos;2559ce4a-61fa-4a9b-af93-23a90be8dd9b&apos;, url: url\r\n  }\r\n  stage(&apos;Prepare testfile&apos;){\r\n    env.WORKSPACE = pwd()\r\n    String NAME =  env.JOB_BASE_NAME.substring(0, env.JOB_BASE_NAME.indexOf(&apos;_&apos;))\r\n    echo &quot;Project name is ${NAME}&quot;\r\n    \r\n    if(fileExists(&quot;${env.WORKSPACE}/../testfile&quot;)){\r\n        echo &quot;Directory ${env.WORKSPACE}/../testfile exists.&quot;\r\n    }else{\r\n        echo &quot; Directory ${env.WORKSPACE}/../testfile doesn&apos;t exists. &quot;\r\n        echo &quot; Create testfile directory. &quot;\r\n        def file = new File(&quot;${env.WORKSPACE}/../testfile&quot;)\r\n        file.mkdir()\r\n    }\r\n    \r\n    if(fileExists(&quot;${env.WORKSPACE}/../testfile/${NAME}&quot;)){\r\n        echo &quot;Directory ${env.WORKSPACE}/../testfile/${NAME} exists.&quot;\r\n    }else{\r\n        echo &quot; Directory ${env.WORKSPACE}/../testfile/${NAME} doesn&apos;t exists. &quot;\r\n        def testfile = new File(&quot;${env.WORKSPACE}/../testfile/${NAME}&quot;)\r\n        testfile.mkdir()\r\n    }\r\n    \r\n    def AppTest = new File(&quot;${env.WORKSPACE}/../testfile/${NAME}/AppTest.java&quot;)\r\n    AppTest.createNewFile()\r\n    \r\n    \r\n    dir(&apos;../&apos;){ \r\n        sh &quot;javac -cp json-20220320.jar testfile_generator.java&quot;\r\n        sh &quot;java -cp &apos;.:json-20220320.jar&apos; testfile_generator ${NAME}&quot;\r\n    }\r\n    \r\n    String testfile = readFile &quot;${env.WORKSPACE}/../testfile/${NAME}/AppTest.java&quot;\r\n    \r\n    echo testfile\r\n    \r\n    writeFile(file: &quot;${env.WORKSPACE}/src/test/java/com/example/AppTest.java&quot; , text: testfile)\r\n    sh &quot;cat ${env.WORKSPACE}/src/test/java/com/example/AppTest.java&quot;\r\n    \r\n  }\r\n  \r\n  stage(&apos;Compile&apos;){\r\n      def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;\r\n      sh &quot;${mvnHome}/bin/mvn clean compile&quot;\r\n      \r\n  }\r\n  stage(&apos;Test&apos;){\r\n    def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;\r\n    try {   \r\n      sh &quot;${mvnHome}/bin/mvn test&quot;\r\n    }catch(err){\r\n        step([$class: &apos;JUnitResultArchiver&apos;, testResults: &apos;**/target/surefire-reports/TEST-*.xml&apos;])\r\n        throw err   \r\n    }\r\n }\r\n  stage(&apos;SonarQube analysis&apos;) {\r\n    def scannerHome = tool &apos;sonarqube&apos;;\r\n    def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;\r\n    withSonarQubeEnv(&apos;sonarqube&apos;) {\r\n         sh &quot;${mvnHome}/bin/mvn sonar:sonar&quot;\r\n    }\r\n  }\r\n}</script>\r\n        <sandbox>false</sandbox>\r\n    </definition>\r\n    <triggers/>\r\n    <disabled>false</disabled>\r\n</flow-definition>"
+				},
+				"url": {
+					"raw": "http://120.108.204.152:8080/createItem?name=pro",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "8080",
+					"path": [
+						"createItem"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "pro"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

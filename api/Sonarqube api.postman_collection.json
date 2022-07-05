@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "2add7651-9115-4203-ac5d-8228a7e3e3c7",
+		"name": "Sonarqube api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19999264"
+	},
+	"item": [
+		{
+			"name": "Get project report",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:9000/api/measures/component?component=edu.selab:sonartest_109_1_20220513_a001&metricKeys=sqale_rating,security_rating,security_review_rating",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"measures",
+						"component"
+					],
+					"query": [
+						{
+							"key": "component",
+							"value": "edu.selab:sonartest_109_1_20220513_a001"
+						},
+						{
+							"key": "metricKeys",
+							"value": "sqale_rating,security_rating,security_review_rating"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get source code",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:9000/api/measures/component?component=edu.selab:fibonaccinumber_109_1_20220514_a001&metricKeys=sqale_rating,security_rating,security_review_rating,reliability_rating,code_smells,bugs,vulnerabilities",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"measures",
+						"component"
+					],
+					"query": [
+						{
+							"key": "component",
+							"value": "edu.selab:fibonaccinumber_109_1_20220514_a001"
+						},
+						{
+							"key": "metricKeys",
+							"value": "sqale_rating,security_rating,security_review_rating,reliability_rating,code_smells,bugs,vulnerabilities"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

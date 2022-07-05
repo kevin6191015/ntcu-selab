@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "26b5ebf0-46ef-49ea-841a-8d8e54de70c6",
+		"name": "Gitlab api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19999264"
+	},
+	"item": [
+		{
+			"name": "create project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "d_KwLLCpGySbKRydWziW",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:10085/api/v4/projects?name=new_test&visibility=private&default_branch=main&initialize_with_readme=true",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "10085",
+					"path": [
+						"api",
+						"v4",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "new_test"
+						},
+						{
+							"key": "visibility",
+							"value": "private"
+						},
+						{
+							"key": "default_branch",
+							"value": "main"
+						},
+						{
+							"key": "initialize_with_readme",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "d_KwLLCpGySbKRydWziW",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:10085/api/v4/projects/13",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "10085",
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cahnge main brnch unprotect",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "d_KwLLCpGySbKRydWziW",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:10085/api/v4/projects/14/protected_branches/main",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "10085",
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"14",
+						"protected_branches",
+						"main"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set jenkins integrations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "d_KwLLCpGySbKRydWziW",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:10085/api/v4/projects/14/integrations/jenkins?jenkins_url=http://120.108.204.152:8080&project_name=new_test&username=root&password=12345678",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "10085",
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"14",
+						"integrations",
+						"jenkins"
+					],
+					"query": [
+						{
+							"key": "jenkins_url",
+							"value": "http://120.108.204.152:8080"
+						},
+						{
+							"key": "project_name",
+							"value": "new_test"
+						},
+						{
+							"key": "username",
+							"value": "root"
+						},
+						{
+							"key": "password",
+							"value": "12345678"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add member",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "d_KwLLCpGySbKRydWziW",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://120.108.204.152:10085/api/v4/projects/14/invitations?access_level=40&user_id=4&email=example@gmail.com",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "10085",
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"14",
+						"invitations"
+					],
+					"query": [
+						{
+							"key": "access_level",
+							"value": "40"
+						},
+						{
+							"key": "user_id",
+							"value": "4"
+						},
+						{
+							"key": "email",
+							"value": "example@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

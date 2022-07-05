@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "65695188-e731-4df2-96c2-8e9878bb4212",
+		"name": "DataBase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19999264"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code_smells_number",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "vulnerabilities_number",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "bugs_number",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "security_rating",
+							"value": "1.0",
+							"type": "text"
+						},
+						{
+							"key": "sqale_rating",
+							"value": "1.0",
+							"type": "text"
+						},
+						{
+							"key": "reliability_rating",
+							"value": "1.0",
+							"type": "text"
+						},
+						{
+							"key": "security_review_rating",
+							"value": "1.0",
+							"type": "text"
+						},
+						{
+							"key": "source_code",
+							"value": "package edu.selab;\n\n/**\n * Hello world!\n *\n */\npublic class App\n{\n    public static final int BIG_NUM = 2000000000;\n        public static final int MOD = 1000000007;\n\n        public static String main(String args) {\n\n                int N = Integer.parseInt(args);\n\n                if(N <= 1){\n\n                        System.out.println(1);\n                        return \"-1\";\n\n                }\n\n                long table[] = new long[N+1];\n\n                table[0] = 0;\n                table[1] = 1;\n\n                for(int i = 2; i <= N; i++){\n                        table[i] = table[i-1]+table[i-2];\n                }\n\n                return Long.toString(table[N]);\n        }\n}\n",
+							"type": "text"
+						},
+						{
+							"key": "project_name",
+							"value": "fibonaccinumber_109_1_20220514_a001",
+							"type": "text"
+						},
+						{
+							"key": "student_id",
+							"value": "a001",
+							"type": "text"
+						},
+						{
+							"key": "analysis_date",
+							"value": "2022/05/28 15:47:51",
+							"type": "text"
+						},
+						{
+							"key": "submit_times",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "unit_test_result",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "compile_result",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://120.108.204.152:3000/api/sqreport",
+					"protocol": "http",
+					"host": [
+						"120",
+						"108",
+						"204",
+						"152"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sqreport"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
