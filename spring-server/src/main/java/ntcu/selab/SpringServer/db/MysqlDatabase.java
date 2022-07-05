@@ -18,7 +18,7 @@ public class MysqlDatabase {
 
     private MysqlDatabase(){
         try{
-            Class.forName("DB_DRIVER");
+            Class.forName(DB_DRIVER);
             if(connectionPool == null){
                 BoneCPConfig config = getConfig();
                 connectionPool = new BoneCP(config);
