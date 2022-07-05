@@ -16,6 +16,10 @@ public class User {
         this.Role = role;
     }
 
+    public User(){
+        
+    }
+
     public int getId(){
         return Id;
     }
