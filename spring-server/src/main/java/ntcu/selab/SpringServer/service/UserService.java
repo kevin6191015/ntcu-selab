@@ -125,6 +125,33 @@ public class UserService {
         }
     }
 
+    @PostMapping("/updatePassword")
+    public ResponseEntity<Object> updatePassword(@RequestParam("username") String username,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword) {
+        HttpHeaders header = new HttpHeaders();
+        boolean check = dbManager.checkPassword(username, currentPassword);
+        if (check) {
+            int gitlabId = dbManager.getGitlabidByUsername(username);
+            gitlabService.updateUserPassword(gitlabId, newPassword);
+            dbManager.ModifyPassword(username, currentPassword, newPassword);
+            return new ResponseEntity<>(header, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Your current password is wrong", header, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(value = "getUserCsvFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<Object> getUserCsvFile() throws Exception {
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Disposition", "attachment;filename=" + "StudentTemplate.csv");
+        InputStream targetStream = this.getClass().getResourceAsStream("/StudentTemplate.csv");
+
+        byte[] file = IOUtils.toByteArray(targetStream);
+        return new ResponseEntity<Object>(file, header, HttpStatus.OK);
+
+    }
+
     private String getErrorMessage(List<User> users, User user) {
         String errorMessage = getErrorMessage(user);
         if (errorMessage.isEmpty()) {
@@ -205,4 +232,5 @@ public class UserService {
 
         dbManager.addUser(user);
     }
+
 }
