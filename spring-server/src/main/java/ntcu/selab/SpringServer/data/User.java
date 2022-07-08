@@ -8,76 +8,85 @@ public class User {
     private String Password;
     private String GitlabToken;
     private String Role;
+    private String email;
 
-    public User(String name, String username, String password, String role){
+    public User(String name, String username, String email, String password, String role) {
         this.Name = name;
         this.UserName = username;
         this.Password = password;
         this.Role = role;
+        this.email = email;
     }
 
-    public User(){
-        
+    public User() {
+
     }
 
-    public int getId(){
+    public int getId() {
         return Id;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.Id = id;
     }
 
-    public int getGitlabId(){
+    public int getGitlabId() {
         return GitlabId;
     }
 
-    public void setGitlabId(int gitlabid){
+    public void setGitlabId(int gitlabid) {
         this.GitlabId = gitlabid;
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return UserName;
     }
 
-    public void setUserName(String username){
+    public void setUserName(String username) {
         this.UserName = username;
     }
 
-    public String getName(){
+    public String getName() {
         return Name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.Name = name;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return Password;
     }
 
-    public void setPassword(String password){
-        if(password == null || password == ""){
+    public void setPassword(String password) {
+        if (password == null || password == "") {
             this.Password = "1234567";
-        }
-        else{
+        } else {
             this.Password = password;
         }
     }
 
-    public String getGitlabToken(){
+    public String getGitlabToken() {
         return GitlabToken;
     }
 
-    public void setGitlabToen(String gitlabtoken){
+    public void setGitlabToen(String gitlabtoken) {
         this.GitlabToken = gitlabtoken;
     }
 
-    public String getRole(){
+    public String getRole() {
         return Role;
     }
 
-    public void setRole(String role){
+    public void setRole(String role) {
         this.Role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
