@@ -70,7 +70,7 @@ public class User {
         return GitlabToken;
     }
 
-    public void setGitlabToen(String gitlabtoken) {
+    public void setGitlabToken(String gitlabtoken) {
         this.GitlabToken = gitlabtoken;
     }
 
