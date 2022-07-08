@@ -222,7 +222,7 @@ public class UserDBManager {
                     user.setUserName(username);
                     user.setEmail(email);
                     user.setName(name);
-                    user.setGitlabToen(gitlabtoken);
+                    user.setGitlabToken(gitlabtoken);
                     user.setPassword(password);
                     user.setRole(role);
                 }
@@ -267,7 +267,7 @@ public class UserDBManager {
 
                 User user = new User(name, username, email, password, role);
                 user.setId(id);
-                user.setGitlabToen(gitlabtoken);
+                user.setGitlabToken(gitlabtoken);
                 user.setGitlabId(gitlabid);
                 users.add(user);
             }
@@ -303,6 +303,39 @@ public class UserDBManager {
             prestmt = conn.prepareStatement(str);
 
             prestmt.setString(1, username);
+            try (ResultSet rs = prestmt.executeQuery()) {
+                rs.next();
+                if (rs.getInt("count(*)") > 0) {
+                    check = true;
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            try {
+                prestmt.close();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+            try {
+                conn.close();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return check;
+    }
+
+    public boolean checkEmail(String email) {
+        boolean check = false;
+        String str = "SELECT count(*) FROM User WHERE email = ?";
+        Connection conn = null;
+        PreparedStatement prestmt = null;
+        try {
+            conn = database.getConnection();
+            prestmt = conn.prepareStatement(str);
+
+            prestmt.setString(1, email);
             try (ResultSet rs = prestmt.executeQuery()) {
                 rs.next();
                 if (rs.getInt("count(*)") > 0) {
