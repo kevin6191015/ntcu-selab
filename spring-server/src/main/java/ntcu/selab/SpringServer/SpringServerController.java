@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SpringServerController {
 
+    @GetMapping("/123")
+    public String test() throws Exception{
+        return "ok";
+    }
+
     @GetMapping ("/create")
     public String hello() throws Exception {
         /*JenkinsService temp = JenkinsService.getObject();
