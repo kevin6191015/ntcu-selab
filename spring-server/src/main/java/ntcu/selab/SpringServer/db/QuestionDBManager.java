@@ -2,6 +2,7 @@ package ntcu.selab.SpringServer.db;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -82,6 +83,81 @@ public class QuestionDBManager {
         question.setOutput(output);
         question.setInputornot(jsonobject.getInt("input_or_not"));
         return question;
+    }
+
+    public void deleteQuestionById(String id) throws Exception{
+        URL url = new URL(dbUrl + "/question1/delete/" + id);
+        setConnect(url, "POST");          
+    }
+
+    public void addQuestion(Question q) throws Exception{
+        URL url = new URL(dbUrl + "/question1/add");
+        HttpURLConnection conn;
+        try{
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String[] input = q.getInput();
+            String[] output = q.getOutnput();
+            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            for(int i=1 ; i<11 ; i++){
+                info += "&input" + String.valueOf(i) + "=" + input[i];
+                info += "&output" + String.valueOf(i) + "=" + output[i];
+            }
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void updateQuestion(String question_id, Question q) throws Exception{
+        URL url = new URL(dbUrl + "/question1/update/" + question_id);
+        HttpURLConnection conn;
+        try{
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String[] input = q.getInput();
+            String[] output = q.getOutnput();
+            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            for(int i=1 ; i<11 ; i++){
+                info += "&input" + String.valueOf(i) + "=" + input[i];
+                info += "&output" + String.valueOf(i) + "=" + output[i];
+            }
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
     }
 
     public StringBuilder setConnect(URL url, String httpmethod) throws Exception{
