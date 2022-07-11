@@ -2,7 +2,7 @@ const TestdataModel = require('../models/testdata.model');
 
 //get testdata by name
 exports.getTestdatabyName = (req,res)=>{
-    TestdataModel.getTestdatabyName(req.params.question_name, (err, question)=>{
+    TestdataModel.getTestdatabyName(req.params.question_id, (err, question)=>{
         if(err)
         res.send(err);
         console.log('single question',question);

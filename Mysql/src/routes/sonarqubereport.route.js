@@ -16,7 +16,7 @@ router.get('/:student_id/:project_name', function(req, res) {
     })
 });
 
-router.post('/delete/:student_id/:projet_name', function(req,res) {
+/*router.post('/delete/:student_id/:projet_name', function(req,res) {
     console.log('delete');
     SQreportModel.deleteSQreport(req.params.student_id, req.params.project_name, (err, sqreport)=>{
         if(err)
@@ -25,9 +25,9 @@ router.post('/delete/:student_id/:projet_name', function(req,res) {
             res.json({success:true, message: 'SQreport deleted successfully!'});
     })
 }); 
-
+*/
 router.post('/add/', function(req,res) {
-    console.log('ok');
+    //console.log('ok');
     const sqreportReqData = new SQreportModel(req.body);
     console.log('sqreportReqData',sqreportReqData);
     //check null

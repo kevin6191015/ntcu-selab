@@ -25,7 +25,7 @@ exports.createNewClass = (req,res) =>{
 }
 
 exports.deleteClass = (req,res)=>{
-    ClassModel.deleteClass(req.params.class_id, (err,question)=>{
+    ClassModel.deleteClass(req.params.class_id, (err,classes)=>{
         if(err)
             res.send(err);
             res.json({success:true, message: 'Class deleted successfully!'});

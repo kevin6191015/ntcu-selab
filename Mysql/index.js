@@ -21,12 +21,42 @@ app.get('/',(req,res)=>{
 const questionRoutes = require('./src/routes/question.route');
 //import testdata routes
 const testdataRoutes = require('./src/routes/testdata.route');
+//import sourcecode routes
+const sourcecodeRoutes = require('./src/routes/sourcecode.route');
+//import sonarqube_report routes
+const sqreportRoutes = require('./src/routes/sonarqubereport.route');
+//import student routes
+const studentRoutes = require('./src/routes/student.route');
+//import class routes
+const classRoutes = require('./src/routes/class.route');
+//import class question routes
+const CQRoutes = require('./src/routes/class_question.route');
+//import question2 routes
+const questionRoutes2 = require('./src/routes/question2.route');
 
 //creat question routes
-app.use('/api/question',questionRoutes);
+app.use('/api/question1',questionRoutes);
 
 //create testdata routes
 app.use('/api/testdata',testdataRoutes);
+
+//create sourcecode routes
+app.use('/api/sourcecode',sourcecodeRoutes);
+
+//create sonarqubereport routes
+app.use('/api/sqreport',sqreportRoutes);
+
+//create student routes
+app.use('/api/student',studentRoutes);
+
+//Create class routes
+app.use('/api/class',classRoutes);
+
+//Create
+app.use('/api/classquestion',CQRoutes);
+
+//create question2 routes
+app.use('/api/question2',questionRoutes2);
 
 //listen to port
 app.listen(port, ()=>{

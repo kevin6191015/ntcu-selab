@@ -15,13 +15,13 @@ exports.getquestionlist = (req,res)=>{
 }
 
 
-//get question by Num
+//get question by id
 exports.getQuestionByNum = (req, res)=>{
     //console.log('get question by num');
-    QuestionModel.getQuestionByNum(req.params.num, (err, question)=>{
+    QuestionModel.getQuestionByNum(req.params.id, (err, question)=>{
         if(err)
             res.send(err);
-        console.log('single question',question);
+        //console.log('single question',question);
         res.send(question);
     })
 }
@@ -38,7 +38,7 @@ exports.createNewQuestion = (req,res) =>{
          QuestionModel.createQuestion(questionReqData, (err, question)=>{
              if(err)
                  res.send(err);
-                 res.json({status: true, message: 'Qusetion Created Successfully',data: question.insertId});
+                 res.json({status: true, message: 'Qusetion Created Successfully'});
          })
      }   
 }
@@ -52,7 +52,7 @@ exports.updateQuestion = (req,res)=>{
          res.send(400).send({success: false, message: 'Please all fields'});
      }else{
          console.log('valid data');
-         QuestionModel.updateQuestion(req.params.num, questionReqData, (err, question)=>{
+         QuestionModel.updateQuestion(req.params.id, questionReqData, (err, question)=>{
              if(err)
              res.send(err);
              else
@@ -64,7 +64,7 @@ exports.updateQuestion = (req,res)=>{
 
 //delete question
 exports.deleteQuestion = (req,res)=>{
-	QuestionModel.deleteQuestion(req.params.num, (err,question)=>{
+	QuestionModel.deleteQuestion(req.params.id, (err,question)=>{
 		if(err)
 			res.send(err);
 		res.json({success:true, message: 'Qusestion deleted successfully!'});

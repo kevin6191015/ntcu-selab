@@ -23,43 +23,44 @@ Class.createNewClass = (classReqData, result) =>{
         class_id += 1;
         changeclass.class_id = class_id;       
         class_id = padLeft(class_id,3);
-        var sql1 = 'CREATE TABLE class_' + class_id + '_question (question_id TEXT, question_name TEXT, release_time DATE, deadline DATE)';
+        console.log(changeclass);
+        var sql1 = 'CREATE TABLE class_' + class_id + '_questions (question_id TEXT, question_name TEXT, release_time DATE, deadline DATE)';
         var sql2 = 'CREATE TABLE class_' + class_id + '_student (student_id TEXT, student_name TEXT)';
         dbConn.query(sql1,(err,res)=>{
-            if(err)
-                result(null,err);
+            //if(err)
+            //    result(null,err);
             //else
                 //result(null,res);
         }) 
         dbConn.query(sql2,(err,res)=>{
-            if(err)
-                result(null,err);
+            //if(err)
+            //    result(null,err);
             //else
                 //result(null,res);
         })
         dbConn.query('INSERT INTO classes_list SET ? ',changeclass, (err,res)=>{
             if(err)
-                result(null,err);
+                result(err);
             else    
                 result(null,res);
-        })
+        }) 
         
-    })
+    })  
 }
 
 Class.deleteClass = (class_id, result)=>{
     class_id1 = padLeft(class_id,3);
-    var sql1 = 'DROP TABLE class_' + class_id1 + '_question';
+    var sql1 = 'DROP TABLE class_' + class_id1 + '_questions';
     var sql2 = 'DROP TABLE class_' + class_id1 + '_student';
     dbConn.query(sql1,(err,res)=>{
-        if(err)
-            result(err);
+        //if(err)
+        //    result(err);
         //else
             //result(null,res);
     }) 
     dbConn.query(sql2,(err,res)=>{
-        if(err)
-            result(err); 
+        //if(err)
+        //    result(err); 
         //else
             //result(null,res);
     })

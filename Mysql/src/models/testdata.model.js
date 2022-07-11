@@ -31,15 +31,26 @@ var Testdata = function(testdata){
 }
 
 //get testdata by id (changed from by name)
-Testdata.getTestdatabyName = (question_name,result) =>{
-      dbConn.query('SELECT question_name,id,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank WHERE id=?', question_name, (err,res)=>{
-          if(err){
-              console.log('Error while fetching question by question_name',err);
-              result(null,err);
-          }else{
-              result(null,res);
-          }
-      })
+Testdata.getTestdatabyName = (question_id,result) =>{
+    if(question_id[0]=='a'){
+        dbConn.query('SELECT question_name,id,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank WHERE id=?', question_id, (err,res)=>{
+            if(err){
+                console.log('Error while fetching question by question_name',err);
+                result(null,err);
+            }else{
+                result(null,res);
+            }
+        })
+    }else{
+        dbConn.query('SELECT question_name,id,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,output1,output2,output3,output4,output5,output6,output7,output8,output9,output10 FROM question_bank2 WHERE id=?', question_id, (err,res)=>{
+            if(err){
+                console.log('Error while fetching question by question_name',err);
+                result(null,err);
+            }else{
+                result(null,res);
+            }
+        }) 
+    }
 }
 //get all testdata
 Testdata.getAllTestdata = (result)=>{
