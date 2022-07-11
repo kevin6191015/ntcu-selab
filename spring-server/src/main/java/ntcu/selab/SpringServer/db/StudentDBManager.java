@@ -56,7 +56,7 @@ public class StudentDBManager {
             conn.setRequestMethod(httpmethod);
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
-            int status = conn.getResponseCode();
+            //int status = conn.getResponseCode();
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
