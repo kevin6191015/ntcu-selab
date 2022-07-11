@@ -28,8 +28,8 @@ public class StudentDBManager {
         return dbManager;
     }
 
-    public List<Student> getStudents(int id)throws Exception{
-        URL url = new URL(dbUrl + String.valueOf(id));       
+    public List<Student> getStudents(String id)throws Exception{
+        URL url = new URL(dbUrl + id);       
         JSONArray jsonarray = null;
         JSONObject jsonobject = null;
         List<Student> students = new ArrayList<>();
