@@ -4,7 +4,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.data.Course;
-import ntcu.selab.SpringServer.data.Student;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -58,7 +57,7 @@ public class CourseDBManager {
             conn.setRequestMethod(httpmethod);
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
-            int status = conn.getResponseCode();
+            //int status = conn.getResponseCode();
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
