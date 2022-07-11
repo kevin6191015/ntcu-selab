@@ -36,7 +36,13 @@ public class StudentDBManager {
 
         StringBuilder response = setConnect(url, "GET");
         jsonarray = new JSONArray( response.toString());
-        jsonobject = jsonarray.getJSONObject(0); 
+		for (int i = 0; i < jsonarray.length(); i++) {
+            Student s = new Student();
+    		jsonobject = jsonarray.getJSONObject(i);
+            s.setId(jsonobject.getString("student_id"));
+            s.setName(jsonobject.getString("student_name"));
+            students.add(s);
+		}
         return students;  
     }
 

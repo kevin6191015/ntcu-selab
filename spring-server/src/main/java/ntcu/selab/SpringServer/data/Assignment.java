@@ -5,18 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 public class Assignment {
-    private int id = 0;
+    private String id = "";
     private String name = "";
-    private Date createtime = null;
     private Date deadline = null;
     private Date releasetime = null;
-    private String description = "";
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -26,14 +24,6 @@ public class Assignment {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getCreateTime() {
-        return createtime;
-    }
-
-    public void setCreateTime(Date createtime) {
-        this.createtime = createtime;
     }
 
     public Date getDeadLine() {
@@ -50,13 +40,5 @@ public class Assignment {
 
     public void setReleaseTime(Date releasetime) {
         this.releasetime = releasetime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

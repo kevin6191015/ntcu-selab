@@ -3,8 +3,6 @@ package ntcu.selab.SpringServer.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-
 public class Course {
     private String coursename = null;
     private String teacher = null;
@@ -30,7 +28,7 @@ public class Course {
         this.coursename = coursename;
     }
 
-    public String getTeacher(String teacher){
+    public String getTeacher(){
         return teacher;
     }
 

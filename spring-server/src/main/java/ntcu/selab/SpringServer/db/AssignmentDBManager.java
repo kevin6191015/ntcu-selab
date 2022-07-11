@@ -31,7 +31,7 @@ public class AssignmentDBManager {
     public void addAssignment(Assignment assignment) {
         String str = "INSERT INTO Assignment(`name`, `createTime`, `description`,"
                 + " VALUES(?, ?, ?)";
-        Timestamp createtime = new Timestamp(assignment.getCreateTime().getTime());
+        //Timestamp createtime = new Timestamp(assignment.getCreateTime().getTime());
 
         Connection conn = null;
         PreparedStatement prestmt = null;
@@ -40,8 +40,8 @@ public class AssignmentDBManager {
             prestmt = conn.prepareStatement(str);
 
             prestmt.setString(1, assignment.getName());
-            prestmt.setTimestamp(2, createtime);
-            prestmt.setString(3, assignment.getDescription());
+            //prestmt.setTimestamp(2, createtime);
+            //prestmt.setString(3, assignment.getDescription());
             prestmt.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -71,10 +71,10 @@ public class AssignmentDBManager {
             prestmt.setString(1, name);
             try (ResultSet rs = prestmt.executeQuery()) {
                 while (rs.next()) {
-                    assignment.setId(rs.getInt("id"));
+                    //assignment.setId(rs.getInt("id"));
                     assignment.setName(rs.getString(name));
-                    assignment.setCreateTime(rs.getTimestamp("createtime"));
-                    assignment.setDescription(rs.getString("description"));
+                    //assignment.setCreateTime(rs.getTimestamp("createtime"));
+                    //assignment.setDescription(rs.getString("description"));
                 }
             }
         } catch (SQLException e) {
@@ -171,10 +171,10 @@ public class AssignmentDBManager {
             rs = stmt.executeQuery(str);
             while (rs.next()) {
                 Assignment assignment = new Assignment();
-                assignment.setId(rs.getInt("id"));
+                //assignment.setId(rs.getInt("id"));
                 assignment.setName(rs.getString("name"));
-                assignment.setCreateTime(rs.getTimestamp("createtime"));
-                assignment.setDescription(rs.getString("description"));
+                //assignment.setCreateTime(rs.getTimestamp("createtime"));
+                //assignment.setDescription(rs.getString("description"));
                 assignments.add(assignment);
             }
         } catch (SQLException e) {

@@ -37,7 +37,14 @@ public class CourseDBManager {
 
         StringBuilder response = setConnect(url, "GET");
         jsonarray = new JSONArray( response.toString());
-        jsonobject = jsonarray.getJSONObject(0); 
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Course c = new Course();
+    		jsonobject = jsonarray.getJSONObject(i);
+            c.setCourseName(jsonobject.getString("class_name"));
+            c.setTeacher(jsonobject.getString("teacher"));
+            c.setTA(jsonobject.getString("TA"));
+            courses.add(c);
+		}
         return courses;  
     }
     
