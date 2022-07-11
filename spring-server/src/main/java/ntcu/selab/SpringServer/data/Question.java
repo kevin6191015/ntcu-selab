@@ -1,14 +1,16 @@
 package ntcu.selab.SpringServer.data;
 
 public class Question {
-    private int id = 0;
+    private String id = null;
     private String name = null;
     private String description = null;
     private String image1 = null;
     private String image2 = null;
-    private String[] input = new String[10];
-    private String[] output = new String[10];
-    private int inputornot = 0;
+    private String[] input = new String[11];
+    private String[] output = new String[11];
+    private int inputornot = -1;
+    private String teacher = null;
+    private String classid = null;
 
     public Question(String name, String description){
         this.name = name;
@@ -16,14 +18,14 @@ public class Question {
     }
 
     public Question(){
-        
+
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
 
-    public void setId(int id){
+    public void setId(String id){
         this.id = id;
     }
 
@@ -64,7 +66,7 @@ public class Question {
     }
 
     public void setInput(String[] input){
-        for(int i=0 ; i<10 ; i++){
+        for(int i=1 ; i<11 ; i++){
             this.input[i] = input[i];
         }
     }
@@ -74,7 +76,7 @@ public class Question {
     }
 
     public void setOutput(String[] output){
-        for(int i=0 ; i<10 ; i++){
+        for(int i=1 ; i<11 ; i++){
             this.output[i] = output[i];
         }
     }
@@ -85,5 +87,21 @@ public class Question {
 
     public void setInputornot(int inputornot){
         this.inputornot = inputornot;
+    }
+
+    public String getTeacher(){
+        return teacher;
+    }
+
+    public void setTeacher(String teaher){
+        this.teacher = teaher;
+    }
+
+    public String getClassId(){
+        return classid;
+    }
+
+    public void setClassId(String classid){
+        this.classid = classid;
     }
 }
