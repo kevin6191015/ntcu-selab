@@ -8,7 +8,7 @@ public class Question {
     private String image2 = null;
     private String[] input = new String[11];
     private String[] output = new String[11];
-    private int inputornot = -1;
+    private int inputornot = 0;
     private String teacher = null;
     private String classid = null;
 
