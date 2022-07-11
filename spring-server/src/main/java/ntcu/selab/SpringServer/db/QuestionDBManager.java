@@ -56,8 +56,8 @@ public class QuestionDBManager {
         return questions;
     }
 
-    public Question getQuestionById(int id) throws Exception{
-        URL url = new URL(dbUrl + "/qustion1/" + String.valueOf(id));       
+    public Question getQuestionById(String id) throws Exception{
+        URL url = new URL(dbUrl + "/question1/" + id);       
         JSONArray jsonarray = null;
         JSONObject jsonobject = null;
         Question question = new Question();
@@ -67,6 +67,20 @@ public class QuestionDBManager {
         jsonobject = jsonarray.getJSONObject(0);
         question.setName(jsonobject.getString("question_name"));
         question.setDescription(jsonobject.getString("question_description"));
+        question.setId(jsonobject.getString("id"));
+        question.setName(jsonobject.getString("question_name"));
+        question.setDescription(jsonobject.getString(("question_description")));
+        question.setImage1(jsonobject.getString("image1"));
+        question.setImage2(jsonobject.getString("image2"));
+        String[] input = new String[11];
+        String[] output = new String[11];
+        for(int j=1 ; j<11 ; j++){
+            input[j] = jsonobject.getString("input" + String.valueOf(j));
+            output[j] = jsonobject.getString("output" + String.valueOf(j));
+        }
+        question.setInput(input);
+        question.setOutput(output);
+        question.setInputornot(jsonobject.getInt("input_or_not"));
         return question;
     }
 
@@ -80,7 +94,7 @@ public class QuestionDBManager {
             conn.setRequestMethod(httpmethod);
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
-            int status = conn.getResponseCode();
+            //int status = conn.getResponseCode();
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
