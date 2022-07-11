@@ -1,8 +1,8 @@
 package ntcu.selab.SpringServer.data;
 
 public class User {
-    private int Id;
-    private int GitlabId;
+    private String Id;
+    private String GitlabId;
     private String Name;
     private String UserName;
     private String Password;
@@ -22,19 +22,19 @@ public class User {
 
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.Id = id;
     }
 
-    public int getGitlabId() {
+    public String getGitlabId() {
         return GitlabId;
     }
 
-    public void setGitlabId(int gitlabid) {
+    public void setGitlabId(String gitlabid) {
         this.GitlabId = gitlabid;
     }
 
