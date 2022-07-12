@@ -19,20 +19,15 @@ public class JenkinsService {
     private static final Logger logger = LoggerFactory.getLogger(JenkinsService.class);
     private static JenkinsService object = new JenkinsService();
     private JenkinsConfig jenkinsConfig;
-    private String jenkinsHostUrl;
     private String jenkinsRootUsername;
-    private String jenkinsRootPassword;
     private String jenkinsApiToken;
     private String jenkinsRootUrl;
-    private final String contentType = "";
-    private final String jenkinsCrumb = "";
 
     public JenkinsService(){
         try {
             jenkinsConfig = JenkinsConfig.getObject();
             jenkinsRootUrl = jenkinsConfig.getJenkinsRootUrl();
             jenkinsRootUsername = jenkinsConfig.getJenkinsRootUsername();
-            jenkinsRootPassword = jenkinsConfig.getJenkinsRootPassword();
             jenkinsApiToken = jenkinsConfig.getJenkinsApiToken();
         }catch(Exception e){
             logger.error(e.getMessage());
