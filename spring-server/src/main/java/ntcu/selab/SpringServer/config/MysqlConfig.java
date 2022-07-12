@@ -26,62 +26,15 @@ public class MysqlConfig {
         return object;
     }
 
-    public String getDBUser() throws Exception {
-        String dbuser = System.getenv("DB_USER");
+    public String getDBUrl() throws Exception {
+        String dbuser = System.getenv("DB_URL");
         if (dbuser != null && !dbuser.equals("")) {
             return dbuser;
         }
         if (props != null) {
-            return props.getProperty("DB_USER").trim();
+            return props.getProperty("DB_URL").trim();
         }
-        throw new Exception("Could not found DB_USER");
+        throw new Exception("Could not found DB_URL");
     }
 
-    public String getDBPassword() throws Exception {
-        String dbpassword = System.getenv("DB_PASSWORD");
-        if (dbpassword != null && !dbpassword.equals("")) {
-            return dbpassword;
-        }
-        if (props != null) {
-            return props.getProperty("DB_PASSWORD").trim();
-        }
-        throw new Exception("Could not found DB_PASSWORD");
-    }
-
-    public String getDBSchema() throws Exception {
-        String dbschema = System.getenv("DB_DATABASE");
-        if (dbschema != null && !dbschema.equals("")) {
-            return dbschema;
-        }
-        if (props != null) {
-            return props.getProperty("DB_DATABASE").trim();
-        }
-        throw new Exception("Could not found DB_DATABASE");
-    }
-
-    public String getDBHost() throws Exception {
-        String dbhost = System.getenv("DB_HOST");
-        if (dbhost != null && !dbhost.equals("")) {
-            return dbhost;
-        }
-        if (props != null) {
-            return props.getProperty("DB_HOST").trim();
-        }
-        throw new Exception("Could not found DB_HOST");
-    }
-
-    public String getDBConnectionOpt() throws Exception {
-        String dbconnopt = System.getenv("DB_CONNECTION_OPTION");
-        if (dbconnopt != null && !dbconnopt.equals("")) {
-            return dbconnopt;
-        }
-        if (props != null) {
-            return props.getProperty("DB_CONNECTION_OPTION").trim();
-        }
-        throw new Exception("Could not found DB_CONNECTION_OPTION");
-    }
-
-    public String getConnectionString() throws Exception {
-        return "jdbc:mysql://" + getDBHost() + "/" + getDBSchema() + getDBConnectionOpt();
-    }
 }
