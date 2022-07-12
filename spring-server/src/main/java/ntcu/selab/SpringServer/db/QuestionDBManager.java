@@ -13,12 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Question;
 
 public class QuestionDBManager {
     private static final Logger logger = LoggerFactory.getLogger(QuestionDBManager.class);
-    private static final String dbUrl = "http://120.108.204.152:3000/api";
     private static QuestionDBManager  dbManager = null;
+    private static MysqlDatabase database = MysqlDatabase.getObject();
+    private static HttpURLConnection conn = null;
+    private static StringBuilder response = null;
+    private static String line = null;
+    private static BufferedReader br = null;
+    private static JSONArray jsonarray = null;
+    private static JSONObject jsonobject = null;  
 
     public static QuestionDBManager getObject(){
         if(dbManager == null){
@@ -28,12 +35,17 @@ public class QuestionDBManager {
     }
 
     public List<Question> getAllQuestion() throws Exception{
-        URL url = new URL(dbUrl + "/question1");       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question1");       
+        
         List<Question> questions = new ArrayList<>();
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
         jsonarray = new JSONArray( response.toString());
         for (int i = 0; i < jsonarray.length(); i++) {
             Question s = new Question();
@@ -58,12 +70,17 @@ public class QuestionDBManager {
     }
 
     public Question getQuestionById(String id) throws Exception{
-        URL url = new URL(dbUrl + "/question1/" + id);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question1/" + id);       
+
         Question question = new Question();
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         question.setName(jsonobject.getString("question_name"));
@@ -85,100 +102,104 @@ public class QuestionDBManager {
         return question;
     }
 
-    public void deleteQuestionById(String id) throws Exception{
-        URL url = new URL(dbUrl + "/question1/delete/" + id);
-        setConnect(url, "POST");          
-    }
-
-    public void addQuestion(Question q) throws Exception{
-        URL url = new URL(dbUrl + "/question1/add");
-        HttpURLConnection conn;
+    public JSONObject deleteQuestionById(String id) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        JSONObject o = new JSONObject();
+        URL url = new URL(dbUrl + "question1/delete/" + id);
         try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            String[] input = q.getInput();
-            String[] output = q.getOutnput();
-            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
-            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
-            for(int i=1 ; i<11 ; i++){
-                info += "&input" + String.valueOf(i) + "=" + input[i];
-                info += "&output" + String.valueOf(i) + "=" + output[i];
-            }
-            byte[] data = info.getBytes();
-            conn.connect();
-            OutputStream out = conn.getOutputStream();
-            out.write(data);
-            out.flush();
-            out.close();
+            conn = database.getConnection(url, "POST");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
-            }
-            conn.disconnect();
-        }catch(HttpStatusCodeException e){
-            logger.error(e.getMessage());
-        }
-    }
-
-    public void updateQuestion(String question_id, Question q) throws Exception{
-        URL url = new URL(dbUrl + "/question1/update/" + question_id);
-        HttpURLConnection conn;
-        try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            String[] input = q.getInput();
-            String[] output = q.getOutnput();
-            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
-            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
-            for(int i=1 ; i<11 ; i++){
-                info += "&input" + String.valueOf(i) + "=" + input[i];
-                info += "&output" + String.valueOf(i) + "=" + output[i];
-            }
-            byte[] data = info.getBytes();
-            conn.connect();
-            OutputStream out = conn.getOutputStream();
-            out.write(data);
-            out.flush();
-            out.close();
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException("Failed : HTTP error code : " +
-                conn.getResponseCode()+" "+conn.getResponseMessage());
-            }
-            conn.disconnect();
-        }catch(HttpStatusCodeException e){
-            logger.error(e.getMessage());
-        }
-    }
-
-    public StringBuilder setConnect(URL url, String httpmethod) throws Exception{
-        HttpURLConnection conn;
-        StringBuilder response = null;
-        BufferedReader br = null;
-        String line = "";
-        try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(httpmethod);
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            //int status = conn.getResponseCode();
+            }            
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());           
+            o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return response;
+        return jsonobject;           
+    }
+
+    public JSONObject addQuestion(Question q) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question1/add");
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String[] input = q.getInput();
+            String[] output = q.getOutnput();
+            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            for(int i=1 ; i<11 ; i++){
+                info += "&input" + String.valueOf(i) + "=" + input[i];
+                info += "&output" + String.valueOf(i) + "=" + output[i];
+            }
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());           
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
+        return jsonobject;
+    }
+
+    public void updateQuestion(String question_id, Question q) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question1/update/" + question_id);
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String[] input = q.getInput();
+            String[] output = q.getOutnput();
+            String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            for(int i=1 ; i<11 ; i++){
+                info += "&input" + String.valueOf(i) + "=" + input[i];
+                info += "&output" + String.valueOf(i) + "=" + output[i];
+            }
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
     }
 }
