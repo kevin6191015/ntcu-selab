@@ -1,14 +1,10 @@
 package ntcu.selab.SpringServer.data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class Assignment {
-    private String id = "";
-    private String name = "";
-    private Date deadline = null;
-    private Date releasetime = null;
+    private String id = null;
+    private String name = null;
+    private String deadline = null;
+    private String releasetime = null;
 
     public String getId() {
         return id;
@@ -26,19 +22,19 @@ public class Assignment {
         this.name = name;
     }
 
-    public Date getDeadLine() {
+    public String getDeadLine() {
         return deadline;
     }
 
-    public void setDeadLine(Date deadline) {
+    public void setDeadLine(String deadline) {
         this.deadline = deadline;
     }
 
-    public Date getReleaseTime() {
+    public String getReleaseTime() {
         return releasetime;
     }
 
-    public void setReleaseTime(Date releasetime) {
+    public void setReleaseTime(String releasetime) {
         this.releasetime = releasetime;
     }
 }
