@@ -3,10 +3,12 @@ package ntcu.selab.SpringServer.db;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Student;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,8 +20,14 @@ import org.slf4j.Logger;
 
 public class StudentDBManager {
     private static final Logger logger = LoggerFactory.getLogger(StudentDBManager.class);
-    private static final String dbUrl = "http://120.108.204.152:3000/api/student/";
     private static StudentDBManager dbManager = null;
+    private static MysqlDatabase database = MysqlDatabase.getObject();
+    private static HttpURLConnection conn = null;
+    private static StringBuilder response = null;
+    private static String line = null;
+    private static BufferedReader br = null;
+    private static JSONArray jsonarray = null;
+    private static JSONObject jsonobject = null;   
 
     public static StudentDBManager getObject(){
         if(dbManager == null){
@@ -29,12 +37,17 @@ public class StudentDBManager {
     }
 
     public List<Student> getStudents(String id)throws Exception{
-        URL url = new URL(dbUrl + id);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "student/" + id);               
+            
         List<Student> students = new ArrayList<>();
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
         jsonarray = new JSONArray( response.toString());
 		for (int i = 0; i < jsonarray.length(); i++) {
             Student s = new Student();
@@ -46,25 +59,89 @@ public class StudentDBManager {
         return students;  
     }
 
-    public StringBuilder setConnect(URL url, String httpmethod) throws Exception{
-        HttpURLConnection conn;
-        StringBuilder response = null;
-        BufferedReader br = null;
-        String line = "";
+    public JSONObject addStudent(String class_id, Student student) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "add/" + class_id);
         try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(httpmethod);
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            //int status = conn.getResponseCode();
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String info = "student_id=" + student.getId() + "&" + "student_name=" + student.getName();
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return response;
+        return jsonobject;
+    }
+
+    public JSONObject updateStudent(String class_id, Student student) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "update/" + class_id + "/" + student.getId());
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String info = "student_id=" + student.getId() + "&" + "student_name=" + student.getName();
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            jsonobject = new JSONObject(response.toString());
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
+        return jsonobject;
+    }
+
+    public JSONObject deleteStudent(String class_id, String sid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "/delete/" + class_id + "/" + sid);
+        try{
+            conn = database.getConnection(url, "POST");
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            jsonobject = new JSONObject(response.toString());
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }
+        return jsonobject;  
     }
 }
