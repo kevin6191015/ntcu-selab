@@ -139,7 +139,7 @@ public class QuestionService {
     }
     
     /*
-     * http://127.0.0.1:8081/question/updateQuestion?id=a0052&input1=123&input2=223&input3=323&output1=121&output2=221&output3=321&input4=123&input5=123&
+     * http://127.0.0.1:8081/question/updateQuestion?id=a0052&input1=qq&input2=223&input3=323&output1=121&output2=221&output3=321&input4=123&input5=123&
      * input6=123&input7=123&input8=123&input9=123&input10=123&output4=321&output5=321&output6=321&output7=321&output8=321&output9=321&output10=321
      */
     @GetMapping("/updateQuestion")

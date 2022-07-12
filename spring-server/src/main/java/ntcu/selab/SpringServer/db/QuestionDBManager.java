@@ -119,7 +119,7 @@ public class QuestionDBManager {
             br.close();
             conn.disconnect();
             jsonobject = new JSONObject(response.toString());           
-            o.put("message", o.getString("message"));
+            //o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
