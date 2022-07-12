@@ -61,7 +61,7 @@ public class StudentDBManager {
 
     public JSONObject addStudent(String class_id, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "add/" + class_id);
+        URL url = new URL(dbUrl + "student/add/" + class_id);
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
@@ -93,7 +93,7 @@ public class StudentDBManager {
 
     public JSONObject updateStudent(String class_id, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "update/" + class_id + "/" + student.getId());
+        URL url = new URL(dbUrl + "student/update/" + class_id + "/" + student.getId());
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
@@ -125,20 +125,22 @@ public class StudentDBManager {
 
     public JSONObject deleteStudent(String class_id, String sid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "/delete/" + class_id + "/" + sid);
+        JSONObject o = new JSONObject();
+        URL url = new URL(dbUrl + "student/delete/" + class_id + "/" + sid);
         try{
             conn = database.getConnection(url, "POST");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
-            }
-            conn.disconnect();
+            }            
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
-            jsonobject = new JSONObject(response.toString());
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());           
+            o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
