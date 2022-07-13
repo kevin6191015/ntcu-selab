@@ -2,16 +2,10 @@ package ntcu.selab.SpringServer.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ProxySelector;
 import java.util.Properties;
 
-import javax.el.ELException;
-
-import org.apache.tomcat.websocket.pojo.PojoEndpointBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.AttributeAccessor;
-
 
 public class JenkinsConfig {
     private static final String PROPERTY_FILE = "/jenkins.properties";
