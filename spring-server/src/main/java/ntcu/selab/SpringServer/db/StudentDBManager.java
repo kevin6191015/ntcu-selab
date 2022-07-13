@@ -59,7 +59,7 @@ public class StudentDBManager {
         return students;  
     }
 
-    public JSONObject addStudent(String class_id, Student student) throws Exception{
+    public void addStudent(String class_id, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "student/add/" + class_id);
         try{
@@ -88,10 +88,9 @@ public class StudentDBManager {
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 
-    public JSONObject updateStudent(String class_id, Student student) throws Exception{
+    public void updateStudent(String class_id, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "student/update/" + class_id + "/" + student.getId());
         try{
@@ -110,22 +109,20 @@ public class StudentDBManager {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
             }
-            conn.disconnect();
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            conn.disconnect();
             jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 
-    public JSONObject deleteStudent(String class_id, String sid) throws Exception{
+    public void deleteStudent(String class_id, String sid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        JSONObject o = new JSONObject();
         URL url = new URL(dbUrl + "student/delete/" + class_id + "/" + sid);
         try{
             conn = database.getConnection(url, "POST");
@@ -140,10 +137,8 @@ public class StudentDBManager {
             br.close();
             conn.disconnect();
             jsonobject = new JSONObject(response.toString());           
-            o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;  
     }
 }

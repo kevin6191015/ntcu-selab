@@ -86,14 +86,13 @@ public class CourseService {
     public ResponseEntity<Object> deleteCourse(@RequestParam String class_id){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
-        JSONObject jsonObject = null;
+
         try{
-            jsonObject = cDbManager.deleteCourse(class_id);
-            header.add("Custom-Header,", "message");
+            cDbManager.deleteCourse(class_id);
         }catch(Exception e){
             logger.error(e.getMessage());
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(jsonObject, header, HttpStatus.OK); 
+        return new ResponseEntity<>(header, HttpStatus.OK); 
     }
 }

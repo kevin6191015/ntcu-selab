@@ -59,7 +59,7 @@ public class CourseDBManager {
         return courses;  
     }
     
-    public JSONObject addCourse(Course course) throws Exception{
+    public void addCourse(Course course) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/add");
         try{
@@ -89,10 +89,9 @@ public class CourseDBManager {
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 
-    public JSONObject updateCourse(String class_id, Course course) throws Exception{
+    public void updateCourse(String class_id, Course course) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/update/" + class_id);
         try{
@@ -122,10 +121,9 @@ public class CourseDBManager {
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 
-    public JSONObject deleteCourse(String class_id) throws Exception{
+    public void deleteCourse(String class_id) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/delete/" + class_id);
         try{
@@ -141,10 +139,8 @@ public class CourseDBManager {
             br.close();
             conn.disconnect();
             jsonobject = new JSONObject(response.toString());           
-            //o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 }

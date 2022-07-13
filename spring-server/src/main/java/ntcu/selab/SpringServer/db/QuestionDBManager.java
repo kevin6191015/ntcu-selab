@@ -102,9 +102,8 @@ public class QuestionDBManager {
         return question;
     }
 
-    public JSONObject deleteQuestionById(String id) throws Exception{
+    public void deleteQuestionById(String id) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        JSONObject o = new JSONObject();
         URL url = new URL(dbUrl + "question1/delete/" + id);
         try{
             conn = database.getConnection(url, "POST");
@@ -119,14 +118,12 @@ public class QuestionDBManager {
             br.close();
             conn.disconnect();
             jsonobject = new JSONObject(response.toString());           
-            //o.put("message", o.getString("message"));
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-        }
-        return jsonobject;           
+        }          
     }
 
-    public JSONObject addQuestion(Question q) throws Exception{
+    public void addQuestion(Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question1/add");
         try{
@@ -162,7 +159,6 @@ public class QuestionDBManager {
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return jsonobject;
     }
 
     public void updateQuestion(String question_id, Question q) throws Exception{

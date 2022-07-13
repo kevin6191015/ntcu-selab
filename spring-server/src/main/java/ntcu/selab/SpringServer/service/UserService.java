@@ -1,13 +1,11 @@
 package ntcu.selab.SpringServer.service;
 
-import ntcu.selab.SpringServer.service.GitlabService;
 import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.UserDBManager;
 import org.gitlab.api.models.GitlabUser;
 
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.IOUtils;
-import org.gitlab.api.models.GitlabUser;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.csvreader.CsvReader;
-import com.fasterxml.jackson.databind.deser.impl.ErrorThrowingDeserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +32,7 @@ public class UserService {
     }
 
     @GetMapping("/getUsers")
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<Object> getUsers() throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
 
@@ -60,15 +57,17 @@ public class UserService {
         return new ResponseEntity<Object>(root, header, HttpStatus.OK);
     }
 
-    @PostMapping("/new")
+    @GetMapping("/addUser")
     public ResponseEntity<Object> createAccount(
+            @RequestParam("id") String id,
             @RequestParam("name") String name,
             @RequestParam("username") String username,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam("role") String role) {
+            @RequestParam("role") String role) throws Exception{
         HttpHeaders header = new HttpHeaders();
         User user = new User(name, username, email, password, role);
+        user.setId(id);
         String error = getErrorMessage(user);
         if (error.isEmpty()) {
             try {
@@ -83,7 +82,7 @@ public class UserService {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Object> createAccounts(@RequestParam("file") MultipartFile uploadedInputStream) {
+    public ResponseEntity<Object> createAccounts(@RequestParam("file") MultipartFile uploadedInputStream) throws Exception{
         HttpHeaders header = new HttpHeaders();
         List<User> users = new ArrayList<>();
         String error = "";
@@ -152,7 +151,38 @@ public class UserService {
 
     }
 
-    private String getErrorMessage(List<User> users, User user) {
+    @GetMapping("updateUser")
+    public ResponseEntity<Object> updateUser(@RequestParam String uid, @RequestParam String username
+    , @RequestParam String name, @RequestParam String password, @RequestParam String role
+    , @RequestParam String email) {
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content_Type", "application/json");
+
+        try{
+            User user = new User(name, username, email, password, role);
+            user.setId(uid);
+            dbManager.updateUser(user);
+        }catch(Exception e){
+            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(header, HttpStatus.OK); 
+    }
+
+    @GetMapping("deleteUser")
+    public ResponseEntity<Object> deleteUser(@RequestParam String uid){
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content_Type", "application/json");
+
+        try{
+            User user = dbManager.getUserInfo(uid);
+            unregister(uid, user.getGitlabId());
+        }catch(Exception e){
+            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(header, HttpStatus.OK); 
+    }
+
+    private String getErrorMessage(List<User> users, User user) throws Exception{
         String errorMessage = getErrorMessage(user);
         if (errorMessage.isEmpty()) {
             if (isDuplicateUsername(users, user.getUserName())) {
@@ -164,7 +194,7 @@ public class UserService {
         return errorMessage;
     }
 
-    private String getErrorMessage(User user) {
+    private String getErrorMessage(User user) throws Exception{
         String errorMessage = "";
         if (isPasswordTooShort(user.getPassword())) {
             errorMessage = user.getName() + " : Password must be at least 8 characters.";
@@ -178,7 +208,7 @@ public class UserService {
         return errorMessage;
     }
 
-    private boolean isDuplicateUsername(String username) {
+    private boolean isDuplicateUsername(String username) throws Exception{
         boolean isDuplicateUsername = false;
         if (dbManager.checkUsername(username)) {
             isDuplicateUsername = true;
@@ -205,7 +235,7 @@ public class UserService {
         return isPasswordTooShort;
     }
 
-    private boolean isDuplicateEmail(String email) {
+    private boolean isDuplicateEmail(String email) throws Exception{
         boolean isDuplicateEmail = false;
         if (dbManager.checkEmail(email)) {
             isDuplicateEmail = true;
@@ -224,13 +254,19 @@ public class UserService {
         return isDuplicateEmail;
     }
 
-    private void register(User user) throws IOException {
+    private void register(User user) throws Exception {
         GitlabUser gitlabUser = gitlabService.createUser(
                 user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
         user.setGitlabToken(gitlabUser.getPrivateToken());
-        user.setGitlabId(gitlabUser.getId());
+        user.setGitlabId(String.valueOf(gitlabUser.getId()));
 
         dbManager.addUser(user);
     }
 
+    private void unregister(String uid, String gid) throws Exception {
+        GitlabService gs = GitlabService.getObject();
+        gs.deleteUserByID(Integer.valueOf(gid));
+
+        dbManager.DeleteUserById(uid);
+    }
 }

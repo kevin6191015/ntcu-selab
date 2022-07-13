@@ -14,12 +14,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.User;
 
 public class UserDBManager {
     private static UserDBManager dbManager = null;
     private static final Logger logger = LoggerFactory.getLogger(UserDBManager.class);
-    private static final String dbUrl = "http://120.108.204.152:3000/api/user/";
+    private static MysqlDatabase database = MysqlDatabase.getObject();
+    private static HttpURLConnection conn = null;
+    private static StringBuilder response = null;
+    private static String line = null;
+    private static BufferedReader br = null;
+    private static JSONArray jsonarray = null;
+    private static JSONObject jsonobject = null;
 
     public static UserDBManager getObject() {
         if (dbManager == null) {
@@ -29,13 +36,10 @@ public class UserDBManager {
     }
 
     public void addUser(User user) throws Exception{
-        HttpURLConnection conn;
-        URL url = new URL(dbUrl + "/add/");
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/add");
         try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
+            conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -53,7 +57,13 @@ public class UserDBManager {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
             }
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
             conn.disconnect();
+            jsonobject = new JSONObject(response.toString()); 
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
@@ -61,11 +71,16 @@ public class UserDBManager {
 
     public String getPassword(String username) throws Exception{
         String password = "";
-        URL url = new URL(dbUrl + "/pw/" +username);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/pw/" +username);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         password = jsonobject.getString("PASSWORD");
@@ -73,9 +88,10 @@ public class UserDBManager {
     }
 
     public void ModifyPassword(String username, String password, String newpassword) throws Exception{
-        URL url = new URL(dbUrl + "/update/pw/" + username + "/" + newpassword);
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/update/pw/" + username + "/" + newpassword);
         if(checkPassword(username, password)){
-            setConnect(url, "POST");
+            conn = database.getConnection(url, "POST");
         }else{
             System.out.println("Wrong password!");
         }  
@@ -92,11 +108,16 @@ public class UserDBManager {
 
     public String getUseridByUsername(String username) throws Exception{
         String id = "";
-        URL url = new URL(dbUrl + "id/" + username);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/id/" + username);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         id = jsonobject.getString("ID");
@@ -105,27 +126,37 @@ public class UserDBManager {
 
     public String getGitlabidByUsername(String username) throws Exception{
         String gitlabid = "";
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "gitlab_id/" + username);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         gitlabid = jsonobject.getString("GITLAB_ID");
         return gitlabid;
     }
 
-    public User getUserInfo(String id) throws Exception{
-        URL url = new URL(dbUrl + "userbyid/" + id);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+    public User getUserInfo(String uid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/userbyid/" + uid);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         User user = new User();
-        user.setId(id);
+        user.setId(uid);
         user.setGitlabId(jsonobject.getString("GITLAB_ID"));
         user.setUserName(jsonobject.getString("USERNAME"));
         user.setEmail(jsonobject.getString("EMAIL"));
@@ -136,13 +167,18 @@ public class UserDBManager {
         return user;
     }
 
-    public List<User> getAllUser() throws Exception{
+    public List<User> getAllUser() throws Exception{      
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/user");       
         List<User> users = new ArrayList<>();
-        URL url = new URL(dbUrl + "user");       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         for(int i=0 ; i<jsonarray.length() ; i++){
             jsonobject = jsonarray.getJSONObject(i);
@@ -162,11 +198,16 @@ public class UserDBManager {
 
     public boolean checkUsername(String username) throws Exception{
         boolean check = false;
-        URL url = new URL(dbUrl + "checkbyusername/" + username);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/checkbyusername/" + username);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         int count = jsonobject.getInt("count(*)");
@@ -178,11 +219,16 @@ public class UserDBManager {
 
     public boolean checkEmail(String email) throws Exception{
         boolean check = false;
-        URL url = new URL(dbUrl + "checkbyemail/" + email);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/checkbyemail/" + email);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         int count = jsonobject.getInt("count(*)");
@@ -192,43 +238,95 @@ public class UserDBManager {
         return check;
     }
 
-    public String getUsernameById(String id) throws Exception{
-        String username = "";
-        URL url = new URL(dbUrl + "username/" + id);       
-        JSONArray jsonarray = null;
-        JSONObject jsonobject = null;
+    public boolean checkUserId(String uid) throws Exception{
+        boolean check = false;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/checkbyid/" + uid);       
 
-        StringBuilder response = setConnect(url, "GET");
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
+        jsonarray = new JSONArray( response.toString());
+        jsonobject = jsonarray.getJSONObject(0);
+        int count = jsonobject.getInt("count(*)");
+        if(count >= 1){
+            check = true;
+        }
+        return check;
+    }
+
+    public String getUsernameById(String uid) throws Exception{
+        String username = "";
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/username/" + uid);       
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
         username = jsonobject.getString("USERNAME");
         return username;
     }
 
-    public void DeleteUserById(String id) throws Exception{
-       URL url = new URL(dbUrl + "delete/" + id);  
-       setConnect(url, "POST");
-    }
-
-    public StringBuilder setConnect(URL url, String httpmethod) throws Exception{
-        HttpURLConnection conn;
-        StringBuilder response = null;
-        BufferedReader br = null;
-        String line = "";
+    public void DeleteUserById(String uid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/delete/" + uid);  
         try{
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(httpmethod);
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            //int status = conn.getResponseCode();
+            conn = database.getConnection(url, "POST");
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }            
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());           
+        }catch(HttpStatusCodeException e){
+            logger.error(e.getMessage());
+        }          
+    }
+
+    public void updateUser(User user) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/update/user/" + user.getUserName());
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String info = "ID=" + user.getId() + "&USERNAME=" + user.getUserName() + "&NAME=" + user.getName() + "&PASSWORD=" + 
+            user.getPassword() + "&ROLE=" + user.getRole() + "&EMAIL=" + user.getEmail();
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString()); 
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
-        return response;
     }
 }

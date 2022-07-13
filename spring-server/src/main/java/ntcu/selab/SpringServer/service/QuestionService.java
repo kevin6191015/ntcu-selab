@@ -45,12 +45,13 @@ public class QuestionService {
                 object.put("output" + String.valueOf(i), output[i]);
             }
             object.put("inputornot", question.getInputornot());
+            
             questionlist.add(object);
         }
+        
         JSONObject root = new JSONObject();
         root.put("Questions", questionlist);
-        System.out.println("ok");
-        return new ResponseEntity<Object>(root, header, HttpStatus.OK);
+        return new ResponseEntity<Object>(root, header, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/getQuestion")
