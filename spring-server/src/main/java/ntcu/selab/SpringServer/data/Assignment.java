@@ -5,6 +5,23 @@ public class Assignment {
     private String name = null;
     private String deadline = null;
     private String releasetime = null;
+    
+    public Assignment(String id, String name, String releasetime, String deadline){
+        this.id = id;
+        this.name = name;
+        this.releasetime = releasetime;
+        this.deadline = deadline;
+    }
+
+    public Assignment(String id, String releasetime, String deadline){
+        this.id = id;
+        this.releasetime = releasetime;
+        this.deadline = deadline;
+    }
+    
+    public Assignment(){
+        
+    }
 
     public String getId() {
         return id;

@@ -1,24 +1,31 @@
 package ntcu.selab.SpringServer.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Assignment;
 
 public class AssignmentDBManager {
     private static AssignmentDBManager dbManager = new AssignmentDBManager();
-    private MysqlDatabase database = MysqlDatabase.getObject();
     private static final Logger logger = LoggerFactory.getLogger(AssignmentDBManager.class);
+    private static MysqlDatabase database = MysqlDatabase.getObject();
+    private static HttpURLConnection conn = null;
+    private static StringBuilder response = null;
+    private static String line = null;
+    private static BufferedReader br = null;
+    private static JSONArray jsonarray = null;
+    private static JSONObject jsonobject = null;   
 
     public static AssignmentDBManager getObject() {
         return dbManager;
@@ -28,169 +35,112 @@ public class AssignmentDBManager {
 
     }
 
-    public void addAssignment(Assignment assignment) {
-        String str = "INSERT INTO Assignment(`name`, `createTime`, `description`,"
-                + " VALUES(?, ?, ?)";
-        //Timestamp createtime = new Timestamp(assignment.getCreateTime().getTime());
+    public List<Assignment> getAllAssignment(String class_id) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "classquestion/" + class_id); 
 
-        Connection conn = null;
-        PreparedStatement prestmt = null;
-        try {
-            conn = database.getConnection();
-            prestmt = conn.prepareStatement(str);
-
-            prestmt.setString(1, assignment.getName());
-            //prestmt.setTimestamp(2, createtime);
-            //prestmt.setString(3, assignment.getDescription());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } finally {
-            try {
-                prestmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public Assignment getAssignmentbyName(String name) {
-        Assignment assignment = new Assignment();
-        String str = "SELECT * FROM Assignment WHERE name = ?";
-        Connection conn = null;
-        PreparedStatement prestmt = null;
-        try {
-            conn = database.getConnection();
-            prestmt = conn.prepareStatement(str);
-
-            prestmt.setString(1, name);
-            try (ResultSet rs = prestmt.executeQuery()) {
-                while (rs.next()) {
-                    //assignment.setId(rs.getInt("id"));
-                    assignment.setName(rs.getString(name));
-                    //assignment.setCreateTime(rs.getTimestamp("createtime"));
-                    //assignment.setDescription(rs.getString("description"));
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } finally {
-            try {
-                prestmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return assignment;
-    }
-
-    public String getAssignmentNameById(int id) {
-        String str = "SELECT name FROM Assignment WHERE id = ?";
-        String assignmentname = "";
-        Connection conn = null;
-        PreparedStatement prestmt = null;
-        try {
-            conn = database.getConnection();
-            prestmt = conn.prepareStatement(str);
-
-            prestmt.setInt(1, id);
-            try (ResultSet rs = prestmt.executeQuery()) {
-                while (rs.next()) {
-                    assignmentname = rs.getString("name");
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } finally {
-            try {
-                prestmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return assignmentname;
-    }
-
-    public int getAssignmentIdbyName(String assignmentname) {
-        String str = "SELECT id FROM Assignment WHERE name = ?";
-        int id = 0;
-        Connection conn = null;
-        PreparedStatement prestmt = null;
-        ResultSet rs = null;
-        try {
-            conn = database.getConnection();
-            prestmt = conn.prepareStatement(str);
-
-            prestmt.setString(1, assignmentname);
-            rs = prestmt.executeQuery();
-            while (rs.next()) {
-                id = rs.getInt("id");
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } finally {
-            try {
-                prestmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return id;
-    }
-
-    public List<Assignment> getAllAssignment() {
         List<Assignment> assignments = new ArrayList<>();
-        String str = "SELECT id, name, createTime, description "
-                + "FROM Assignment;";
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            conn = database.getConnection();
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(str);
-            while (rs.next()) {
-                Assignment assignment = new Assignment();
-                //assignment.setId(rs.getInt("id"));
-                assignment.setName(rs.getString("name"));
-                //assignment.setCreateTime(rs.getTimestamp("createtime"));
-                //assignment.setDescription(rs.getString("description"));
-                assignments.add(assignment);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } finally {
-            try {
-                stmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Assignment assignment = new Assignment();
+    		jsonobject = jsonarray.getJSONObject(i);
+            assignment.setId(jsonobject.getString("question_id"));
+            assignment.setName(jsonobject.getString("question_name"));
+            assignment.setReleaseTime(jsonobject.getString("release_time"));
+            assignment.setDeadLine(jsonobject.getString("deadline"));
+            assignments.add(assignment);
+		}
         return assignments;
+    }
+
+    public void addAssignment(String cid, Assignment assignment) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "classquestion/add/" + cid);
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String info = "question_id=" + assignment.getId() + "&question_name=" + assignment.getName()
+            + "&release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }
+            conn.disconnect();
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            jsonobject = new JSONObject(response.toString());
+        }catch(Exception e){
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void updateAssignment(String cid, Assignment assignment)throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "classquestion/update/" + cid + "/" + assignment.getId());
+        try{
+            conn = database.getConnection(url, "POST");
+            conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            String info = "release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
+            byte[] data = info.getBytes();
+            conn.connect();
+            OutputStream out = conn.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }       
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());
+        }catch(Exception e){
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void deleteAssignment(String cid, String qid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "classquestion/delete/" + cid + "/" + qid);
+        try{
+            conn = database.getConnection(url, "POST");
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : " +
+                conn.getResponseCode()+" "+conn.getResponseMessage());
+            }            
+            response = new StringBuilder();  
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while((line = br.readLine())!= null)
+                response.append(line);
+            br.close();
+            conn.disconnect();
+            jsonobject = new JSONObject(response.toString());           
+        }catch(Exception e){
+            logger.error(e.getMessage());
+        }  
     }
 }
