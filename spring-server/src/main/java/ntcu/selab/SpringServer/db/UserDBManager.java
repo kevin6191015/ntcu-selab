@@ -277,6 +277,24 @@ public class UserDBManager {
         return username;
     }
 
+    public String getNameById(String uid) throws Exception{
+        String name = "";
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/name/" + uid);       
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
+        jsonarray = new JSONArray( response.toString());
+        jsonobject = jsonarray.getJSONObject(0);
+        name = jsonobject.getString("NAME");
+        return name;
+    }
+
     public void DeleteUserById(String uid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/delete/" + uid);  

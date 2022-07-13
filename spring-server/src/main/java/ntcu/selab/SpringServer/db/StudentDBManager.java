@@ -77,13 +77,13 @@ public class StudentDBManager {
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
-            }
-            conn.disconnect();
+            }           
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            conn.disconnect();
             jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
@@ -140,5 +140,26 @@ public class StudentDBManager {
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
         }
+    }
+
+    public boolean checkStudentId(String cid, String uid) throws Exception{
+        boolean check = false;
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "student/checkbyid/" + cid + "/" + uid);       
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
+        jsonarray = new JSONArray( response.toString());
+        jsonobject = jsonarray.getJSONObject(0);
+        int count = jsonobject.getInt("count(*)");
+        if(count >= 1){
+            check = true;
+        }
+        return check;
     }
 }
