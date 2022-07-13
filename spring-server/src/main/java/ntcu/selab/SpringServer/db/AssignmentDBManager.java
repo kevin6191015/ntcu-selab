@@ -79,13 +79,13 @@ public class AssignmentDBManager {
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : " +
                 conn.getResponseCode()+" "+conn.getResponseMessage());
-            }
-            conn.disconnect();
+            }            
             response = new StringBuilder();  
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = br.readLine())!= null)
                 response.append(line);
             br.close();
+            conn.disconnect();
             jsonobject = new JSONObject(response.toString());
         }catch(Exception e){
             logger.error(e.getMessage());

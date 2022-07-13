@@ -2,10 +2,12 @@ package ntcu.selab.SpringServer.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.gitlab.api.models.GitlabProject;
+import org.gitlab.api.models.GitlabUser;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.expression.spel.ast.Assign;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Assignment;
 import ntcu.selab.SpringServer.data.Question;
+import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.db.AssignmentDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
+import ntcu.selab.SpringServer.db.StudentDBManager;
+import ntcu.selab.SpringServer.db.UserDBManager;
 
 @RestController
 @RequestMapping(value = "/assignment")
 public class AssignmentService {
     private static AssignmentService object = new AssignmentService();
     private static AssignmentDBManager aDbManager = AssignmentDBManager.getObject();
+    private static GitlabService gitlabService = GitlabService.getObject();
+    private static JenkinsService jenkinsService = JenkinsService.getObject();
+    private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
+    private static StudentDBManager sDbManager = StudentDBManager.getObject();
+    private static UserDBManager uDbManager = UserDBManager.getObject();
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public static AssignmentService getObject(){
@@ -62,10 +72,38 @@ public class AssignmentService {
         header.add("Content_Type", "application/json");
 
         try{
-            QuestionDBManager qDbManager = QuestionDBManager.getObject();
+            /*
+             * 將題目加進class_question裡
+             */
             Question question = qDbManager.getQuestionById(qid);
             Assignment assignment = new Assignment(qid, question.getName(), release_time, deadline);
             aDbManager.addAssignment(cid, assignment);
+            /*
+             * 對該班的student
+             */
+            List<Student> students = sDbManager.getStudents(cid);
+            for(Student student : students){
+                //設定project name
+                String project_name = student.getId() + "_" + question.getName().replace(" ", "");
+
+                //創建jenkins project
+                jenkinsService.createJob(project_name);
+
+                //build jenkins job
+                jenkinsService.buildJob(project_name);
+
+                //創建gitlab project
+                GitlabProject gitlabProject = gitlabService.createRootProject(project_name);
+
+                //得到該學生在gitlab的個人資料
+                GitlabUser gitlabUser = gitlabService.getUserById(Integer.valueOf(uDbManager.getUserInfo(student.getId()).getGitlabId()));
+
+                //將學生加進該project
+                gitlabService.addMember(gitlabUser, project_name);
+
+                //設定gitlab使其與jenkins連接
+                gitlabService.setGitlabIntegrations(gitlabProject, project_name);              
+            }
         }catch(Exception e){
             logger.error(e.getMessage());
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,6 +134,22 @@ public class AssignmentService {
         header.add("Content_Type", "application/json");
 
         try{
+            /*
+             * 對該班的student
+             */
+            List<Student> students = sDbManager.getStudents(cid);
+            for(Student student : students){
+                //得到project_name
+                String project_name = student.getId() + "_"  + qDbManager.getQuestionById(qid).getName().replace(" ", "");
+
+                //刪除jenkins project
+                jenkinsService.deleteJob(project_name);
+
+                //刪除gitlab project
+                gitlabService.deleteRootProject(project_name);
+            }
+
+            //將class_question裡的題目刪除
             aDbManager.deleteAssignment(cid, qid);
         }catch(Exception e){
             logger.error(e.getMessage());
