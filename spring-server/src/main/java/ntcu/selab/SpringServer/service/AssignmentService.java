@@ -62,7 +62,7 @@ public class AssignmentService {
         }
         JSONObject root = new JSONObject();
         root.put("Courses", assignmeList);
-        return new ResponseEntity<Object>(root, header, HttpStatus.OK);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
     }
     
     @GetMapping("addAssignment")
@@ -75,7 +75,10 @@ public class AssignmentService {
             /*
              * 將題目加進class_question裡
              */
-            Question question = qDbManager.getQuestionById(qid);
+            Question question = qDbManager.getQuestionFromBank1ById(qid);
+            if(question == null){
+                question = qDbManager.getQuestionFromBank2ById(qid);
+            }
             Assignment assignment = new Assignment(qid, question.getName(), release_time, deadline);
             aDbManager.addAssignment(cid, assignment);
             /*
@@ -140,7 +143,11 @@ public class AssignmentService {
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
-                String project_name = student.getId() + "_"  + qDbManager.getQuestionById(qid).getName().replace(" ", "");
+                Question question = qDbManager.getQuestionFromBank1ById(qid);
+                if(question == null){
+                    question = qDbManager.getQuestionFromBank2ById(qid);
+                }
+                String project_name = student.getId() + "_"  + question.getName().replace(" ", "");
 
                 //刪除jenkins project
                 jenkinsService.deleteJob(project_name);

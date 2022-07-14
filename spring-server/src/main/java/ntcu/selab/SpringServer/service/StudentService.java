@@ -47,7 +47,7 @@ public class StudentService {
         }
         JSONObject root = new JSONObject();
         root.put("Students", studentlist);
-        return new ResponseEntity<Object>(root, header, HttpStatus.OK);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
     }
 
     @GetMapping("addStudent")

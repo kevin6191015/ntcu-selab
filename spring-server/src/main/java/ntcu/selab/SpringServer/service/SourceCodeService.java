@@ -35,7 +35,7 @@ public class SourceCodeService {
         object.put("question_name", sourceCode.getQuestionName());
         object.put("code", sourceCode.getCode());
                       
-        return new ResponseEntity<Object>(object, header, HttpStatus.OK);
+        return new ResponseEntity<Object>(object.toMap(), header, HttpStatus.OK);
     }
 
     @GetMapping("addSourceCode")

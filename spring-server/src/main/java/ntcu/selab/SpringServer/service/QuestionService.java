@@ -25,12 +25,12 @@ public class QuestionService {
         return qs;
     }
 
-    @GetMapping("/getQuestions")
-    public ResponseEntity<Object> getQuestions() throws Exception{
+    @GetMapping("/getQuestionBank1")
+    public ResponseEntity<Object> getQuestionBank1() throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
         
-        List<Question> questions = qDbManager.getAllQuestion();
+        List<Question> questions = qDbManager.getQuestionBank1();
         List<JSONObject> questionlist = new ArrayList<>();
         for(Question question : questions){
             JSONObject object = new JSONObject();
@@ -51,15 +51,52 @@ public class QuestionService {
         
         JSONObject root = new JSONObject();
         root.put("Questions", questionlist);
-        return new ResponseEntity<Object>(root, header, HttpStatus.ACCEPTED);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getQuestion")
-    public ResponseEntity<Object> getQuestionById(@RequestParam("id") String id) throws Exception{
+    @GetMapping("/getQuestionBank2")
+    public ResponseEntity<Object> getQuestionBank2() throws Exception{
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "application/json");
+        
+        List<Question> questions = qDbManager.getQuestionBank2();
+        List<JSONObject> questionlist = new ArrayList<>();
+        for(Question question : questions){
+            JSONObject object = new JSONObject();
+            object.put("id", question.getId());
+            object.put("question_name", question.getName());
+            object.put("question_description", question.getDescription());
+            object.put("teacher", question.getTeacher());
+            object.put("class_id", question.getClassId());
+            object.put("image1", question.getImage1());
+            object.put("image2", question.getImage2());
+            String[] input = question.getInput();
+            String[] output = question.getOutnput();
+            for(int i=0 ; i<10 ; i++){
+                object.put("input" + String.valueOf(i), input[i]);
+                object.put("output" + String.valueOf(i), output[i]);
+            }
+            object.put("inputornot", question.getInputornot());
+            
+            questionlist.add(object);
+        }
+        
+        List<String> teachers = qDbManager.getTeachers();
+        List<String> classes = qDbManager.getClasses();
+        
+        JSONObject root = new JSONObject();
+        root.put("Questions", questionlist);
+        root.put("Teachers", teachers);
+        root.put("Classes", classes);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getQuestionFromBank1")
+    public ResponseEntity<Object> getQuestionFromBank1(@RequestParam("id") String qid) throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
         JSONObject object = new JSONObject();
-        Question question = qDbManager.getQuestionById(id);
+        Question question = qDbManager.getQuestionFromBank1ById(qid);
 
         object.put("question_name", question.getName());
         object.put("question_description", question.getDescription());
@@ -73,7 +110,31 @@ public class QuestionService {
         }
         object.put("inputornot", question.getInputornot());
 
-        return new ResponseEntity<Object>(object, header, HttpStatus.OK);
+        return new ResponseEntity<>(object.toMap(), header, HttpStatus.OK);
+    }
+
+    @GetMapping("/getQuestionFromBank2")
+    public ResponseEntity<Object> getQuestionfromBank2(@RequestParam("id") String qid) throws Exception{
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "application/json");
+        JSONObject object = new JSONObject();
+        Question question = qDbManager.getQuestionFromBank2ById(qid);
+
+        object.put("question_name", question.getName());
+        object.put("question_description", question.getDescription());
+        object.put("teacher", question.getTeacher());
+        object.put("class_id", question.getClassId());
+        object.put("image1", question.getImage1());
+        object.put("image2", question.getImage2());
+        String[] input = question.getInput();
+        String[] output = question.getOutnput();
+        for(int i=0 ; i<10 ; i++){
+            object.put("input" + String.valueOf(i), input[i]);
+            object.put("output" + String.valueOf(i), output[i]);
+        }
+        object.put("inputornot", question.getInputornot());
+
+        return new ResponseEntity<Object>(object.toMap(), header, HttpStatus.OK);
     }
 
     @GetMapping("/deleteQuestion")
@@ -99,13 +160,16 @@ public class QuestionService {
     , @RequestParam("output2") String output2, @RequestParam("output3") String output3, @RequestParam("output4") String output4
     , @RequestParam("output5") String output5, @RequestParam("output6") String output6, @RequestParam("output7") String output7
     , @RequestParam("output8") String output8, @RequestParam("output9") String output9, @RequestParam("output10") String output10
-    , @RequestParam("image1") String image1, @RequestParam("image2") String image2, @RequestParam("input_or_not") int inputornot) throws Exception{
+    , @RequestParam("image1") String image1, @RequestParam("image2") String image2, @RequestParam("input_or_not") int inputornot
+    , @RequestParam("teacher") String teacher, @RequestParam("class_id") String class_id) throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
 
         Question q = new Question();
         q.setName(name);
         q.setDescription(description);
+        q.setTeacher(teacher);
+        q.setClassId(class_id);
         q.setImage1(image1);
         q.setImage2(image2);
         String[] input = new String[11];
@@ -144,13 +208,15 @@ public class QuestionService {
      * input6=123&input7=123&input8=123&input9=123&input10=123&output4=321&output5=321&output6=321&output7=321&output8=321&output9=321&output10=321
      */
     @GetMapping("/updateQuestion")
-    public ResponseEntity<Object> updateQuestion(@RequestParam("id") String id, @RequestParam("input1") String input1, @RequestParam("input2") String input2
-    , @RequestParam("input3") String input3, @RequestParam("input4") String input4, @RequestParam("input5") String input5
-    , @RequestParam("input6") String input6, @RequestParam("input7") String input7, @RequestParam("input8") String input8
-    , @RequestParam("input9") String input9, @RequestParam("input10") String input10, @RequestParam("output1") String output1
-    , @RequestParam("output2") String output2, @RequestParam("output3") String output3, @RequestParam("output4") String output4
-    , @RequestParam("output5") String output5, @RequestParam("output6") String output6, @RequestParam("output7") String output7
-    , @RequestParam("output8") String output8, @RequestParam("output9") String output9, @RequestParam("output10") String output10) throws Exception{
+    public ResponseEntity<Object> updateQuestion(@RequestParam("id") String id, @RequestParam("input1") String input1
+    , @RequestParam("input2") String input2, @RequestParam("input3") String input3, @RequestParam("input4") String input4
+    , @RequestParam("input5") String input5, @RequestParam("input6") String input6, @RequestParam("input7") String input7
+    , @RequestParam("input8") String input8, @RequestParam("input9") String input9, @RequestParam("input10") String input10
+    , @RequestParam("output1") String output1, @RequestParam("output2") String output2, @RequestParam("output3") String output3
+    , @RequestParam("output4") String output4, @RequestParam("output5") String output5, @RequestParam("output6") String output6
+    , @RequestParam("output7") String output7, @RequestParam("output8") String output8, @RequestParam("output9") String output9
+    , @RequestParam("output10") String output10, @RequestParam("teacher") String teacher, @RequestParam("class_id") String class_id
+    , @RequestParam("input_or_not") int inputornot) throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
 
