@@ -5,6 +5,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Student;
+import ntcu.selab.SpringServer.data.User;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 public class StudentDBManager {
     private static final Logger logger = LoggerFactory.getLogger(StudentDBManager.class);
     private static StudentDBManager dbManager = null;
+    private static UserDBManager uDbManager = UserDBManager.getObject();
     private static MysqlDatabase database = MysqlDatabase.getObject();
     private static HttpURLConnection conn = null;
     private static StringBuilder response = null;
@@ -59,9 +61,9 @@ public class StudentDBManager {
         return students;  
     }
 
-    public void addStudent(String class_id, Student student) throws Exception{
+    public void addStudent(String cid, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "student/add/" + class_id);
+        URL url = new URL(dbUrl + "student/add/" + cid);
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");

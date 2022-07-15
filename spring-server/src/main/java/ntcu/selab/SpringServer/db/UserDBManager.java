@@ -15,12 +15,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
+import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
 
 public class UserDBManager {
     private static UserDBManager dbManager = null;
     private static final Logger logger = LoggerFactory.getLogger(UserDBManager.class);
     private static MysqlDatabase database = MysqlDatabase.getObject();
+    private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static HttpURLConnection conn = null;
     private static StringBuilder response = null;
     private static String line = null;
@@ -163,7 +165,8 @@ public class UserDBManager {
         user.setName(jsonobject.getString("NAME"));
         user.setGitlabToken(jsonobject.getString("GITLAB_TOKEN"));
         user.setPassword(jsonobject.getString("PASSWORD"));
-        user.setRole(jsonobject.getString("ROLE"));              
+        user.setRole(jsonobject.getString("ROLE"));
+        user.setClasses(jsonobject.getString("CLASSES"));              
         return user;
     }
 
@@ -194,6 +197,14 @@ public class UserDBManager {
             users.add(user); 
         }       
         return users;
+    }
+
+    public void addClasses(User user, String cid){
+        String classes = user.getClasses();
+        System.out.println("str= " + classes);
+        classes = classes + "," + cid;
+        user.setClasses(classes);
+        System.out.println("classes= " + user.getClasses());
     }
 
     public boolean checkUsername(String username) throws Exception{
@@ -295,6 +306,26 @@ public class UserDBManager {
         return name;
     }
 
+    public List<String> getClassesByName(String name) throws Exception{
+        List<String> classes = new ArrayList<>();
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "user/classes/" + name);       
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+            response.append(line);
+        br.close();
+        conn.disconnect();
+        jsonarray = new JSONArray( response.toString());
+        for(int i=0 ; i<jsonarray.length() ; i++){
+            jsonobject = jsonarray.getJSONObject(i);
+            classes.add(jsonobject.getString("CLASSES"));
+        }       
+        return classes;
+    }
+
     public void DeleteUserById(String uid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/delete/" + uid);  
@@ -313,7 +344,9 @@ public class UserDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-        }          
+        }
+        
+        
     }
 
     public void updateUser(User user) throws Exception{
@@ -325,7 +358,7 @@ public class UserDBManager {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             String info = "ID=" + user.getId() + "&USERNAME=" + user.getUserName() + "&NAME=" + user.getName() + "&PASSWORD=" + 
-            user.getPassword() + "&ROLE=" + user.getRole() + "&EMAIL=" + user.getEmail();
+            user.getPassword() + "&ROLE=" + user.getRole() + "&EMAIL=" + user.getEmail() + "&CLASSES=" + user.getClasses();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
@@ -345,6 +378,6 @@ public class UserDBManager {
             jsonobject = new JSONObject(response.toString()); 
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-        }
+        }       
     }
 }

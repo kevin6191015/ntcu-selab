@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Student;
+import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
 
@@ -23,6 +24,7 @@ public class StudentService {
     public static StudentService ss = new StudentService();
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
+    private static UserDBManager uDbManager = UserDBManager.getObject();
 
     public static StudentService getObject(){
         return ss;
@@ -61,7 +63,14 @@ public class StudentService {
         String error = getErrorMessage(cid, student);
         if (error.isEmpty()) {
             try{              
-                sDbManager.addStudent(cid, student);
+                //sDbManager.addStudent(cid, student);
+                //將cid加入user的classes
+                User user = uDbManager.getUserInfo(uid);
+                //System.out.println(user.getClasses());
+                
+                user.setClasses(user.getClasses() + "," + cid);
+                System.out.println(user.getClasses());
+                uDbManager.updateUser(user);
             }catch(Exception e){
                 logger.error(e.getMessage());
                 return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);

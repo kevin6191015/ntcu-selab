@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Course;
+import ntcu.selab.SpringServer.data.Question;
 import ntcu.selab.SpringServer.db.CourseDBManager;
+import ntcu.selab.SpringServer.db.QuestionDBManager;
 
 @RestController
 @RequestMapping(value = "/course")
@@ -22,6 +24,7 @@ public class CourseService {
     public static CourseService cs = new CourseService();
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static CourseDBManager cDbManager = CourseDBManager.getObject();
+    private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
 
     public static CourseService getObject(){
         return cs;
@@ -67,14 +70,19 @@ public class CourseService {
     }
 
     @GetMapping("updateCourse")
-    public ResponseEntity<Object> updateCourse(@RequestParam String class_id, @RequestParam String class_name
+    public ResponseEntity<Object> updateCourse(@RequestParam String cid, @RequestParam String class_name
     , @RequestParam String teacher, @RequestParam String TA){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
 
         try{
             Course course = new Course(class_name, teacher, TA);
-            cDbManager.updateCourse(class_id, course);
+            cDbManager.updateCourse(cid, course);
+            List<Question> questions = qDbManager.getQuestionsByClass(cid);
+            for(Question question : questions){                
+                question.setTeacher(teacher);
+                qDbManager.updateQuestion(question.getId(), question);
+            }
         }catch(Exception e){
             logger.error(e.getMessage());
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);

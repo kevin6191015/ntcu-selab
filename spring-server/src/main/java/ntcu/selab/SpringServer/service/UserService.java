@@ -1,6 +1,8 @@
 package ntcu.selab.SpringServer.service;
 
+import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
+import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
 import org.gitlab.api.models.GitlabUser;
 
@@ -25,6 +27,7 @@ import java.util.List;
 public class UserService {
     private static UserService object = new UserService();
     private UserDBManager dbManager = UserDBManager.getObject();
+    private StudentDBManager sDbManager = StudentDBManager.getObject();
     private GitlabService gitlabService = GitlabService.getObject();
 
     public static UserService getObject() {
@@ -48,6 +51,7 @@ public class UserService {
             Object.put("name", user.getName());
             Object.put("id", user.getId());
             Object.put("username", user.getUserName());
+            Object.put("CLASSES", user.getClasses());
             userlist.add(Object);
         }
 
@@ -162,6 +166,12 @@ public class UserService {
             User user = new User(name, username, email, password, role);
             user.setId(uid);
             dbManager.updateUser(user);
+            //將user的資料同步到student
+            Student student = new Student(uid, username);
+            String[] split = user.getClasses().split(",");
+            for (int i=0; i<split.length; i++){
+                sDbManager.updateStudent(split[i], student);
+            }       
         }catch(Exception e){
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -176,6 +186,11 @@ public class UserService {
         try{
             User user = dbManager.getUserInfo(uid);
             unregister(uid, user.getGitlabId());
+            //student同步刪除該user
+            List<String> classes = dbManager.getClassesByName(dbManager.getNameById(uid));
+            for(String c : classes){
+                sDbManager.deleteStudent(c, uid);
+            } 
         }catch(Exception e){
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -255,17 +270,17 @@ public class UserService {
     }
 
     private void register(User user) throws Exception {
-        GitlabUser gitlabUser = gitlabService.createUser(
-                user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
-        user.setGitlabToken(gitlabUser.getPrivateToken());
-        user.setGitlabId(String.valueOf(gitlabUser.getId()));
+        // GitlabUser gitlabUser = gitlabService.createUser(
+        //         user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
+        // user.setGitlabToken(gitlabUser.getPrivateToken());
+        // user.setGitlabId(String.valueOf(gitlabUser.getId()));
 
         dbManager.addUser(user);
     }
 
     private void unregister(String uid, String gid) throws Exception {
-        GitlabService gs = GitlabService.getObject();
-        gs.deleteUserByID(Integer.valueOf(gid));
+        // GitlabService gs = GitlabService.getObject();
+        // gs.deleteUserByID(Integer.valueOf(gid));
 
         dbManager.DeleteUserById(uid);
     }

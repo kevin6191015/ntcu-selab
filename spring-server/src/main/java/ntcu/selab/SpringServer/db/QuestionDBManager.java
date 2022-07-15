@@ -34,7 +34,7 @@ public class QuestionDBManager {
         return dbManager;
     }
 
-    public List<Question> getAllQuestion() throws Exception{
+    public List<Question> getQuestionBank1() throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question1");       
         
@@ -69,9 +69,158 @@ public class QuestionDBManager {
         return questions;
     }
 
-    public Question getQuestionById(String id) throws Exception{
+    public List<Question> getQuestionBank2() throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "question1/" + id);       
+        URL url = new URL(dbUrl + "question2");       
+        
+        List<Question> questions = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Question s = new Question();
+    		jsonobject = jsonarray.getJSONObject(i);
+            s.setId(jsonobject.getString("id"));
+            s.setName(jsonobject.getString("question_name"));
+            s.setDescription(jsonobject.getString(("question_description")));
+            s.setTeacher(jsonobject.getString("teacher"));
+            s.setClassId(jsonobject.getString("class_id"));
+            s.setImage1(jsonobject.getString("image1"));
+            s.setImage2(jsonobject.getString("image2"));
+            String[] input = new String[11];
+            String[] output = new String[11];
+            for(int j=1 ; j<11 ; j++){
+                input[j] = jsonobject.getString("input" + String.valueOf(j));
+                output[j] = jsonobject.getString("output" + String.valueOf(j));
+            }
+            s.setInput(input);
+            s.setOutput(output);
+            s.setInputornot(jsonobject.getInt("input_or_not"));
+            questions.add(s);
+		}          
+        return questions;
+    }
+
+    public List<Question> getQuestionsByTeacher(String teacher) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/byteacher/" + teacher);       
+        
+        List<Question> questions = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Question s = new Question();
+    		jsonobject = jsonarray.getJSONObject(i);
+            s.setId(jsonobject.getString("id"));
+            s.setName(jsonobject.getString("question_name"));
+            s.setDescription(jsonobject.getString(("question_description")));
+            s.setTeacher(jsonobject.getString("teacher"));
+            s.setClassId(jsonobject.getString("class_id"));
+            s.setImage1(jsonobject.getString("image1"));
+            s.setImage2(jsonobject.getString("image2"));
+            String[] input = new String[11];
+            String[] output = new String[11];
+            for(int j=1 ; j<11 ; j++){
+                input[j] = jsonobject.getString("input" + String.valueOf(j));
+                output[j] = jsonobject.getString("output" + String.valueOf(j));
+            }
+            s.setInput(input);
+            s.setOutput(output);
+            s.setInputornot(jsonobject.getInt("input_or_not"));
+            questions.add(s);
+		}          
+        return questions;
+    }
+
+    public List<Question> getQuestionsByClass(String cid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/byclass/" + cid);       
+        
+        List<Question> questions = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Question s = new Question();
+    		jsonobject = jsonarray.getJSONObject(i);
+            s.setId(jsonobject.getString("id"));
+            s.setName(jsonobject.getString("question_name"));
+            s.setDescription(jsonobject.getString(("question_description")));
+            s.setTeacher(jsonobject.getString("teacher"));
+            s.setClassId(jsonobject.getString("class_id"));
+            s.setImage1(jsonobject.getString("image1"));
+            s.setImage2(jsonobject.getString("image2"));
+            String[] input = new String[11];
+            String[] output = new String[11];
+            for(int j=1 ; j<11 ; j++){
+                input[j] = jsonobject.getString("input" + String.valueOf(j));
+                output[j] = jsonobject.getString("output" + String.valueOf(j));
+            }
+            s.setInput(input);
+            s.setOutput(output);
+            s.setInputornot(jsonobject.getInt("input_or_not"));
+            questions.add(s);
+		}          
+        return questions;
+    }
+
+    public List<String> getTeachers() throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/teachers");
+        List<String> teachers = new ArrayList<>();
+        
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+    		jsonobject = jsonarray.getJSONObject(i);
+            teachers.add(jsonobject.getString("teacher"));
+		}
+        return teachers;          
+    }
+
+    public List<String> getClasses() throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/class");
+        List<String> classes = new ArrayList<>();
+        
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+    		jsonobject = jsonarray.getJSONObject(i);
+            classes.add(jsonobject.getString("class_id"));
+		}
+        return classes;   
+    }
+
+    public Question getQuestionFromBank1ById(String qid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question1/" + qid);       
 
         Question question = new Question();
 
@@ -83,6 +232,7 @@ public class QuestionDBManager {
         br.close();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
+        question.setId(jsonobject.getString("id"));
         question.setName(jsonobject.getString("question_name"));
         question.setDescription(jsonobject.getString("question_description"));
         question.setId(jsonobject.getString("id"));
@@ -102,9 +252,45 @@ public class QuestionDBManager {
         return question;
     }
 
-    public void deleteQuestionById(String id) throws Exception{
+    public Question getQuestionFromBank2ById(String qid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "question1/delete/" + id);
+        URL url = new URL(dbUrl + "question2/byid/" + qid);       
+
+        Question question = new Question();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        jsonobject = jsonarray.getJSONObject(0);
+        question.setId(jsonobject.getString("id"));
+        question.setName(jsonobject.getString("question_name"));
+        question.setDescription(jsonobject.getString("question_description"));
+        question.setTeacher(jsonobject.getString("teacher"));
+        question.setClassId(jsonobject.getString("class_id"));
+        question.setId(jsonobject.getString("id"));
+        question.setName(jsonobject.getString("question_name"));
+        question.setDescription(jsonobject.getString(("question_description")));
+        question.setImage1(jsonobject.getString("image1"));
+        question.setImage2(jsonobject.getString("image2"));
+        String[] input = new String[11];
+        String[] output = new String[11];
+        for(int j=1 ; j<11 ; j++){
+            input[j] = jsonobject.getString("input" + String.valueOf(j));
+            output[j] = jsonobject.getString("output" + String.valueOf(j));
+        }
+        question.setInput(input);
+        question.setOutput(output);
+        question.setInputornot(jsonobject.getInt("input_or_not"));
+        return question;
+    }
+
+    public void deleteQuestionById(String qid) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/delete/" + qid);
         try{
             conn = database.getConnection(url, "POST");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -125,7 +311,7 @@ public class QuestionDBManager {
 
     public void addQuestion(Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "question1/add");
+        URL url = new URL(dbUrl + "question2/add");
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
@@ -134,7 +320,8 @@ public class QuestionDBManager {
             String[] input = q.getInput();
             String[] output = q.getOutnput();
             String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
-            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot())
+            + "&teacher=" + q.getTeacher() + "&class_id=" + q.getClassId();
             for(int i=1 ; i<11 ; i++){
                 info += "&input" + String.valueOf(i) + "=" + input[i];
                 info += "&output" + String.valueOf(i) + "=" + output[i];
@@ -161,9 +348,9 @@ public class QuestionDBManager {
         }
     }
 
-    public void updateQuestion(String question_id, Question q) throws Exception{
+    public void updateQuestion(String qid, Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "question1/update/" + question_id);
+        URL url = new URL(dbUrl + "question2/update/" + qid);
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
@@ -172,7 +359,8 @@ public class QuestionDBManager {
             String[] input = q.getInput();
             String[] output = q.getOutnput();
             String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
-            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot());
+            "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot())
+            + "&teacher=" + q.getTeacher() + "&class_id=" + q.getClassId();
             for(int i=1 ; i<11 ; i++){
                 info += "&input" + String.valueOf(i) + "=" + input[i];
                 info += "&output" + String.valueOf(i) + "=" + output[i];
