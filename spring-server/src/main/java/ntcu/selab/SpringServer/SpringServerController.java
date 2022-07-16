@@ -31,10 +31,19 @@ public class SpringServerController {
 
     @GetMapping("/123")
     public void test() throws Exception{
+<<<<<<< HEAD
         //GitlabService d = GitlabService.getObject();
         //String message = java.net.URLEncoder.encode("我是誰","utf-8");
         //GitlabUser h = d.getUserById(15);
         //d.addMember(h,"ACS108101_FibonacciNumber");
+=======
+        User user = UserDBManager.getObject().getUserInfo("acs108102");
+        //System.out.println(user.getClasses());
+        //User user = new User();
+        user.setClasses("2");
+        UserDBManager.getObject().updateUser(user);
+        //System.out.println(user.getClasses());
+>>>>>>> 99ce288 (test)
         // QuestionDBManager uDbManager = QuestionDBManager.getObject();
         // User user = new User("aa","asd","122ww@gmail.com","qqq","student");
         // user.setId("111");
