@@ -94,7 +94,7 @@ public class SpringServerController {
         gitlab.addMember(gitlab.getUserByName("a001"),"test");*/
         GitlabService gitlab = GitlabService.getObject();
         GitlabUser user;
-        user = gitlab.updateUserName("student1", "a001");
+        user = gitlab.updateUserName("a001", "a001");
         return user.getName();
     }
     @GetMapping ("/delete")

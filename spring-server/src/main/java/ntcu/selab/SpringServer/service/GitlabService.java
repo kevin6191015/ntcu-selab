@@ -251,14 +251,41 @@ public class GitlabService {
         return user;
     }
     /*
-    update user name
+    update name
  */
-    public GitlabUser updateUserName(String newName,String name) {
+    public GitlabUser updateName(String newName,String name) {
         GitlabUser user = null;
         HttpURLConnection conn = null;
         try {
             user = getUserByName(name);
             String urls = hostUrl + API_NAMESPACE +"/users/"+user.getId()+"?name="+newName;
+            URL url = new URL(urls);
+            conn = (HttpURLConnection) url.openConnection();
+            String input = gitlabConfig.getGitlabApiToken();
+            String encoding = "Bearer " + input;
+            conn.setRequestProperty("Authorization", encoding);
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("PUT");
+            conn.connect();
+            InputStream stream = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
+            String result = reader.readLine();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return user;
+    }
+
+    /*
+    update name
+ */
+    public GitlabUser updateUserName(String newUserName,String UserName) {
+        GitlabUser user = null;
+        HttpURLConnection conn = null;
+        try {
+            user = getUserByName(UserName);
+            String urls = hostUrl + API_NAMESPACE +"/users/"+user.getId()+"?username="+newUserName;
             URL url = new URL(urls);
             conn = (HttpURLConnection) url.openConnection();
             String input = gitlabConfig.getGitlabApiToken();

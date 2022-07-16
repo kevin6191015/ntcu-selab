@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6f9821e-ba04-437e-97fa-a289fb35f2ac" name="Changes" comment="add .idea">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring-server/src/main/java/ntcu/selab/SpringServer/SpringServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-server/src/main/java/ntcu/selab/SpringServer/SpringServerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring-server/src/main/java/ntcu/selab/SpringServer/service/GitlabService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-server/src/main/java/ntcu/selab/SpringServer/service/GitlabService.java" afterDir="false" />
     </list>
