@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Course;
 import ntcu.selab.SpringServer.data.Question;
+import ntcu.selab.SpringServer.data.Student;
+import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.CourseDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
+import ntcu.selab.SpringServer.db.StudentDBManager;
+import ntcu.selab.SpringServer.db.UserDBManager;
 
 @RestController
 @RequestMapping(value = "/course")
@@ -25,6 +29,8 @@ public class CourseService {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static CourseDBManager cDbManager = CourseDBManager.getObject();
     private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
+    private static StudentDBManager sDbManager = StudentDBManager.getObject();
+    private static UserDBManager uDbManager = UserDBManager.getObject();
 
     public static CourseService getObject(){
         return cs;
@@ -76,8 +82,11 @@ public class CourseService {
         header.add("Content_Type", "application/json");
 
         try{
+            //更新course資料
             Course course = new Course(class_name, teacher, TA);
             cDbManager.updateCourse(cid, course);
+
+            //更新question裡course相關資料(question bank2)
             List<Question> questions = qDbManager.getQuestionsByClass(cid);
             for(Question question : questions){                
                 question.setTeacher(teacher);
@@ -91,12 +100,21 @@ public class CourseService {
     }
 
     @GetMapping("deleteCourse")
-    public ResponseEntity<Object> deleteCourse(@RequestParam String class_id){
+    public ResponseEntity<Object> deleteCourse(@RequestParam String cid){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
 
         try{
-            cDbManager.deleteCourse(class_id);
+            //刪除user的classes中該課程的id
+            List<Student> students = sDbManager.getStudents(cid);
+            for(Student student : students){
+                User user = uDbManager.getUserInfo(student.getId());
+                uDbManager.deleteClasses(user, cid);
+                uDbManager.updateUser(user);
+            }
+            
+            //刪除course資料
+            cDbManager.deleteCourse(cid);
         }catch(Exception e){
             logger.error(e.getMessage());
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);

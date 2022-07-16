@@ -96,16 +96,16 @@ public class StudentService {
     // }
 
     @GetMapping("deleteStudent")
-    public ResponseEntity<Object> deleteStudent(@RequestParam String cid, @RequestParam String sid){
+    public ResponseEntity<Object> deleteStudent(@RequestParam String cid, @RequestParam String uid){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
         JSONObject jsonObject = null;
         try{
             //刪除student資料(student database)
-            sDbManager.deleteStudent(cid, sid);
+            sDbManager.deleteStudent(cid, uid);
 
             //刪除user database的classes欄位中該課程id
-            User user = uDbManager.getUserInfo(sid);
+            User user = uDbManager.getUserInfo(uid);
             uDbManager.deleteClasses(user, cid);   
             uDbManager.updateUser(user);
         }catch(Exception e){

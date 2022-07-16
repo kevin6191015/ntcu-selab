@@ -15,14 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
-import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
 
 public class UserDBManager {
     private static UserDBManager dbManager = null;
     private static final Logger logger = LoggerFactory.getLogger(UserDBManager.class);
     private static MysqlDatabase database = MysqlDatabase.getObject();
-    private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static HttpURLConnection conn = null;
     private static StringBuilder response = null;
     private static String line = null;
@@ -48,7 +46,7 @@ public class UserDBManager {
             String info = "ID=" + user.getId() + "&GITLAB_ID=" + user.getGitlabId()
             + "&USERNAME=" + user.getUserName() + "&NAME=" + user.getName() + "&PASSWORD=" + 
             user.getPassword() + "&GITLAB_TOKEN=" + user.getGitlabToken() + "&ROLE=" + user.getRole()
-            + "&EMAIL=" + user.getEmail();
+            + "&EMAIL=" + user.getEmail() + "&CLASSES=" + user.getClasses();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
@@ -324,7 +322,7 @@ public class UserDBManager {
         conn.disconnect();
         jsonarray = new JSONArray( response.toString());
         jsonobject = jsonarray.getJSONObject(0);
-        name = jsonobject.getString("CLASSES");
+        classes = jsonobject.getString("CLASSES");
         return classes;
     }
 
