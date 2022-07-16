@@ -183,14 +183,19 @@ public class UserService {
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
 
-        try{
-            User user = dbManager.getUserInfo(uid);
+        try{                     
+            //刪除user所在class裡的資料(student databae)
+            String classes = dbManager.getClassesByName(dbManager.getUsernameById(uid));
+            if(!classes.equals("")){
+                String[] split = classes.split(",");
+                for (int i=0; i<split.length; i++){
+                    sDbManager.deleteStudent(split[i], uid);;
+                } 
+            }
+
+            //刪除user資料(user database)
+            User user = dbManager.getUserInfo(uid); 
             unregister(uid, user.getGitlabId());
-            //student同步刪除該user
-            List<String> classes = dbManager.getClassesByName(dbManager.getNameById(uid));
-            for(String c : classes){
-                sDbManager.deleteStudent(c, uid);
-            } 
         }catch(Exception e){
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
