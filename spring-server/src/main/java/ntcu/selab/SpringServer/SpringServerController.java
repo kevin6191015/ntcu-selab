@@ -31,10 +31,10 @@ public class SpringServerController {
 
     @GetMapping("/123")
     public void test() throws Exception{
-        GitlabService d = GitlabService.getObject();
-        String message = java.net.URLEncoder.encode("我是誰","utf-8");
-        GitlabUser h = d.getUserById(15);
-        d.addMember(h,"ACS108101_FibonacciNumber");
+        //GitlabService d = GitlabService.getObject();
+        //String message = java.net.URLEncoder.encode("我是誰","utf-8");
+        //GitlabUser h = d.getUserById(15);
+        //d.addMember(h,"ACS108101_FibonacciNumber");
         // QuestionDBManager uDbManager = QuestionDBManager.getObject();
         // User user = new User("aa","asd","122ww@gmail.com","qqq","student");
         // user.setId("111");
@@ -93,9 +93,9 @@ public class SpringServerController {
         gitlab.setGitlabIntegrations(project,"test");
         gitlab.addMember(gitlab.getUserByName("a001"),"test");*/
         GitlabService gitlab = GitlabService.getObject();
-        GitlabUser user = new GitlabUser() ;
-        user = gitlab.createUser("examplea1@gmail.com","12345678","a006","temp2");
-        return "OK";
+        GitlabUser user;
+        user = gitlab.updateUserName("student1", "a001");
+        return user.getName();
     }
     @GetMapping ("/delete")
     public String hello2(){
