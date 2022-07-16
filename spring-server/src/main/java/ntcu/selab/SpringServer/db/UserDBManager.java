@@ -200,11 +200,15 @@ public class UserDBManager {
     }
 
     public void addClasses(User user, String cid){
-        String classes = user.getClasses();
-        System.out.println("str= " + classes);
-        classes = classes + "," + cid;
+        user.addClasses(cid);
+        String classes = user.getClasses();        
         user.setClasses(classes);
-        System.out.println("classes= " + user.getClasses());
+    }
+
+    public void deleteClasses(User user, String cid){
+        user.deleteClasses(cid);
+        String classes = user.getClasses();
+        user.setClasses(classes);   
     }
 
     public boolean checkUsername(String username) throws Exception{
@@ -306,8 +310,8 @@ public class UserDBManager {
         return name;
     }
 
-    public List<String> getClassesByName(String name) throws Exception{
-        List<String> classes = new ArrayList<>();
+    public String getClassesByName(String name) throws Exception{
+        String classes = "";
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/classes/" + name);       
 
@@ -319,10 +323,8 @@ public class UserDBManager {
         br.close();
         conn.disconnect();
         jsonarray = new JSONArray( response.toString());
-        for(int i=0 ; i<jsonarray.length() ; i++){
-            jsonobject = jsonarray.getJSONObject(i);
-            classes.add(jsonobject.getString("CLASSES"));
-        }       
+        jsonobject = jsonarray.getJSONObject(0);
+        name = jsonobject.getString("CLASSES");
         return classes;
     }
 

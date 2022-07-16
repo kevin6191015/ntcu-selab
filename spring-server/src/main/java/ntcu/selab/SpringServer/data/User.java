@@ -96,10 +96,8 @@ public class User {
 
     public String getClasses(){
         String combine = "";
-        //System.out.println(classes.size());
-        for(int i=1 ; i<this.classes.size() ; i++){
-            //System.out.println("i= " + i);
-            if(i == 1){
+        for(int i=0 ; i<this.classes.size() ; i++){
+            if(i == 0){
                 combine = this.classes.get(i);
                 
             }else{
@@ -111,12 +109,16 @@ public class User {
     }
 
     public void setClasses(String c){
-        //System.out.println(c);
-        String[] split = c.split(",");
-        for (int i=1; i<split.length; i++){
-            System.out.println("s[i]= " + split[i]);
-            this.classes.add(split[i]); 
-        }
+        if(c.equals("")){
+            this.classes = new ArrayList<>();
+        }else{
+            this.classes = new ArrayList<>();
+            String[] split = c.split(",");
+            for (int i=0; i<split.length; i++){
+                this.classes.add(split[i]); 
+            }
+            this.classes.sort(null);
+        }       
     }
 
     public void addClasses(String cid){
@@ -124,15 +126,6 @@ public class User {
     }
 
     public void deleteClasses(String cid){
-        this.classes.remove(new String(cid));
-    }
-
-    public void getList(){
-        System.out.println(classes.size());
-        System.out.println(classes.get(0));
-        System.out.println(classes.get(1));
-        // for(int i=1 ; i<classes.size() ; i++){
-        //     System.out.println(classes.get(i));
-        // }
+        this.classes.remove(cid);
     }
 }

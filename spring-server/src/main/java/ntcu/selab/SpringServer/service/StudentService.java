@@ -62,14 +62,13 @@ public class StudentService {
 
         String error = getErrorMessage(cid, student);
         if (error.isEmpty()) {
-            try{              
-                //sDbManager.addStudent(cid, student);
+            try{  
+                //加進student database            
+                sDbManager.addStudent(cid, student);
+
                 //將cid加入user的classes
                 User user = uDbManager.getUserInfo(uid);
-                //System.out.println(user.getClasses());
-                
-                user.setClasses(user.getClasses() + "," + cid);
-                System.out.println(user.getClasses());
+                uDbManager.addClasses(user, cid);
                 uDbManager.updateUser(user);
             }catch(Exception e){
                 logger.error(e.getMessage());
@@ -97,12 +96,18 @@ public class StudentService {
     // }
 
     @GetMapping("deleteStudent")
-    public ResponseEntity<Object> deleteStudent(@RequestParam String class_id, @RequestParam String sid){
+    public ResponseEntity<Object> deleteStudent(@RequestParam String cid, @RequestParam String sid){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
         JSONObject jsonObject = null;
         try{
-            sDbManager.deleteStudent(class_id, sid);
+            //刪除student資料(student database)
+            sDbManager.deleteStudent(cid, sid);
+
+            //刪除user database的classes欄位中該課程id
+            User user = uDbManager.getUserInfo(sid);
+            uDbManager.deleteClasses(user, cid);   
+            uDbManager.updateUser(user);
         }catch(Exception e){
             logger.error(e.getMessage());
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
