@@ -1,5 +1,8 @@
 package ntcu.selab.SpringServer.service;
 
+import java.io.InputStream;
+import java.util.Scanner;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,32 +43,47 @@ public class SourceCodeService {
 
     @GetMapping("addSourceCode")
     public ResponseEntity<Object> addSourceCode(@RequestParam String question_name
-    , @RequestParam String code) throws Exception{
+    , @RequestParam String filename) throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
-        SourceCode sourceCode = new SourceCode();
-        sourceCode.setQuestionName(question_name);
-        sourceCode.setCode(code);
+        
 
-        try{              
+        try{
+            InputStream is = this.getClass().getResourceAsStream("/" + filename);
+            Scanner obj = new Scanner(is);
+            String code = "";
+            while (obj.hasNextLine()){
+                code += obj.nextLine();
+            }
+            obj.close();
+            SourceCode sourceCode = new SourceCode();
+            sourceCode.setQuestionName(question_name);
+            sourceCode.setCode(code);
             scDbManager.addSourceCode(sourceCode);
         }catch(Exception e){
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
         }        
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
 
     @GetMapping("updateSourceCode")
     public ResponseEntity<Object> updateSourceCode(@RequestParam String question_name
-    , @RequestParam String code) throws Exception{
+    , @RequestParam String filename) throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
-        SourceCode sourceCode = new SourceCode();
-        sourceCode.setQuestionName(question_name);
-        sourceCode.setCode(code);
 
-        try{              
+        try{   
+            InputStream is = this.getClass().getResourceAsStream("/" + filename);
+            Scanner obj = new Scanner(is);
+            String code = "";
+            while (obj.hasNextLine()){
+                code += obj.nextLine();
+            }
+            obj.close();
+            SourceCode sourceCode = new SourceCode();
+            sourceCode.setQuestionName(question_name);
+            sourceCode.setCode(code);           
             scDbManager.updateSourceCode(sourceCode);
         }catch(Exception e){
             logger.error(e.getMessage());
