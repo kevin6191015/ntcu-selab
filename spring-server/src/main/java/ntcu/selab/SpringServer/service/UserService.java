@@ -95,12 +95,14 @@ public class UserService {
             csvReader.readHeaders();
             while (csvReader.readRecord()) {
                 User user = new User();
+                String id = csvReader.get("id");
                 String username = csvReader.get("Username");
                 String password = csvReader.get("Password");
                 String name = csvReader.get("Name");
                 String email = csvReader.get("Email");
                 String role = csvReader.get("Role");
 
+                user.setId(id);
                 user.setUserName(username);
                 user.setPassword(password);
                 user.setName(name);
@@ -128,21 +130,21 @@ public class UserService {
         }
     }
 
-    // @PostMapping("/updatePassword")
-    // public ResponseEntity<Object> updatePassword(@RequestParam("username") String username,
-    //         @RequestParam("currentPassword") String currentPassword,
-    //         @RequestParam("newPassword") String newPassword) {
-    //     HttpHeaders header = new HttpHeaders();
-    //     boolean check = dbManager.checkPassword(username, currentPassword);
-    //     if (check) {
-    //         int gitlabId = dbManager.getGitlabidByUsername(username);
-    //         gitlabService.updateUserPassword(gitlabId, newPassword);
-    //         dbManager.ModifyPassword(username, currentPassword, newPassword);
-    //         return new ResponseEntity<>(header, HttpStatus.OK);
-    //     } else {
-    //         return new ResponseEntity<>("Your current password is wrong", header, HttpStatus.OK);
-    //     }
-    // }
+    @GetMapping("/updatePassword")
+    public ResponseEntity<Object> updatePassword(@RequestParam("username") String username,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword) throws Exception{
+        HttpHeaders header = new HttpHeaders();
+        boolean check = dbManager.checkPassword(username, currentPassword);
+        if (check) {
+            String gitlabId = dbManager.getGitlabidByUsername(username);
+            gitlabService.updatePassword(gitlabId, newPassword);
+            dbManager.ModifyPassword(username, currentPassword, newPassword);
+            return new ResponseEntity<>(header, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Your current password is wrong", header, HttpStatus.OK);
+        }
+    }
 
     @GetMapping(value = "getUserCsvFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Object> getUserCsvFile() throws Exception {
@@ -163,9 +165,20 @@ public class UserService {
         header.add("Content_Type", "application/json");
 
         try{
-            User user = new User(name, username, email, password, role);
-            user.setId(uid);
+            User user = dbManager.getUserInfo(uid);
+            //將user的資料同步到gitlab
+            //gitlabService.updateEmail(user.getEmail(), user.getName());
+            gitlabService.updateName(name, user.getName());
+            gitlabService.updatePassword(password, user.getName());
+            gitlabService.updateUserName(username, user.getUserName());
+
+            //更新user資料(user database)
+            user.setName(name);
+            user.setPassword(password);            
+            user.setRole(role);
+            user.setEmail(email);
             dbManager.updateUser(user);
+
             //將user的資料同步到student
             Student student = new Student(uid, username);
             String[] split = user.getClasses().split(",");
@@ -207,7 +220,7 @@ public class UserService {
         if (errorMessage.isEmpty()) {
             if (isDuplicateUsername(users, user.getUserName())) {
                 errorMessage = "username : " + user.getUserName() + " is duplicated in student list.";
-            } else if (isDuplicateEmail(user.getEmail())) {
+            } else if (isDuplicateEmail(users, user.getEmail())) {
                 errorMessage = "Email : " + user.getEmail() + " already exists.";
             }
         }
@@ -275,17 +288,16 @@ public class UserService {
     }
 
     private void register(User user) throws Exception {
-        // GitlabUser gitlabUser = gitlabService.createUser(
-        //         user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
-        // user.setGitlabToken(gitlabUser.getPrivateToken());
-        // user.setGitlabId(String.valueOf(gitlabUser.getId()));
+        GitlabUser gitlabUser = gitlabService.createUser(
+                user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
+        user.setGitlabToken(gitlabUser.getPrivateToken());
+        user.setGitlabId(String.valueOf(gitlabUser.getId()));
 
         dbManager.addUser(user);
     }
 
-    private void unregister(String uid, String gid) throws Exception {
-        // GitlabService gs = GitlabService.getObject();
-        // gs.deleteUserByID(Integer.valueOf(gid));
+    private void unregister(String uid, String gid) throws Exception {       
+        gitlabService.deleteUserByID(Integer.valueOf(gid));
 
         dbManager.DeleteUserById(uid);
     }
