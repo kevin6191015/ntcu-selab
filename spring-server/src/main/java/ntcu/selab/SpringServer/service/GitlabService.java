@@ -11,13 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +23,6 @@ public class GitlabService {
     GitlabConfig gitlabConfig = GitlabConfig.getObject();
     private final GitlabAPI gitlab;
     private String hostUrl;
-    private String rootUrl;
     private String apiToken;
     private final TokenType tokenType = TokenType.PRIVATE_TOKEN;
     private final AuthMethod authMethod = AuthMethod.URL_PARAMETER;
@@ -36,7 +31,7 @@ public class GitlabService {
     public GitlabService() {
         try {
             hostUrl = gitlabConfig.getGitlabHostUrl();
-            rootUrl = gitlabConfig.getGitlabRootUrl();
+            gitlabConfig.getGitlabRootUrl();
             apiToken = gitlabConfig.getGitlabApiToken();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -186,7 +181,6 @@ public class GitlabService {
     }
 
     public GitlabProject getRootProject(String proName) {
-        GitlabUser gitlabUser = getUserById(0);
         GitlabProject projects = new GitlabProject();
         try {
             projects = gitlab.getProject("root", proName);
@@ -226,9 +220,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -268,9 +259,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -295,9 +283,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -323,9 +308,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -357,9 +339,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -382,9 +361,6 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
-            InputStream stream = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8), 8);
-            String result = reader.readLine();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
