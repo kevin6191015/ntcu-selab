@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 
 Vue.config.productionTip = false
+var axios = require('axios')
+Vue.prototype.$ajax = axios
+axios.default.baseURL = '/data'
 
 /* eslint-disable no-new */
 new Vue({
