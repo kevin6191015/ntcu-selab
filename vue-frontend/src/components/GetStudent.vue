@@ -1,22 +1,14 @@
 <template>
-    <div class="layout">
-    <Layout>
-      <Content :style="{padding: '0 50px'}">
-        <Card>
-          <div style="min-height: 200px;">
-            <v-table
-              is-horizontal-resize
-              style="width:100%"
-              :columns="columns"
-              :table-data="tableData"
-              row-hover-color="#eee"
-              row-click-color="#edf7ff"
-            ></v-table>
-          </div>
-        </Card>
-      </Content>
-    </Layout>
-  </div>
+    <div>
+      <table>
+          <tbody>
+              <tr v-for="(item, key) in this.content" :key="key">
+                 <td>student id : {{item.student_id}}</td>
+                 <td>student name : {{item.student_name}}</td>
+               </tr>
+           </tbody>
+      </table>
+    </div>
 </template>
 <script>
 
@@ -24,24 +16,14 @@ export default {
   name: 'GetStudent',
   data () {
     return {
-      tableData: [],
-      columns: [
-        {field: 'student_id', title: 'id', width: 80, titleAlign: 'center', columnAlign: 'center', isResize: true},
-        {field: 'student_name', title: 'name', width: 280, titleAlign: 'center', columnAlign: 'left', isResize: true}
-      ]
+      content: []
     }
   },
   created () {
     this.$ajax('data/student/getStudents?id=1').then(res => {
-      var jsonObj = JSON.parse(JSON.stringify(res.data.data))
-      //    var newArray = new Array()
-      for (var i = 0; i < jsonObj.length; i++) {
-        jsonObj[i].index = 'Students'
-      }
-      this.items[1].subs = jsonObj
-      console.log(this.items[1].subs)
-    //   this.tableData = jsonObj
-    //   console.log(res.data)
+      var a = JSON.stringify(res.data.Students)
+      this.content = JSON.parse(a)
+      console.log(JSON.parse(a))
     }).catch(function (error) {
       console.log(error)
     })
