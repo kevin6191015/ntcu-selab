@@ -51,6 +51,7 @@ public class CourseDBManager {
         for (int i = 0; i < jsonarray.length(); i++) {
             Course c = new Course();
     		jsonobject = jsonarray.getJSONObject(i);
+            c.setId(jsonobject.getString("class_id"));
             c.setCourseName(jsonobject.getString("class_name"));
             c.setTeacher(jsonobject.getString("teacher"));
             c.setTA(jsonobject.getString("TA"));

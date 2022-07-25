@@ -1,7 +1,11 @@
 package ntcu.selab.SpringServer.service;
 
+import ntcu.selab.SpringServer.data.Course;
+import ntcu.selab.SpringServer.data.Question;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
+import ntcu.selab.SpringServer.db.CourseDBManager;
+import ntcu.selab.SpringServer.db.QuestionDBManager;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
 import org.gitlab.api.models.GitlabUser;
@@ -29,6 +33,8 @@ public class UserService {
     private UserDBManager dbManager = UserDBManager.getObject();
     private StudentDBManager sDbManager = StudentDBManager.getObject();
     private GitlabService gitlabService = GitlabService.getObject();
+    private CourseDBManager cDbManager = CourseDBManager.getObject();
+    private QuestionDBManager qDbManager = QuestionDBManager.getObject();
 
     public static UserService getObject() {
         return object;
@@ -172,19 +178,47 @@ public class UserService {
             gitlabService.updatePassword(password, user.getName());
             gitlabService.updateUserName(username, user.getUserName());
 
+            //將user的資料同步到student(如果是學生)
+            if(user.getRole().equals("student")){
+                Student student = new Student(uid, username);
+                String[] split = user.getClasses().split(",");
+                for (int i=0; i<split.length; i++){
+                    sDbManager.updateStudent(split[i], student);
+                }       
+            }else{
+                //將user的資料同步到course
+                List<Course> courses = cDbManager.getCourses();
+                for(Course course : courses){
+                    //如果是老師
+                    if(user.getRole().equals("teacher")){
+                        if(course.getTeacher() == user.getName()){
+                            course.setTeacher(name);
+                            cDbManager.updateCourse(course.getId(), course);
+                        }
+    
+                        //更新question裡老師相關資料(question bank2)
+                        List<Question> questions = qDbManager.getQuestionsByClass(course.getId());
+                        for(Question question : questions){                
+                            question.setTeacher(name);
+                            qDbManager.updateQuestion(question.getId(), question);
+                        }
+                    }else{
+                        //如果是助教
+                        if(course.getTA() == user.getName()){
+                            course.setTA(name);
+                            cDbManager.updateCourse(course.getId(), course);
+                        }
+                    }        
+                }               
+            }
+            
             //更新user資料(user database)
             user.setName(name);
             user.setPassword(password);            
-            user.setRole(role);
+            //user.setRole(role);
             user.setEmail(email);
             dbManager.updateUser(user);
 
-            //將user的資料同步到student
-            Student student = new Student(uid, username);
-            String[] split = user.getClasses().split(",");
-            for (int i=0; i<split.length; i++){
-                sDbManager.updateStudent(split[i], student);
-            }       
         }catch(Exception e){
             return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -210,7 +244,7 @@ public class UserService {
             User user = dbManager.getUserInfo(uid); 
             unregister(uid, user.getGitlabId());
         }catch(Exception e){
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(header, HttpStatus.OK); 
     }
@@ -288,15 +322,17 @@ public class UserService {
     }
 
     private void register(User user) throws Exception {
-        GitlabUser gitlabUser = gitlabService.createUser(
+        if(user.getRole().equals("student")){
+            GitlabUser gitlabUser = gitlabService.createUser(
                 user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
-        user.setGitlabToken(gitlabUser.getPrivateToken());
-        user.setGitlabId(String.valueOf(gitlabUser.getId()));
-
-        dbManager.addUser(user);
+            user.setGitlabToken(gitlabUser.getPrivateToken());
+            user.setGitlabId(String.valueOf(gitlabUser.getId()));
+        }
+        dbManager.addUser(user);     
     }
 
-    private void unregister(String uid, String gid) throws Exception {       
+    private void unregister(String uid, String gid) throws Exception { 
+              
         gitlabService.deleteUserByID(Integer.valueOf(gid));
 
         dbManager.DeleteUserById(uid);

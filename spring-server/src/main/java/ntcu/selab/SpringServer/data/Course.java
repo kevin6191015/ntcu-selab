@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
+    private String id = null;
     private String coursename = null;
     private String teacher = null;
     private String TA = null;
@@ -20,6 +21,13 @@ public class Course {
 
     }
 
+    public String getId(){
+        return id;
+    }
+
+    public void setId(String id){
+        this.id = id;
+    }
     public String getCourseName(){
         return coursename;
     }
