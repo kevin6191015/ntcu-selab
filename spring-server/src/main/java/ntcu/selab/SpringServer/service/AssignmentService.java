@@ -109,7 +109,7 @@ public class AssignmentService {
             }
         }catch(Exception e){
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(header, HttpStatus.OK);
     }
