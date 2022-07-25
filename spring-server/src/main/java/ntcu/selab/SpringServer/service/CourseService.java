@@ -47,7 +47,7 @@ public class CourseService {
             for(Course course : courses){
                 JSONObject object = new JSONObject();
                 object.put("class_name", course.getCourseName());
-                object.put("teacher", course.getTA());
+                object.put("teacher", course.getTeacher());
                 object.put("TA", course.getTA());
                 courseList.add(object);
             }
@@ -57,7 +57,7 @@ public class CourseService {
         }
         JSONObject root = new JSONObject();
         root.put("Courses", courseList);
-        return new ResponseEntity<Object>(root, header, HttpStatus.OK);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
     }
 
     @GetMapping("addCourse")
