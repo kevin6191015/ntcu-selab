@@ -53,7 +53,7 @@ public class SourceCodeService {
             Scanner obj = new Scanner(is);
             String code = "";
             while (obj.hasNextLine()){
-                code += obj.nextLine();
+                code += obj.nextLine() +"\n";
             }
             obj.close();
             SourceCode sourceCode = new SourceCode();
