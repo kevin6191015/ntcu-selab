@@ -17,6 +17,7 @@
     "axios": "^0.27.2",
     "boostrap": "^2.0.0",
     "bootstrap": "^5.2.0",
+    "element-ui": "^2.15.9",
     "vue": "^2.5.2",
     "vue-axios": "^3.4.1",
     "vue-router": "^3.0.1"

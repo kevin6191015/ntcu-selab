@@ -23,7 +23,6 @@ export default {
     this.$ajax('data/student/getStudents?id=1').then(res => {
       var a = JSON.stringify(res.data.Students)
       this.content = JSON.parse(a)
-      console.log(JSON.parse(a))
     }).catch(function (error) {
       console.log(error)
     })
