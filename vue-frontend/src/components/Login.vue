@@ -37,13 +37,14 @@ export default {
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
+            // var token = successResponse.data.data
             this.$router.replace({
               path: '/'
             })
-          } else {
-            this.$router.replace({
-              path: '/getStudent'
-            })
+          // } else {
+          //   this.$router.replace({
+          //     path: '/getStudent'
+          //   })
           }
         })
         .catch(failResponse => {

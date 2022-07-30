@@ -36,7 +36,12 @@ export default {
     }
   },
   created () {
-    this.$ajax('data/student/getStudents?id=1').then(res => {
+    this.$ajax({
+      URL: 'data/student/getStudents?id=1',
+      Headers: {
+        'Authorization': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjM0NTY3OCIsImV4cCI6MTY1OTE2ODQ0OX0.abO72w9CYmll8zfo4GgQCnfoYhM6VjVLPKZgyJt3TaehomJPZv27HjAGh98SfzPKgXS5TjtwqrBExRrcW1Agvw'
+      }
+    }).then(res => {
       var a = JSON.stringify(res.data.Students)
       this.content = JSON.parse(a)
     }).catch(function (error) {
