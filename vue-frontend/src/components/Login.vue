@@ -4,7 +4,7 @@
     <el-form class="login-container" label-position="left" label-width="0px">
       <h3 class="login_title">系統登入</h3>
       <el-form-item>
-        <el-input type="text" v-model="loginForm.loginName" auto-complete="off" placeholder="賬號"></el-input>
+        <el-input type="text" v-model="loginForm.loginName" auto-complete="off" placeholder="帳號"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密碼"></el-input>
@@ -55,7 +55,7 @@ export default {
 
 <style scoped>
 #login-page {
-  background: url("../assets/img/FB_IMG_1655820772017.jpg") no-repeat;
+  background: url("../assets/img/bg.png") no-repeat;
   background-position: center;
   height: 100%;
   width: 100%;

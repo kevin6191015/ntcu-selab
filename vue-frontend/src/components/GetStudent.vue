@@ -1,13 +1,29 @@
 <template>
     <div>
-      <table>
+      <table class="table table-striped" >
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">student id</th>
+            <th scope="col">student name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in this.content" :key="index">
+            <th scope="row">{{index+=1}}</th>
+              <td>{{item.student_id}}</td>
+              <td>{{item.student_name}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <table>
           <tbody>
               <tr v-for="(item, key) in this.content" :key="key">
                  <td>student id : {{item.student_id}}</td>
                  <td>student name : {{item.student_name}}</td>
                </tr>
            </tbody>
-      </table>
+      </table> -->
     </div>
 </template>
 <script>
