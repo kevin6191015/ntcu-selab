@@ -40,7 +40,11 @@ public class LoginDBManager {
                 //MySecret是自訂的私鑰，HS512是自選的演算法，可以任意改變
                 .signWith(SignatureAlgorithm.HS512,"MySecret")
                 .compact();
-            return new Result(200, "", jwtToken);
+
+            Login loginInfo = new Login(login.getUsername(), login.getPassword());
+            loginInfo.setToken(jwtToken);
+            loginInfo.setUser(user);
+            return new Result(200, "", loginInfo);
         }
 
         return new Result(400, "登入失敗", "");

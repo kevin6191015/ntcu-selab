@@ -3,6 +3,8 @@ package ntcu.selab.SpringServer.data;
 public class Login {
     private String username;
     private String password;
+    private String token;
+    private User user;
 
     public Login(String username, String password){
         this.username = username;
@@ -23,5 +25,21 @@ public class Login {
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    public String getToken(){
+        return token;
+    }
+
+    public void setToken(String token){
+        this.token = token;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }
