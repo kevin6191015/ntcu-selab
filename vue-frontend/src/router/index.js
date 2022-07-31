@@ -12,7 +12,10 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld
+      component: HelloWorld,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/login',
@@ -22,7 +25,10 @@ export default new Router({
     {
       path: '/getStudent',
       name: 'GetStudent',
-      component: GetStudent
+      component: GetStudent,
+      meta: {
+        requireAuth: true
+      }
     }
   ]
 })

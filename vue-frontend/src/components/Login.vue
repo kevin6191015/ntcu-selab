@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { userLogin } from '../api/user'
+import store from '../store'
 export default {
   name: 'Login',
   data () {
@@ -30,24 +32,25 @@ export default {
   },
   methods: {
     login () {
-      this.$ajax
-        .post('data/login', {
-          username: this.loginForm.loginName,
-          password: this.loginForm.password
-        })
-        .then(successResponse => {
-          if (successResponse.data.code === 200) {
-            // var token = successResponse.data.data
+      // var _this = this
+      userLogin({
+        username: this.loginForm.loginName,
+        password: this.loginForm.password
+      })
+        .then((resp) => {
+          let code = resp.data.code
+          if (code === 200) {
+            let data = resp.data.data
+            let token = data.token
+            let user = data.user
+            // 儲存token
+            store.commit('SET_TOKENN', token)
+            // 儲存user，優雅一點的做法是token和user分開獲取
+            store.commit('SET_USER', user)
+            var path = this.$route.query.redirect
             this.$router.replace({
-              path: '/'
-            })
-          // } else {
-          //   this.$router.replace({
-          //     path: '/getStudent'
-          //   })
+              path: path === '/' || path === undefined ? '/' : path})
           }
-        })
-        .catch(failResponse => {
         })
     }
   }

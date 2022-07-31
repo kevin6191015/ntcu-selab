@@ -90,6 +90,11 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  computed: {
+    userName () {
+      return this.$store.state.user.userName
+    }
   }
 }
 </script>
