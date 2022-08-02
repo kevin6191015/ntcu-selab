@@ -28,12 +28,15 @@ public class LoginDBManager {
             return new Result(400, "密碼不能是空白", "");
         }
 
-        String uid = uDbManager.getUseridByUsername(login.getUsername());
-        User user = uDbManager.getUserInfo(uid);
+        String uid = null;
+        if((uid = uDbManager.getUseridByUsername(login.getUsername())) == null){
+            return new Result(400, "用戶不存在", "");
+        }
 
+        User user = uDbManager.getUserInfo(uid);
         if(user != null && user.getPassword().equals(login.getPassword())){
             //設定30min過期
-            Date expireDate = new Date(System.currentTimeMillis()+ 30 * 60 * 1000);
+            Date expireDate = new Date(System.currentTimeMillis()+ 30 * 60 *1000);
             String jwtToken = Jwts.builder()
                 .setSubject(login.getPassword()) //以password當subject
                 .setExpiration(expireDate)

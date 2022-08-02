@@ -107,7 +107,7 @@ public class UserDBManager {
     }
 
     public String getUseridByUsername(String username) throws Exception{
-        String id = "";
+        String id = null;
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/id/" + username);       
 
@@ -119,8 +119,11 @@ public class UserDBManager {
         br.close();
         conn.disconnect();
         jsonarray = new JSONArray( response.toString());
-        jsonobject = jsonarray.getJSONObject(0);
-        id = jsonobject.getString("ID");
+        if(jsonarray.length() != 0){
+            System.out.println(jsonarray);
+            jsonobject = jsonarray.getJSONObject(0);
+            id = jsonobject.getString("ID");
+        }
         return id;
     }
 
