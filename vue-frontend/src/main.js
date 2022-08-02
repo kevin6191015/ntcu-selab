@@ -8,12 +8,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import store from './store'
-
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 var axios = require('axios')
 Vue.prototype.$ajax = axios
-axios.default.baseURL = 'http://127.0.0.1:8081/data'
+axios.default.baseURL = '/data'
 
 router.beforeEach((to, from, next) => {
   // 路由需要認證
@@ -23,7 +22,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: 'login',
+        path: '/login',
         query: {
           redirect: to.fullPath
         }

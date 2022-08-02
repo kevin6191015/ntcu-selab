@@ -38,8 +38,7 @@ error => {
   console.log(error)
   if (error.response.data) {
     error.message = error.response.data.msg
-  }
-  if (error.response.status === 401) {
+  } else {
     router.push('/login')
   }
   return Promise.reject(error)

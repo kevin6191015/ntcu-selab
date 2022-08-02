@@ -50,6 +50,12 @@ export default {
             var path = this.$route.query.redirect
             this.$router.replace({
               path: path === '/' || path === undefined ? '/' : path})
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            })
           }
         })
     }

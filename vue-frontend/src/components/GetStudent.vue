@@ -40,8 +40,13 @@ export default {
     }).then(res => {
       var a = JSON.stringify(res.data.Students)
       this.content = JSON.parse(a)
-    }).catch(function (error) {
-      console.log(error)
+    }).catch(error => {
+      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+        confirmButtonText: '確定'
+      })
+      var path = this.$route.query.redirect
+      this.$router.replace({
+        path: path === '/' || path === undefined ? '/login' : path})
     })
   }
 }

@@ -20,6 +20,7 @@
     "element-ui": "^2.15.9",
     "vue": "^2.5.2",
     "vue-axios": "^3.4.1",
+    "vue-layer": "^1.2.5",
     "vue-router": "^3.0.1",
     "vuex": "^4.0.2"
   },
