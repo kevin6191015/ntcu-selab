@@ -28,19 +28,17 @@ router.beforeEach((to, from, next) => {
       var Expiretime = JSON.parse(jsonPayload).exp
       // 取得當前時間
       var now = Math.floor(new Date().getTime() / 1000)
-      // 憑證有效時長
-      var Validatetime = 30 * 60 * 1000
       // 判斷token是否已過期
-      if (now - Expiretime < Validatetime) {
+      if (now < Expiretime) {
         next()
+      } else {
+        next({
+          path: '/login',
+          query: {
+            redirect: to.fullPath
+          }
+        })
       }
-    } else {
-      next({
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        }
-      })
     }
   } else {
     next()
