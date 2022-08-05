@@ -17,6 +17,7 @@
         <li class="nav-item">
           <router-link to="/getStudent" class="nav-link" >GetStudent</router-link>
         </li>
+        <el-button type="primary" style="width: 100%;  border: none" round @click='logout'>logout</el-button>
       </ul>
     </div>
   </div>
@@ -30,8 +31,22 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    logout () {
+      store.commit('REMOVE_INFO', store.state)
+      this.$message({
+        showClose: true,
+        message: '登出成功',
+        type: 'success'
+      })
+      var path = this.$route.query.redirect
+      this.$router.replace({
+        path: path === '/' || path === undefined ? '/login' : path})
+    }
+  }
 }
 </script>
 
