@@ -36,8 +36,8 @@ export default {
     }
   },
   created () {
-    getStudent({
-    }).then(res => {
+    var id = 1
+    getStudent({id}).then(res => {
       var a = JSON.stringify(res.data.Students)
       this.content = JSON.parse(a)
     }).catch(error => {
