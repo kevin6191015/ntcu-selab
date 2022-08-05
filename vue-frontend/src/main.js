@@ -12,13 +12,12 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 var axios = require('axios')
 Vue.prototype.$ajax = axios
-axios.default.baseURL = '/data'
 
 router.beforeEach((to, from, next) => {
   // 路由需要認證
   if (to.meta.requireAuth) {
     // 判斷store裡是否有token
-    if (store.state.token) {
+    if (store.state.token !== '') {
       // 取得token中的到期時間
       var base64Url = store.state.token.split('.')[1]
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
@@ -39,6 +38,13 @@ router.beforeEach((to, from, next) => {
           }
         })
       }
+    } else {
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
     }
   } else {
     next()
