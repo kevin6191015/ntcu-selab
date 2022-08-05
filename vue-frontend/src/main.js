@@ -31,6 +31,7 @@ router.beforeEach((to, from, next) => {
       if (now < Expiretime) {
         next()
       } else {
+        alert('憑證已過期，請重新登入')
         next({
           path: '/login',
           query: {
