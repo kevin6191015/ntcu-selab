@@ -2,11 +2,8 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 
-// const baseURL="localhost:8088/api"
-
-// 建立axios例項
 const service = axios.create({
-  baseURL: process.env.BASE_API // api的base_url
+  baseURL: process.env.BASE_API
 })
 
 // request 請求攔截
@@ -18,8 +15,7 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    console.log(error)
     return Promise.reject(error)
   }
 )

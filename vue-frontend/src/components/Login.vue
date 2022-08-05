@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     login () {
-      // var _this = this
       userLogin({
         username: this.loginForm.loginName,
         password: this.loginForm.password
@@ -43,9 +42,7 @@ export default {
             let data = resp.data.data
             let token = data.token
             let user = data.user
-            // 儲存token
             store.commit('SET_TOKENN', token)
-            // 儲存user，優雅一點的做法是token和user分開獲取
             store.commit('SET_USER', user)
             var path = this.$route.query.redirect
             this.$router.replace({

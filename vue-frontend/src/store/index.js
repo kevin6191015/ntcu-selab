@@ -9,7 +9,6 @@ export default new Vuex.Store({
     user: JSON.parse(sessionStorage.getItem('user'))
   },
   mutations: {
-    // set
     SET_TOKENN: (state, token) => {
       state.token = token
       sessionStorage.setItem('token', token)
