@@ -1,6 +1,5 @@
 <template>
   <el-container class="home-container">
-    <!--頂部-->
     <el-header style="margin-right: 15px; width: 100%">
       <span class="nav-logo">😀</span>
       <span class="head-title">DashBoard</span>
@@ -9,9 +8,7 @@
         style="color: #222; float: right; padding: 20px"
         >{{username}}</el-avatar>
     </el-header>
-    <!-- 主體 -->
     <el-container>
-      <!-- 側邊欄 -->
       <el-aside width="13%">
         <el-menu
           :default-active="$route.path"
@@ -31,7 +28,6 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <!--路由佔位符-->
         <router-view></router-view>
       </el-main>
     </el-container>
