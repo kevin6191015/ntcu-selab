@@ -46,7 +46,7 @@ export default {
             store.commit('SET_USER', user)
             var path = this.$route.query.redirect
             this.$router.replace({
-              path: path === '/' || path === undefined ? '/' : path})
+              path: path === '/' || path === undefined ? '/home' : path})
           } else {
             this.$message({
               showClose: true,

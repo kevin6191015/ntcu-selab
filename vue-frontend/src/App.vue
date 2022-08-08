@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <!-- <div id="app">
     <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="https://ecsb.ntcu.edu.tw/newweb/index.htm">NTCU-SELAB</a>
@@ -21,13 +21,13 @@
       </ul>
     </div>
   </div>
-</nav>
+</nav> -->
 <router-view/>
     <!-- <router-link to="/">Home</router-link> |
     <router-link to="/login">Login</router-link> |
     <router-link to="/getStudent">getStudent</router-link>
     <router-view/> -->
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>

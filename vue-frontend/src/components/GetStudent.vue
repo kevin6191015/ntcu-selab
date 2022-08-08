@@ -1,30 +1,9 @@
 <template>
-    <div>
-      <table class="table table-striped" >
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">student id</th>
-            <th scope="col">student name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in this.content" :key="index">
-            <th scope="row">{{index+=1}}</th>
-              <td>{{item.student_id}}</td>
-              <td>{{item.student_name}}</td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- <table>
-          <tbody>
-              <tr v-for="(item, key) in this.content" :key="key">
-                 <td>student id : {{item.student_id}}</td>
-                 <td>student name : {{item.student_name}}</td>
-               </tr>
-           </tbody>
-      </table> -->
-    </div>
+    <el-table :data="content" border stripe>
+        <el-table-column type="index" label="序號"></el-table-column>
+        <el-table-column prop="student_name" label="登入名"></el-table-column>
+        <el-table-column prop="student_id" label="學號"></el-table-column>
+    </el-table>
 </template>
 <script>
 import {getStudent} from '../api/student'
