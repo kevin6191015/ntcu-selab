@@ -1,9 +1,14 @@
 <template>
-    <el-table :data="content" border stripe>
-        <el-table-column type="index" label="序號"></el-table-column>
-        <el-table-column prop="student_name" label="登入名"></el-table-column>
-        <el-table-column prop="student_id" label="學號"></el-table-column>
-    </el-table>
+<body>
+  <el-input  placeholder="請輸入內容" v-model="classid" clearable>
+    <el-button slot="append" icon="el-icon-search" @click='getStudentList'></el-button>
+  </el-input>
+  <el-table :data="content" border stripe>
+      <el-table-column type="index" label="序號"></el-table-column>
+      <el-table-column prop="student_name" label="名字"></el-table-column>
+      <el-table-column prop="student_id" label="學號"></el-table-column>
+  </el-table>
+</body>
 </template>
 <script>
 import {getStudent} from '../api/student'
@@ -11,22 +16,24 @@ export default {
   name: 'GetStudent',
   data () {
     return {
+      classid: '',
       content: []
     }
   },
-  created () {
-    var id = 1
-    getStudent({id}).then(res => {
-      var a = JSON.stringify(res.data.Students)
-      this.content = JSON.parse(a)
-    }).catch(error => {
-      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-        confirmButtonText: '確定'
+  methods: {
+    getStudentList () {
+      getStudent({class_id: this.classid}).then(res => {
+        var a = JSON.stringify(res.data.Students)
+        this.content = JSON.parse(a)
+      }).catch(error => {
+        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+          confirmButtonText: '確定'
+        })
+        var path = this.$route.query.redirect
+        this.$router.replace({
+          path: path === '/' || path === undefined ? '/user' : path})
       })
-      var path = this.$route.query.redirect
-      this.$router.replace({
-        path: path === '/' || path === undefined ? '/login' : path})
-    })
+    }
   }
 }
 </script>

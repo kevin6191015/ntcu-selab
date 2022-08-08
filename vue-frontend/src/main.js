@@ -19,7 +19,6 @@ router.beforeEach((to, from, next) => {
     // 判斷store裡是否有token
     if (store.state.token !== '' && store.state.token !== null) {
       // 取得token中的到期時間
-      console.log(store.state.token)
       var base64Url = store.state.token.split('.')[1]
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
       var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
