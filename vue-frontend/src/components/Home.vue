@@ -3,10 +3,16 @@
     <el-header style="margin-right: 15px; width: 100%">
       <span class="nav-logo">😀</span>
       <span class="head-title">DashBoard</span>
-      <el-avatar
-        icon="el-icon-user-solid"
-        style="color: #222; float: right; padding: 20px"
-        >{{username}}</el-avatar>
+      <el-dropdown type="primary" style="float: right;">
+        <el-button type="primary">
+          {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>
+            <el-button type="text" @click='logout'>logout</el-button>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-header>
     <el-container>
       <el-aside width="13%">
@@ -24,7 +30,6 @@
             <i :class="item.icon"></i>
             {{item.title }}
           </el-menu-item>
-          <el-button type="primary" style="width: 70%;  border: none" round @click='logout'>logout</el-button>
         </el-menu>
       </el-aside>
       <el-main>
@@ -40,7 +45,7 @@ export default {
   name: 'Home',
   data () {
     return {
-      username: store.state.user.username,
+      username: store.state.user.name,
       navList: [
         {name: '/home', title: '首頁', icon: 'el-icon-s-home'},
         {name: '/user', title: '使用者管理', icon: 'el-icon-s-custom'}
@@ -77,5 +82,14 @@ export default {
   left: 15%;
   font-size: 20px;
   font-weight: bold;
+}
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>
