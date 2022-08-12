@@ -30,7 +30,6 @@
             <i :class="item.icon"></i>
             {{item.title }}
           </el-menu-item>
-          <el-button type="primary" style="width: 70%;  border: none" round @click='logout'>logout</el-button>
         </el-menu>
       </el-aside>
       <el-main>
@@ -46,10 +45,11 @@ export default {
   name: 'Home',
   data () {
     return {
-      username: store.state.user.username,
+      username: store.state.user.name,
       navList: [
         {name: '/home', title: '首頁', icon: 'el-icon-s-home'},
-        {name: '/user', title: '使用者管理', icon: 'el-icon-s-custom'}
+        {name: '/user', title: '使用者管理', icon: 'el-icon-s-custom'},
+        {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-s-custom'}
       ]
     }
   },

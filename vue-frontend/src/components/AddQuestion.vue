@@ -135,8 +135,9 @@ export default {
       let classid = this.QuestionForm.class_id ? this.QuestionForm.class_id : 'null'
       let teacher = this.QuestionForm.teacher ? this.QuestionForm.teacher : 'null'
       let description = this.QuestionForm.description ? this.QuestionForm.description : 'null'
+      let test = this.QuestionForm.input_or_not ? 1 : 0
 
-      let url1 = 'http://127.0.0.1:8081/question/addQuestionToBank2?'
+      let url1 = '/question/addQuestionToBank2?'
       url1 = url1 + 'question_name=' + this.QuestionForm.question_name
       url1 = url1 + '&question_description=' + description
       url1 = url1 + '&image1=' + image1 + '&image2=' + image2
@@ -146,7 +147,7 @@ export default {
         url1 = url1 + '&output' + (i + 1).toString() + '=' + output[i]
       }
 
-      url1 = url1 + '&teacher=' + teacher + '&class_id=' + classid
+      url1 = url1 + '&teacher=' + teacher + '&class_id=' + classid + '&input_or_not=' + test
 
       /* http://127.0.0.1:8081/question/addQuestionToBank2?question_name=null
       &question_description=null&image1=null&image2=null&input10=null&output10=null&
