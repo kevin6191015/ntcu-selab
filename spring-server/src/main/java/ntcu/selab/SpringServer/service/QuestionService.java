@@ -202,7 +202,7 @@ public class QuestionService {
      * &question_description=tgfh&input_or_not=1&image1=www&image2=lll
      */
     @GetMapping("/addQuestionToBank2")
-    public ResponseEntity<Object> addQuestionToBank2(@RequestParam("id") String id, @RequestParam("question_name") String name
+    public ResponseEntity<Object> addQuestionToBank2( @RequestParam("question_name") String name
     , @RequestParam("question_description") String description, @RequestParam("input1") String input1, @RequestParam("input2") String input2
     , @RequestParam("input3") String input3, @RequestParam("input4") String input4, @RequestParam("input5") String input5
     , @RequestParam("input6") String input6, @RequestParam("input7") String input7, @RequestParam("input8") String input8
