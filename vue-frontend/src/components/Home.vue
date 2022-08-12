@@ -3,10 +3,16 @@
     <el-header style="margin-right: 15px; width: 100%">
       <span class="nav-logo">😀</span>
       <span class="head-title">DashBoard</span>
-      <el-avatar
-        icon="el-icon-user-solid"
-        style="color: #222; float: right; padding: 20px"
-        >{{username}}</el-avatar>
+      <el-dropdown style="float: right;">
+        <el-button type="primary" plain>
+          {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>
+            <el-button type="text" @click='logout'>logout</el-button>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-header>
     <el-container>
       <el-aside width="13%">

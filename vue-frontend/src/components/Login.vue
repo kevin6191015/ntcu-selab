@@ -42,8 +42,10 @@ export default {
             let data = resp.data.data
             let token = data.token
             let user = data.user
+            let role = user.role
             store.commit('SET_TOKENN', token)
             store.commit('SET_USER', user)
+            store.commit('SET_ROLE', role)
             var path = this.$route.query.redirect
             this.$router.replace({
               path: path === '/' || path === undefined ? '/home' : path})

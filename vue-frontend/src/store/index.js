@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: sessionStorage.getItem('token'),
-    user: JSON.parse(sessionStorage.getItem('user'))
+    user: JSON.parse(sessionStorage.getItem('user')),
+    role: 'student'
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -17,12 +18,18 @@ export default new Vuex.Store({
       state.user = user
       sessionStorage.setItem('user', JSON.stringify(user))
     },
+    SET_ROLE: (state, role) => {
+      state.role = role
+      sessionStorage.setItem('role', role)
+    },
     REMOVE_INFO: (state) => {
       state.token = ''
       state.user = {
       }
+      state.role = ''
       sessionStorage.setItem('token', '')
       sessionStorage.setItem('user', JSON.stringify(''))
+      sessionStorage.setItem('role', '')
     }
   },
   getters: {

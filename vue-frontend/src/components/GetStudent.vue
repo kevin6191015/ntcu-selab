@@ -3,7 +3,11 @@
   <el-input  placeholder="請輸入內容" v-model="classid" clearable>
     <el-button slot="append" icon="el-icon-search" @click='getStudentList'></el-button>
   </el-input>
-  <el-table :data="content" border stripe>
+  <el-table v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    :data="content" border stripe>
       <el-table-column type="index" label="序號"></el-table-column>
       <el-table-column prop="student_name" label="名字"></el-table-column>
       <el-table-column prop="student_id" label="學號"></el-table-column>
