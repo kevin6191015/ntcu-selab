@@ -191,6 +191,7 @@ public class UserService {
                 for(Course course : courses){
                     //如果是老師
                     if(user.getRole().equals("teacher")){
+                        //更新課程資訊
                         if(course.getTeacher() == user.getName()){
                             course.setTeacher(name);
                             cDbManager.updateCourse(course.getId(), course);
@@ -202,8 +203,10 @@ public class UserService {
                             question.setTeacher(name);
                             qDbManager.updateQuestion(question.getId(), question);
                         }
-                    }else{
-                        //如果是助教
+                    }
+                    //如果是助教
+                    else{
+                        //更新助教資料
                         if(course.getTA() == user.getName()){
                             course.setTA(name);
                             cDbManager.updateCourse(course.getId(), course);
@@ -242,7 +245,7 @@ public class UserService {
 
             //刪除user資料(user database)
             User user = dbManager.getUserInfo(uid); 
-            unregister(uid, user.getGitlabId());
+            unregister(user);
         }catch(Exception e){
             return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -331,10 +334,10 @@ public class UserService {
         dbManager.addUser(user);     
     }
 
-    private void unregister(String uid, String gid) throws Exception { 
-              
-        gitlabService.deleteUserByID(Integer.valueOf(gid));
+    private void unregister(User user) throws Exception { 
+        if(user.getRole().equals("student") )    
+            gitlabService.deleteUserByID(Integer.valueOf(user.getGitlabId()));
 
-        dbManager.DeleteUserById(uid);
+        dbManager.DeleteUserById(user.getId());
     }
 }
