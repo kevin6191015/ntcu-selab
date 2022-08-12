@@ -7,7 +7,7 @@
         <el-input type="text" v-model="loginForm.loginName" auto-complete="off" placeholder="帳號"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密碼" show-password></el-input>
+        <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密碼"></el-input>
       </el-form-item>
       <el-form-item style="width: 100%">
         <el-button type="primary" style="width: 100%;  border: none" @click='login'>登入</el-button>
@@ -82,7 +82,7 @@ body {
   padding: 35px 35px 15px 35px;
   background: #fff;
   border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
+  /*box-shadow: 0 0 25px #cac6c6;*/
 }
 
 .login_title {

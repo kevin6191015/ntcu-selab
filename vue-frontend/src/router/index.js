@@ -3,7 +3,9 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
+
 // import GetStudent from '@/components/GetStudent'
+import AddQuestion from '@/components/AddQuestion'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -31,6 +33,14 @@ export default new Router({
           path: '/user',
           name: 'User',
           component: () => import('@/components/GetStudent'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/AddQuestion',
+          name: 'AddQuestion',
+          component: AddQuestion,
           meta: {
             requireAuth: true
           }

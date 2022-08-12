@@ -17,6 +17,9 @@
         <li class="nav-item">
           <router-link to="/getStudent" class="nav-link" >GetStudent</router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/AddQuestion" class="nav-link" >AddQuestion</router-link>
+        </li>
         <el-button type="primary" style="width: 100%;  border: none" round @click='logout'>logout</el-button>
       </ul>
     </div>

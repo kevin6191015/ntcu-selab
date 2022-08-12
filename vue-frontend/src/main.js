@@ -6,8 +6,12 @@ import router from './router'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import './assets/formulate.css'
+import VueFormulate from '@braid/vue-formulate'
 
 import store from './store'
+
+Vue.use(VueFormulate)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 var axios = require('axios')
