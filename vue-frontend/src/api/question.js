@@ -4,15 +4,11 @@ import store from '../store'
 
 export function AddQuestionbank2 (data) {
   return request({
-    url: data.url,
-    method: 'get',
+    url: '/question/addQuestionToBank2',
+    method: 'post',
     headers: {
       'Authorization': 'Bearer ' + store.state.token
-    }
-  })
-  /* return request({
-    url: '/questions/addQuestionToBank2',
-    method: 'post',
+    },
     data
-  }) */
+  })
 }
