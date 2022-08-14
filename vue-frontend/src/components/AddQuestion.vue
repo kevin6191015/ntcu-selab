@@ -70,33 +70,33 @@ export default {
   data () {
     return {
       QuestionForm: {
-        question_name: 'null',
-        question_description: 'null',
-        image1: 'null',
-        image2: 'null',
-        input1: 'null',
-        input2: 'null',
-        input3: 'null',
-        input4: 'null',
-        input5: 'null',
-        input6: 'null',
-        input7: 'null',
-        input8: 'null',
-        input9: 'null',
-        input10: 'null',
-        output1: 'null',
-        output2: 'null',
-        output3: 'null',
-        output4: 'null',
-        output5: 'null',
-        output6: 'null',
-        output7: 'null',
-        output8: 'null',
-        output9: 'null',
-        output10: 'null',
+        question_name: '',
+        question_description: '',
+        image1: '',
+        image2: '',
+        input1: '',
+        input2: '',
+        input3: '',
+        input4: '',
+        input5: '',
+        input6: '',
+        input7: '',
+        input8: '',
+        input9: '',
+        input10: '',
+        output1: '',
+        output2: '',
+        output3: '',
+        output4: '',
+        output5: '',
+        output6: '',
+        output7: '',
+        output8: '',
+        output9: '',
+        output10: '',
         input_or_not: false,
-        teacher: 'null',
-        class_id: 'null'
+        teacher: '',
+        class_id: ''
       },
       responseResult: []
     }
@@ -104,67 +104,48 @@ export default {
   methods: {
     questionsumbit () {
       let output = []
-      output[0] = this.QuestionForm.output1
-      output[1] = this.QuestionForm.output2
-      output[2] = this.QuestionForm.output3
-      output[3] = this.QuestionForm.output4
-      output[4] = this.QuestionForm.output5
-      output[5] = this.QuestionForm.output6
-      output[6] = this.QuestionForm.output7
-      output[7] = this.QuestionForm.output8
-      output[8] = this.QuestionForm.output9
-      output[9] = this.QuestionForm.output10
+      output[1] = this.QuestionForm.output1
+      output[2] = this.QuestionForm.output2
+      output[3] = this.QuestionForm.output3
+      output[4] = this.QuestionForm.output4
+      output[5] = this.QuestionForm.output5
+      output[6] = this.QuestionForm.output6
+      output[7] = this.QuestionForm.output7
+      output[8] = this.QuestionForm.output8
+      output[9] = this.QuestionForm.output9
+      output[10] = this.QuestionForm.output10
       let input = []
-      input[0] = this.QuestionForm.input1
-      input[1] = this.QuestionForm.input2
-      input[2] = this.QuestionForm.input3
-      input[3] = this.QuestionForm.input4
-      input[4] = this.QuestionForm.input5
-      input[5] = this.QuestionForm.input6
-      input[6] = this.QuestionForm.input7
-      input[7] = this.QuestionForm.input8
-      input[8] = this.QuestionForm.input9
-      input[9] = this.QuestionForm.input10
-
-      for (let i = 0; i < input.length; i++) {
-        input[i] = input[i] ? input[i] : 'null'
-        output[i] = output[i] ? output[i] : 'null'
+      input[1] = this.QuestionForm.input1
+      input[2] = this.QuestionForm.input2
+      input[3] = this.QuestionForm.input3
+      input[4] = this.QuestionForm.input4
+      input[5] = this.QuestionForm.input5
+      input[6] = this.QuestionForm.input6
+      input[7] = this.QuestionForm.input7
+      input[8] = this.QuestionForm.input8
+      input[9] = this.QuestionForm.input9
+      input[10] = this.QuestionForm.input10
+      for (let i = 1; i < input.length; i++) {
+        input[i] = input[i].length ? input[i] : 'null'
+        output[i] = output[i].length ? output[i] : 'null'
       }
+
       let image1 = this.QuestionForm.image1 ? this.QuestionForm.image1 : 'null'
       let image2 = this.QuestionForm.image2 ? this.QuestionForm.image2 : 'null'
-      let classid = this.QuestionForm.class_id ? this.QuestionForm.class_id : 'null'
-      let teacher = this.QuestionForm.teacher ? this.QuestionForm.teacher : 'null'
+      let Inputornot = this.QuestionForm.input_or_not ? 1 : 0
       let description = this.QuestionForm.description ? this.QuestionForm.description : 'null'
+      let classid = this.QuestionForm.class_id ? this.QuestionForm.class_id : 'null'
 
-      let url1 = 'http://127.0.0.1:8081/question/addQuestionToBank2?'
-      url1 = url1 + 'question_name=' + this.QuestionForm.question_name
-      url1 = url1 + '&question_description=' + description
-      url1 = url1 + '&image1=' + image1 + '&image2=' + image2
-
-      for (let i = 0; i < input.length; i++) {
-        url1 = url1 + '&input' + (i + 1).toString() + '=' + input[i]
-        url1 = url1 + '&output' + (i + 1).toString() + '=' + output[i]
-      }
-
-      url1 = url1 + '&teacher=' + teacher + '&class_id=' + classid
-
-      /* http://127.0.0.1:8081/question/addQuestionToBank2?question_name=null
-      &question_description=null&image1=null&image2=null&input10=null&output10=null&
-      input1=null&output1=null&input2=null&output2=null&input3=null&output3=null&
-      input4=null&output4=null&input5=null&output5=null&input6=null&output6=null&
-      input7=null&output7=null&input8=null&output8=null&input9=null&output9=null&
-      input_or_not=0&teacher=null&class_id=null */
-      alert(url1)
       AddQuestionbank2({
         input: input,
         output: output,
-        image1: this.QuestionForm.image1,
-        image2: this.QuestionForm.image2,
-        class_id: this.QuestionForm.class_id,
+        image1: image1,
+        image2: image2,
+        class_id: classid,
         teacher: store.state.user.name,
         name: this.QuestionForm.question_name,
-        description: this.QuestionForm.question_description,
-        input_or_not: this.QuestionForm.input_or_not
+        description: description,
+        input_or_not: Inputornot
       })
     }
 
