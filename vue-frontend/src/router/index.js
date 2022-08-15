@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
+import ChooseClass from '@/components/ChooseClass'
 
 // import GetStudent from '@/components/GetStudent'
 import AddQuestion from '@/components/AddQuestion'
@@ -12,6 +13,14 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/chooseclass',
+      name: 'ChooseClass',
+      component: ChooseClass,
+      meta: {
+        requireAuth: true
+      }
+    },
     {
       path: '/',
       name: 'Default',

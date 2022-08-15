@@ -1,13 +1,12 @@
 import request from '@/utils/request'
 import store from '../store'
 
-export function AddQuestionbank2 (data) {
+export function getCourse () {
   return request({
-    url: '/question/addQuestionToBank2',
-    method: 'post',
+    url: '/course/getCourses',
+    method: 'get',
     headers: {
       'Authorization': 'Bearer ' + store.state.token
-    },
-    data
+    }
   })
 }

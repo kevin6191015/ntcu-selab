@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     token: sessionStorage.getItem('token'),
     user: JSON.parse(sessionStorage.getItem('user')),
-    role: 'student'
+    role: 'student',
+    class: 1
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -21,6 +22,10 @@ export default new Vuex.Store({
     SET_ROLE: (state, role) => {
       state.role = role
       sessionStorage.setItem('role', role)
+    },
+    SET_CLASS: (state, Class) => {
+      state.class = Class
+      sessionStorage.setItem('class', Class)
     },
     REMOVE_INFO: (state) => {
       state.token = ''
