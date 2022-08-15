@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.SourceCode;
 
 public class SourceCodeDBManager {
@@ -50,7 +51,7 @@ public class SourceCodeDBManager {
         return sourceCode;
     }
     
-    public void addSourceCode(SourceCode sourceCode) throws Exception{
+    public Result addSourceCode(SourceCode sourceCode) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "sourcecode/add");
         try{
@@ -78,10 +79,12 @@ public class SourceCodeDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
+            return new Result(400, "Add Source Code Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Add Source Code Sucessfull!", "");
     }
 
-    public void updateSourceCode(SourceCode sourceCode) throws Exception{
+    public Result updateSourceCode(SourceCode sourceCode) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "sourcecode/update/" + sourceCode.getQuestionName());
         try{
@@ -109,10 +112,12 @@ public class SourceCodeDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
+            return new Result(400, "Update Source Code Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Update Source Code Sucessfull!", "");
     }
 
-    public void deleteSourceCode(String question_name) throws Exception{
+    public Result deleteSourceCode(String question_name) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "sourcecode/delete/" + question_name);
         try{
@@ -130,6 +135,8 @@ public class SourceCodeDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-        }          
+            return new Result(400, "Delete Source Code Failed! " + e.getMessage(), "");
+        }     
+        return new Result(200, "Delete Source Code Sucessfull!", "");     
     }
 }

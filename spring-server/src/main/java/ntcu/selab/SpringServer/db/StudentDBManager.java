@@ -1,6 +1,7 @@
 package ntcu.selab.SpringServer.db;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 
 import java.io.BufferedReader;
@@ -58,7 +59,7 @@ public class StudentDBManager {
         return students;  
     }
 
-    public void addStudent(String cid, Student student) throws Exception{
+    public Result addStudent(String cid, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "student/add/" + cid);
         try{
@@ -86,10 +87,12 @@ public class StudentDBManager {
             jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
+            return new Result(400, "Add Student Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Add Student Sucessfull!", "");  
     }
 
-    public void updateStudent(String class_id, Student student) throws Exception{
+    public Result updateStudent(String class_id, Student student) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "student/update/" + class_id + "/" + student.getId());
         try{
@@ -117,10 +120,12 @@ public class StudentDBManager {
             jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
+            return new Result(400, "Update Student Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Update Student Sucessfull!", "");
     }
 
-    public void deleteStudent(String class_id, String sid) throws Exception{
+    public Result deleteStudent(String class_id, String sid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "student/delete/" + class_id + "/" + sid);
         try{
@@ -138,7 +143,9 @@ public class StudentDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
+            return new Result(400, "Delete Student Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Delete Student Sucessfull!", "");
     }
 
     public boolean checkStudentId(String cid, String uid) throws Exception{

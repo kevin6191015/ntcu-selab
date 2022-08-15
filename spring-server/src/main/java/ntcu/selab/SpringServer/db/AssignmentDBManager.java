@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Assignment;
+import ntcu.selab.SpringServer.data.Result;
 
 public class AssignmentDBManager {
     private static AssignmentDBManager dbManager = new AssignmentDBManager();
@@ -60,7 +61,7 @@ public class AssignmentDBManager {
         return assignments;
     }
 
-    public void addAssignment(String cid, Assignment assignment) throws Exception{
+    public Result addAssignment(String cid, Assignment assignment) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "classquestion/add/" + cid);
         try{
@@ -89,10 +90,12 @@ public class AssignmentDBManager {
             jsonobject = new JSONObject(response.toString());
         }catch(Exception e){
             logger.error(e.getMessage());
+            return new Result(400, "Add Assignment Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Add Assignment Sucessfull!", "");
     }
 
-    public void updateAssignment(String cid, Assignment assignment)throws Exception{
+    public Result updateAssignment(String cid, Assignment assignment)throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "classquestion/update/" + cid + "/" + assignment.getId());
         try{
@@ -120,10 +123,12 @@ public class AssignmentDBManager {
             jsonobject = new JSONObject(response.toString());
         }catch(Exception e){
             logger.error(e.getMessage());
+            return new Result(400, "Update Assignment Failed! " + e.getMessage(), "");
         }
+        return new Result(200, "Update Assignment Sucessfull!", "");
     }
 
-    public void deleteAssignment(String cid, String qid) throws Exception{
+    public Result deleteAssignment(String cid, String qid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "classquestion/delete/" + cid + "/" + qid);
         try{
@@ -141,6 +146,8 @@ public class AssignmentDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(Exception e){
             logger.error(e.getMessage());
-        }  
+            return new Result(400, "Delete Assignment Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Delete Assignment Sucessfull!", "");  
     }
 }
