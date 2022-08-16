@@ -5,7 +5,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Course;
-import ntcu.selab.SpringServer.data.Result;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -37,7 +36,7 @@ public class CourseDBManager {
         return dbManager;
     }
 
-    public List<Course> getCourses()throws Exception{
+    public List<Course> getAllCourses()throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class");       
         List<Course> courses = new ArrayList<>();
@@ -51,9 +50,33 @@ public class CourseDBManager {
         jsonarray = new JSONArray( response.toString());
         for (int i = 0; i < jsonarray.length(); i++) {
             Course c = new Course();
-    		jsonobject = jsonarray.getJSONObject(i);
-            // c.setId(jsonobject.getString("class_id"));
+    		jsonobject = jsonarray.getJSONObject(i);           
             c.setCourseName(jsonobject.getString("class_name"));
+            c.setSemester(jsonobject.getString("semester"));
+            c.setTeacher(jsonobject.getString("teacher"));
+            c.setTA(jsonobject.getString("TA"));
+            courses.add(c);
+		}
+        return courses;  
+    }
+
+    public List<Course> getCoursesBySemester(String semester)throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "class/" + semester);       
+        List<Course> courses = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Course c = new Course();
+    		jsonobject = jsonarray.getJSONObject(i);           
+            c.setCourseName(jsonobject.getString("class_name"));
+            c.setSemester(jsonobject.getString("semester"));
             c.setTeacher(jsonobject.getString("teacher"));
             c.setTA(jsonobject.getString("TA"));
             courses.add(c);
@@ -61,7 +84,7 @@ public class CourseDBManager {
         return courses;  
     }
     
-    public Result addCourse(Course course) throws Exception{
+    public void addCourse(Course course) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/add");
         try{
@@ -70,7 +93,7 @@ public class CourseDBManager {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             String info = "class_name=" + course.getCourseName() + "&teacher=" + course.getTeacher() +
-            "&TA=" + course.getTA();
+            "&TA=" + course.getTA() + "&semester=" + course.getSemester();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
@@ -90,12 +113,10 @@ public class CourseDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Add Course Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Add Course Sucessfull!", "");
     }
 
-    public Result updateCourse(String class_id, Course course) throws Exception{
+    public void updateCourse(String class_id, Course course) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/update/" + class_id);
         try{
@@ -124,12 +145,10 @@ public class CourseDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Update Course Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Update Course Sucessfull!", "");
     }
 
-    public Result deleteCourse(String class_id) throws Exception{
+    public void deleteCourse(String class_id) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/delete/" + class_id);
         try{
@@ -147,8 +166,6 @@ public class CourseDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Delete Course Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Delete Course Sucessfull!", "");
     }
 }

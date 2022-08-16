@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
-import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.User;
 
 public class UserDBManager {
@@ -36,7 +35,7 @@ public class UserDBManager {
         return dbManager;
     }
 
-    public Result addUser(User user) throws Exception{
+    public void addUser(User user) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/add");
         try{
@@ -67,9 +66,7 @@ public class UserDBManager {
             jsonobject = new JSONObject(response.toString()); 
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Add User Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Add User Sucessfull!", "");
     }
 
     public String getPassword(String username) throws Exception{
@@ -332,7 +329,7 @@ public class UserDBManager {
         return classes;
     }
 
-    public Result DeleteUserById(String uid) throws Exception{
+    public void DeleteUserById(String uid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/delete/" + uid);  
         try{
@@ -350,12 +347,10 @@ public class UserDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Delete User Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Delete User Sucessfull!", "");
     }
 
-    public Result updateUser(User user) throws Exception{
+    public void updateUser(User user) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "user/update/user/" + user.getUserName());
         try{
@@ -384,8 +379,6 @@ public class UserDBManager {
             jsonobject = new JSONObject(response.toString()); 
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Update User Failed! " + e.getMessage(), "");
-        }     
-        return new Result(200, "Update User Sucessfull!", "");  
+        }      
     }
 }

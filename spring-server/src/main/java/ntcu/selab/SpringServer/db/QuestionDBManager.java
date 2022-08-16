@@ -15,7 +15,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import ntcu.selab.SpringServer.config.MysqlConfig;
 import ntcu.selab.SpringServer.data.Question;
-import ntcu.selab.SpringServer.data.Result;
 
 public class QuestionDBManager {
     private static final Logger logger = LoggerFactory.getLogger(QuestionDBManager.class);
@@ -289,7 +288,7 @@ public class QuestionDBManager {
         return question;
     }
 
-    public Result deleteQuestionById(String qid) throws Exception{
+    public void deleteQuestionById(String qid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question2/delete/" + qid);
         try{
@@ -307,12 +306,10 @@ public class QuestionDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Delete failed! " + e.getMessage(), "");
-        }
-        return new Result(200, "Delete Question Id No." + qid + "Successfull!", "");          
+        }       
     }
 
-    public Result addQuestionbank1(Question q) throws Exception{
+    public void addQuestionbank1(Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question1/add");
         try{
@@ -347,12 +344,10 @@ public class QuestionDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Add Question To Bank1 Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Add Question To Bank1 successfull!", "");
     }
 
-    public Result addQuestionbank2(Question q) throws Exception{
+    public void addQuestionbank2(Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question2/add");
         try{
@@ -388,12 +383,10 @@ public class QuestionDBManager {
             jsonobject = new JSONObject(response.toString());           
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Add Question To Bank2 Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Add Question To Bank2 successfull!", "");
     }
 
-    public Result updateQuestion(String qid, Question q) throws Exception{
+    public void updateQuestion(String qid, Question q) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question2/update/" + qid);
         try{
@@ -429,8 +422,6 @@ public class QuestionDBManager {
             jsonobject = new JSONObject(response.toString());
         }catch(HttpStatusCodeException e){
             logger.error(e.getMessage());
-            return new Result(400, "Update Question in Bank2 Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Update Question in Bank2 successfull!", "");
     }
 }
