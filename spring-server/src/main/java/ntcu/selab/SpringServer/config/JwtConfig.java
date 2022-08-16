@@ -27,7 +27,7 @@ public class JwtConfig {
     }
 
     public String generatorToken(User user){
-        Date expireDate = new Date(System.currentTimeMillis()+ 30 * 60 *1000);
+        Date expireDate = new Date(System.currentTimeMillis()+ 2* 60 * 60 *1000);
             String jwtToken = Jwts.builder()
                 .setSubject(user.getRole()) 
                 .setExpiration(expireDate)
