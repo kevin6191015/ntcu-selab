@@ -36,17 +36,43 @@ public class CourseService {
         return cs;
     }
 
-    @GetMapping("getCourses")
-    public ResponseEntity<Object> getCourses() throws Exception{
+    @GetMapping("getAllCourses")
+    public ResponseEntity<Object> getAllCourses() throws Exception{
         HttpHeaders header = new HttpHeaders();
         header.add("Content-Type", "application/json");
 
-        List<Course> courses = cDbManager.getCourses();
+        List<Course> courses = cDbManager.getAllCourses();
         List<JSONObject> courseList = new ArrayList<>();
         try{
             for(Course course : courses){
                 JSONObject object = new JSONObject();
                 object.put("class_name", course.getCourseName());
+                object.put("semester", course.getSemester());
+                object.put("teacher", course.getTeacher());
+                object.put("TA", course.getTA());
+                courseList.add(object);
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage());
+            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        JSONObject root = new JSONObject();
+        root.put("Courses", courseList);
+        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
+    }
+
+    @GetMapping("getCoursesBySemester")
+    public ResponseEntity<Object> getCoursesBySemester(@RequestParam String semester) throws Exception{
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "application/json");
+
+        List<Course> courses = cDbManager.getCoursesBySemester(semester);
+        List<JSONObject> courseList = new ArrayList<>();
+        try{
+            for(Course course : courses){
+                JSONObject object = new JSONObject();
+                object.put("class_name", course.getCourseName());
+                object.put("semester", course.getSemester());
                 object.put("teacher", course.getTeacher());
                 object.put("TA", course.getTA());
                 courseList.add(object);
@@ -61,12 +87,13 @@ public class CourseService {
     }
 
     @GetMapping("addCourse")
-    public ResponseEntity<Object> addCourse(@RequestParam String class_name, @RequestParam String teacher, @RequestParam String TA){
+    public ResponseEntity<Object> addCourse(@RequestParam String class_name, @RequestParam String semester, 
+    @RequestParam String teacher, @RequestParam String TA){
         HttpHeaders header = new HttpHeaders();
         header.add("Content_Type", "application/json");
 
         try{
-            Course course = new Course(class_name, teacher, TA);
+            Course course = new Course(class_name, semester, teacher, TA);
             cDbManager.addCourse(course);
         }catch(Exception e){
             logger.error(e.getMessage());

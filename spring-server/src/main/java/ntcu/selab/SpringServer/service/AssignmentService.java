@@ -6,11 +6,6 @@ import java.util.List;
 import org.gitlab.api.models.GitlabProject;
 import org.gitlab.api.models.GitlabUser;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Assignment;
 import ntcu.selab.SpringServer.data.Question;
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.db.AssignmentDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
@@ -34,17 +30,13 @@ public class AssignmentService {
     private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static UserDBManager uDbManager = UserDBManager.getObject();
-    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public static AssignmentService getObject(){
         return object;
     }
 
     @GetMapping("getAssignments")
-    public ResponseEntity<Object> getAssignments(@RequestParam String cid)throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-
+    public Result getAssignments(@RequestParam String cid)throws Exception{
         List<Assignment> assignments = aDbManager.getAllAssignment(cid);
         List<JSONObject> assignmeList = new ArrayList<>();
         try{
@@ -57,20 +49,16 @@ public class AssignmentService {
                 assignmeList.add(object);
             }
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Get Assignments Failed! " + e.getMessage(), "");
         }
         JSONObject root = new JSONObject();
         root.put("Courses", assignmeList);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
+        return new Result(200, "Get Assignments Successfull!", root.toMap());
     }
     
     @GetMapping("addAssignment")
-    public ResponseEntity<Object> addAssignment(@RequestParam String cid, @RequestParam String qid
+    public Result addAssignment(@RequestParam String cid, @RequestParam String qid
     , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             /*
              * 將題目加進class_question裡
@@ -108,34 +96,26 @@ public class AssignmentService {
                 gitlabService.setGitlabIntegrations(gitlabProject, project_name);              
             }
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Add Assignment Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        return new Result(200, "Add Assignment Successfull!", "");
     }
 
     @GetMapping("updateAssignment")
-    public ResponseEntity<Object> updateAssignment(@RequestParam String cid, @RequestParam String qid
+    public Result updateAssignment(@RequestParam String cid, @RequestParam String qid
     , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             Assignment assignment = new Assignment(qid, release_time, deadline);
             aDbManager.updateAssignment(cid, assignment);
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Update Assignment Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        return new Result(200, "Update Assignment Successfull!", "");
     }
 
     @GetMapping("deleteAssignment")
-    public ResponseEntity<Object> deleteAssignment(@RequestParam String cid
+    public Result deleteAssignment(@RequestParam String cid
     , @RequestParam String qid)throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             /*
              * 對該班的student
@@ -159,9 +139,8 @@ public class AssignmentService {
             //將class_question裡的題目刪除
             aDbManager.deleteAssignment(cid, qid);
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Delete Assignment Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        return new Result(200, "Delete Assignment Successfull!", "");
     }
 }

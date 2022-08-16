@@ -2,6 +2,7 @@ package ntcu.selab.SpringServer.service;
 
 import ntcu.selab.SpringServer.data.Course;
 import ntcu.selab.SpringServer.data.Question;
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.CourseDBManager;
@@ -41,30 +42,29 @@ public class UserService {
     }
 
     @GetMapping("/getUsers")
-    public ResponseEntity<Object> getUsers() throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-
+    public Result getUsers() throws Exception{
         List<User> users = dbManager.getAllUser();
         List<JSONObject> userlist = new ArrayList<>();
 
-        for (User user : users) {
-            JSONObject Object = new JSONObject();
-            Object.put("gitlabId", user.getGitlabId());
-            Object.put("password", user.getPassword());
-            Object.put("role", user.getRole());
-            Object.put("gitlabToken", user.getGitlabToken());
-            Object.put("name", user.getName());
-            Object.put("id", user.getId());
-            Object.put("username", user.getUserName());
-            Object.put("CLASSES", user.getClasses());
-            userlist.add(Object);
+        try{
+            for (User user : users) {
+                JSONObject Object = new JSONObject();
+                Object.put("gitlabId", user.getGitlabId());
+                Object.put("password", user.getPassword());
+                Object.put("role", user.getRole());
+                Object.put("gitlabToken", user.getGitlabToken());
+                Object.put("name", user.getName());
+                Object.put("id", user.getId());
+                Object.put("username", user.getUserName());
+                Object.put("CLASSES", user.getClasses());
+                userlist.add(Object);
+            }
+        }catch(Exception e){
+            return new Result(400, "Get Users Failed! " + e.getMessage(), "");
         }
-
         JSONObject root = new JSONObject();
         root.put("Users", userlist);
-
-        return new ResponseEntity<Object>(root, header, HttpStatus.OK);
+        return new Result(200, "Get Users Successfull!", root);
     }
 
     @GetMapping("/addUser")
@@ -137,18 +137,18 @@ public class UserService {
     }
 
     @GetMapping("/updatePassword")
-    public ResponseEntity<Object> updatePassword(@RequestParam("username") String username,
-            @RequestParam("currentPassword") String currentPassword,
-            @RequestParam("newPassword") String newPassword) throws Exception{
-        HttpHeaders header = new HttpHeaders();
+    public Result updatePassword(@RequestParam("username") String username
+    , @RequestParam("currentPassword") String currentPassword
+    , @RequestParam("newPassword") String newPassword) throws Exception{
+
         boolean check = dbManager.checkPassword(username, currentPassword);
         if (check) {
             String gitlabId = dbManager.getGitlabidByUsername(username);
             gitlabService.updatePassword(gitlabId, newPassword);
             dbManager.ModifyPassword(username, currentPassword, newPassword);
-            return new ResponseEntity<>(header, HttpStatus.OK);
+            return new Result(200, "Update Password Successfull!", "");
         } else {
-            return new ResponseEntity<>("Your current password is wrong", header, HttpStatus.OK);
+            return new Result(400, "Update Password Failed!", "");
         }
     }
 
@@ -164,12 +164,9 @@ public class UserService {
     }
 
     @GetMapping("updateUser")
-    public ResponseEntity<Object> updateUser(@RequestParam String uid, @RequestParam String username
+    public Result updateUser(@RequestParam String uid, @RequestParam String username
     , @RequestParam String name, @RequestParam String password, @RequestParam String role
     , @RequestParam String email) {
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             User user = dbManager.getUserInfo(uid);
             //將user的資料同步到gitlab
@@ -187,7 +184,7 @@ public class UserService {
                 }       
             }else{
                 //將user的資料同步到course
-                List<Course> courses = cDbManager.getCourses();
+                List<Course> courses = cDbManager.getAllCourses();
                 for(Course course : courses){
                     //如果是老師
                     if(user.getRole().equals("teacher")){
@@ -223,16 +220,13 @@ public class UserService {
             dbManager.updateUser(user);
 
         }catch(Exception e){
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Update User Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK); 
+        return new Result(200, "Update User Successfull!", ""); 
     }
 
     @GetMapping("deleteUser")
-    public ResponseEntity<Object> deleteUser(@RequestParam String uid){
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
+    public Result deleteUser(@RequestParam String uid){
         try{                     
             //刪除user所在class裡的資料(student databae)
             String classes = dbManager.getClassesByName(dbManager.getUsernameById(uid));
@@ -247,9 +241,9 @@ public class UserService {
             User user = dbManager.getUserInfo(uid); 
             unregister(user);
         }catch(Exception e){
-            return new ResponseEntity<>("Failed! " + e.getMessage(), header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Delete User Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK); 
+        return new Result(200, "Delete User Successfull!", "");  
     }
 
     private String getErrorMessage(List<User> users, User user) throws Exception{

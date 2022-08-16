@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,14 +26,74 @@ public class QuestionService {
     }
 
     @GetMapping("/getQuestionBank1")
-    public ResponseEntity<Object> getQuestionBank1() throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-        
+    public Result getQuestionBank1() throws Exception{
         List<Question> questions = qDbManager.getQuestionBank1();
         List<JSONObject> questionlist = new ArrayList<>();
-        for(Question question : questions){
-            JSONObject object = new JSONObject();
+        try{
+            for(Question question : questions){
+                JSONObject object = new JSONObject();
+                object.put("question_name", question.getName());
+                object.put("question_description", question.getDescription());
+                object.put("image1", question.getImage1());
+                object.put("image2", question.getImage2());
+                String[] input = question.getInput();
+                String[] output = question.getOutnput();
+                for(int i=0 ; i<10 ; i++){
+                    object.put("input" + String.valueOf(i), input[i]);
+                    object.put("output" + String.valueOf(i), output[i]);
+                }
+                object.put("inputornot", question.getInputornot());
+                questionlist.add(object);
+            }
+        }catch(Exception e){
+            return new Result(400, "Get Questions From Bank1 Failed! " + e.getMessage(), "");
+        }
+        JSONObject root = new JSONObject();
+        root.put("Questions", questionlist);
+        return new Result(200, "Get Questions From Bank1 Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getQuestionBank2")
+    public Result getQuestionBank2() throws Exception{ 
+        List<Question> questions = qDbManager.getQuestionBank2();
+        List<JSONObject> questionlist = new ArrayList<>();
+        List<String> teachers = qDbManager.getTeachers();
+        List<String> classes = qDbManager.getClasses();
+        try{
+            for(Question question : questions){
+                JSONObject object = new JSONObject();
+                object.put("id", question.getId());
+                object.put("question_name", question.getName());
+                object.put("question_description", question.getDescription());
+                object.put("teacher", question.getTeacher());
+                object.put("class_id", question.getClassId());
+                object.put("image1", question.getImage1());
+                object.put("image2", question.getImage2());
+                String[] input = question.getInput();
+                String[] output = question.getOutnput();
+                for(int i=0 ; i<10 ; i++){
+                    object.put("input" + String.valueOf(i), input[i]);
+                    object.put("output" + String.valueOf(i), output[i]);
+                }
+                object.put("inputornot", question.getInputornot());
+                
+                questionlist.add(object);
+            }
+        }catch(Exception e){
+            return new Result(400, "Get Questions From Bank2 Failed! " + e.getMessage(), "");
+        }
+        JSONObject root = new JSONObject();
+        root.put("Questions", questionlist);
+        root.put("Teachers", teachers);
+        root.put("Classes", classes);
+        return new Result(200, "Get Questions From Bank2 Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getQuestionFromBank1")
+    public Result getQuestionFromBank1(@RequestParam("id") String qid) throws Exception{
+        JSONObject object = new JSONObject();
+        Question question = qDbManager.getQuestionFromBank1ById(qid);
+        try{
             object.put("question_name", question.getName());
             object.put("question_description", question.getDescription());
             object.put("image1", question.getImage1());
@@ -48,25 +105,17 @@ public class QuestionService {
                 object.put("output" + String.valueOf(i), output[i]);
             }
             object.put("inputornot", question.getInputornot());
-            
-            questionlist.add(object);
+        }catch(Exception e){
+            return new Result(400, "Get Question From Bank1 Failed! " + e.getMessage(), "");
         }
-        
-        JSONObject root = new JSONObject();
-        root.put("Questions", questionlist);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.ACCEPTED);
+        return new Result(200, "Get Question From Bank1 Successfull!", object.toMap());
     }
 
-    @GetMapping("/getQuestionBank2")
-    public ResponseEntity<Object> getQuestionBank2() throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-        
-        List<Question> questions = qDbManager.getQuestionBank2();
-        List<JSONObject> questionlist = new ArrayList<>();
-        for(Question question : questions){
-            JSONObject object = new JSONObject();
-            object.put("id", question.getId());
+    @GetMapping("/getQuestionFromBank2")
+    public Result getQuestionfromBank2(@RequestParam("id") String qid) throws Exception{
+        JSONObject object = new JSONObject();
+        Question question = qDbManager.getQuestionFromBank2ById(qid);
+        try{
             object.put("question_name", question.getName());
             object.put("question_description", question.getDescription());
             object.put("teacher", question.getTeacher());
@@ -80,83 +129,49 @@ public class QuestionService {
                 object.put("output" + String.valueOf(i), output[i]);
             }
             object.put("inputornot", question.getInputornot());
-            
-            questionlist.add(object);
+        }catch(Exception e){
+            return new Result(400, "Get Question From Bank2 Failed! " + e.getMessage(), "");
         }
-        
-        List<String> teachers = qDbManager.getTeachers();
-        List<String> classes = qDbManager.getClasses();
-        
-        JSONObject root = new JSONObject();
-        root.put("Questions", questionlist);
-        root.put("Teachers", teachers);
-        root.put("Classes", classes);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping("/getQuestionFromBank1")
-    public ResponseEntity<Object> getQuestionFromBank1(@RequestParam("id") String qid) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-        JSONObject object = new JSONObject();
-        Question question = qDbManager.getQuestionFromBank1ById(qid);
-
-        object.put("question_name", question.getName());
-        object.put("question_description", question.getDescription());
-        object.put("image1", question.getImage1());
-        object.put("image2", question.getImage2());
-        String[] input = question.getInput();
-        String[] output = question.getOutnput();
-        for(int i=0 ; i<10 ; i++){
-            object.put("input" + String.valueOf(i), input[i]);
-            object.put("output" + String.valueOf(i), output[i]);
-        }
-        object.put("inputornot", question.getInputornot());
-
-        return new ResponseEntity<>(object.toMap(), header, HttpStatus.OK);
-    }
-
-    @GetMapping("/getQuestionFromBank2")
-    public ResponseEntity<Object> getQuestionfromBank2(@RequestParam("id") String qid) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-        JSONObject object = new JSONObject();
-        Question question = qDbManager.getQuestionFromBank2ById(qid);
-
-        object.put("question_name", question.getName());
-        object.put("question_description", question.getDescription());
-        object.put("teacher", question.getTeacher());
-        object.put("class_id", question.getClassId());
-        object.put("image1", question.getImage1());
-        object.put("image2", question.getImage2());
-        String[] input = question.getInput();
-        String[] output = question.getOutnput();
-        for(int i=0 ; i<10 ; i++){
-            object.put("input" + String.valueOf(i), input[i]);
-            object.put("output" + String.valueOf(i), output[i]);
-        }
-        object.put("inputornot", question.getInputornot());
-
-        return new ResponseEntity<Object>(object.toMap(), header, HttpStatus.OK);
+        return new Result(200, "Get Question From Bank2 Successfull!", object.toMap());
     }
 
     @GetMapping("/deleteQuestion")
     public Result deleteQuestionById(@RequestParam("id") String id) throws Exception{
-        return qDbManager.deleteQuestionById(id);
+        try{
+            qDbManager.deleteQuestionById(id);
+        }catch(Exception e){
+            return new Result(400, "Delete Question From Bank1 Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Delete Question From Bank1 Successfull!", "");
     }
 
     @GetMapping("/addQuestionToBank1")
     public Result addQuestionToBank1(@RequestBody Question question) throws Exception{
-        return qDbManager.addQuestionbank1(question);
+        try{
+            qDbManager.addQuestionbank1(question);
+        }catch(Exception e){
+            return new Result(400, "Add Question to Bank1 Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Add Question to Bank1 Successfull!", "");
     }
 
     @PostMapping("/addQuestionToBank2")
     public Result addQuestionToBank2( @RequestBody Question question) throws Exception{
-        return qDbManager.addQuestionbank2(question);
+        try{
+            qDbManager.addQuestionbank2(question);
+        }catch(Exception e){
+            return new Result(400, "Add Question to Bank2 Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Add Question to Bank2 Successfull!", "");
     }
     
     @GetMapping("/updateQuestion")
     public Result updateQuestion(@RequestBody Question question) throws Exception{
-        return qDbManager.updateQuestion(question.getId(), question);
+        try{
+            qDbManager.updateQuestion(question.getId(), question);
+        }catch(Exception e){
+            return new Result(400, "Update Question From Bank2 Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Update Question From Bank2 Successfull!", "");
     }
 }

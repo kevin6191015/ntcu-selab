@@ -2,17 +2,14 @@ package ntcu.selab.SpringServer.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.StudentDBManager;
@@ -22,7 +19,6 @@ import ntcu.selab.SpringServer.db.UserDBManager;
 @RequestMapping(value = "/student")
 public class StudentService {
     public static StudentService ss = new StudentService();
-    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static UserDBManager uDbManager = UserDBManager.getObject();
 
@@ -31,10 +27,7 @@ public class StudentService {
     }
 
     @GetMapping("/getStudents")
-    public ResponseEntity<Object> getStudents(@RequestParam String id) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-
+    public Result getStudents(@RequestParam String id) throws Exception{
         List<Student> students = sDbManager.getStudents(id);
         List<JSONObject> studentlist = new ArrayList<>();
         try{            
@@ -45,18 +38,16 @@ public class StudentService {
                 studentlist.add(object);
             }           
         }catch(Exception e){
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Get Students Failed! " + e.getMessage(), "");
         }
         JSONObject root = new JSONObject();
         root.put("Students", studentlist);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
+        return new Result(200, "Get Students Successfull!", root.toMap());
     }
 
     @GetMapping("addStudent")
-    public ResponseEntity<Object> addStudent(@RequestParam String cid
+    public Result addStudent(@RequestParam String cid
     , @RequestParam String uid) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
         String uname = UserDBManager.getObject().getNameById(uid);
         Student student = new Student(uid, uname);
 
@@ -71,14 +62,10 @@ public class StudentService {
                 uDbManager.addClasses(user, cid);
                 uDbManager.updateUser(user);
             }catch(Exception e){
-                logger.error(e.getMessage());
-                return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+                return new Result(400, "Add Students Failed! " + e.getMessage(), "");
             }
-        } else {
-            return new ResponseEntity<Object>(error, header, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        }     
+        return new Result(200, "Add Students Successfull!", "");
     }
 
     // @GetMapping("updateStudent")
@@ -96,10 +83,7 @@ public class StudentService {
     // }
 
     @GetMapping("deleteStudent")
-    public ResponseEntity<Object> deleteStudent(@RequestParam String cid, @RequestParam String uid){
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-        JSONObject jsonObject = null;
+    public Result deleteStudent(@RequestParam String cid, @RequestParam String uid){
         try{
             //刪除student資料(student database)
             sDbManager.deleteStudent(cid, uid);
@@ -109,10 +93,9 @@ public class StudentService {
             uDbManager.deleteClasses(user, cid);   
             uDbManager.updateUser(user);
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Delete Students Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(jsonObject, header, HttpStatus.OK); 
+        return new Result(200, "Delete Students Successfull!", "");
     }
 
     private String getErrorMessage(String cid, Student student) throws Exception{
