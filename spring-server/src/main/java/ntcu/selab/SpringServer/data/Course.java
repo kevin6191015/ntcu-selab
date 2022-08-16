@@ -6,10 +6,18 @@ import java.util.List;
 public class Course {
     private String id = null;
     private String coursename = null;
+    private String semester = null;
     private String teacher = null;
     private String TA = null;
     private List<Student> studentlist = new ArrayList<>();
     private List<Assignment> assignmentlist = new ArrayList<>();
+
+    public Course(String coursename, String semester, String teacher, String TA){
+        this.coursename = coursename;
+        this.semester = semester;
+        this.teacher = teacher;
+        this.TA = TA;
+    }
 
     public Course(String coursename, String teacher, String TA){
         this.coursename = coursename;
@@ -34,6 +42,14 @@ public class Course {
 
     public void setCourseName(String coursename){
         this.coursename = coursename;
+    }
+
+    public String getSemester(){
+        return semester;
+    }
+
+    public void setSemester(String semester){
+        this.semester = semester;
     }
 
     public String getTeacher(){
