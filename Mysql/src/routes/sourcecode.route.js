@@ -7,6 +7,12 @@ const SourcecodeController = require('../controllers/sourcecode.controller');
 router.get('/:name',SourcecodeController.getSourcecodeByName);
 
 //add sourcecode
-router.post('/',SourcecodeController.addSourcecode);
+router.post('/add/',SourcecodeController.addSourcecode);
+
+//update sourcecode
+router.post('/update/:name',SourcecodeController.updateSourcecode);
+
+//delete sourcecode
+router.post('/delete/:name',SourcecodeController.deleteSourcecode);
 
 module.exports = router;

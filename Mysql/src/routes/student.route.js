@@ -23,6 +23,7 @@ router.post('/update/:class_id/:student_id', function(req,res) {
     })
 });
 
+//delete
 router.post('/delete/:class_id/:student_id', function(req,res) {
     StudentModel.deleteStudentByclassIdandStudentId(req.params.class_id,req.params.student_id, (err, Student)=>{
         if(err)
@@ -32,6 +33,15 @@ router.post('/delete/:class_id/:student_id', function(req,res) {
     })
 })
 
+//check by class and student id
+router.get('/checkbyid/:class_id/:student_id', function(req,res) {
+    StudentModel.checkbyid(req.params.class_id,req.params.student_id, (err, check)=>{
+        if(err)
+            res.send(err);
+        else    
+            res.send(check);
+    })
+});
 
 
 

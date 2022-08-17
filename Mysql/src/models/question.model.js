@@ -90,7 +90,7 @@ var Question = function(question){
               console.log('Error while updating the question');
               result(err);
           }else{    
-              console.log('Question updated sucessfully');
+              console.log(res);
               result(null,res);
           }
   })

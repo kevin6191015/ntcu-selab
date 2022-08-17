@@ -86,7 +86,7 @@ Question.createQuestion = (questionReqData, result) =>{
 
 //update question
 Question.updateQuestion = (id, questionReqData, result)=>{
-    dbConn.query("UPDATE question_bank2 SET input1=?,input2=?,input3=?,input4=?,input5=?,input6=?,input7=?,input8=?,input9=?,input10=?,output1=?,output2=?,output3=?,output4=?,output5=?,output6=?,output7=?,output8=?,output9=?,output10=? WHERE id = ?",[questionReqData.input1,questionReqData.input2,questionReqData.input3,questionReqData.input4,questionReqData.input5,questionReqData.input6,questionReqData.input7,questionReqData.input8,questionReqData.input9,questionReqData.input10,questionReqData.output1,questionReqData.output2,questionReqData.output3,questionReqData.output4,questionReqData.output5,questionReqData.output6,questionReqData.output7,questionReqData.output8,questionReqData.output9,questionReqData.output10,id],(err,res)=>{
+    dbConn.query("UPDATE question_bank2 SET teacher=?,input1=?,input2=?,input3=?,input4=?,input5=?,input6=?,input7=?,input8=?,input9=?,input10=?,output1=?,output2=?,output3=?,output4=?,output5=?,output6=?,output7=?,output8=?,output9=?,output10=? WHERE id = ?",[questionReqData.teacher,questionReqData.input1,questionReqData.input2,questionReqData.input3,questionReqData.input4,questionReqData.input5,questionReqData.input6,questionReqData.input7,questionReqData.input8,questionReqData.input9,questionReqData.input10,questionReqData.output1,questionReqData.output2,questionReqData.output3,questionReqData.output4,questionReqData.output5,questionReqData.output6,questionReqData.output7,questionReqData.output8,questionReqData.output9,questionReqData.output10,id],(err,res)=>{
         if(err){
             console.log('Error while updating the question');
             result(err);
@@ -126,6 +126,27 @@ Question.getQuestionByClass = (class_id, result)=>{
             result(null,res);
     })
 }
+
+//get teacher list
+Question.getteachers = (result)=>{
+    dbConn.query('SELECT DISTINCT teacher FROM question_bank2',(err,res)=>{
+        if(err)
+            result(err);
+        else
+            result(null,res);
+    })
+}
+
+//get class list
+Question.getclass = (result)=>{
+    dbConn.query('SELECT DISTINCT class_id FROM question_bank2',(err,res)=>{
+        if(err)
+            result(err);
+        else
+            result(null,res);
+    })
+}
+
 
 function padLeft(str,lenght){
     if( str.length >= lenght)

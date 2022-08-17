@@ -24,4 +24,10 @@ router.get('/byteacher/:teacher',QuestionController.getQuestionByTeacher);
 //get by class
 router.get('/byclass/:class',QuestionController.getQuestionByClass);
 
+//get teacher list
+router.get('/teachers/',QuestionController.getteachers);
+
+//get class list
+router.get('/class/',QuestionController.getclass);
+
 module.exports = router;

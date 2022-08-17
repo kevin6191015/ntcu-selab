@@ -9,6 +9,15 @@ exports.getclasslist = (req,res)=>{
     })
 }
 
+//get all semesters
+exports.getSemester = (req,res)=>{
+    ClassModel.getSemester( (err,Semesters)=>{
+        if(err)
+            res.send(err);
+        res.send(Semesters);
+    })
+}
+
 //add new class
 exports.createNewClass = (req,res) =>{
     const classReqData = new ClassModel(req.body);
@@ -45,4 +54,12 @@ exports.updateClass = (req,res)=>{
                 res.json({status: true, message: 'Class Updated Successfully'});    
         })
     }
+}
+
+exports.getClassbysemester = (req,res)=>{
+    ClassModel.getClassbysemester(req.params.semester, (err,classes)=>{
+        if(err)
+            res.send(err);
+        res.send(classes);
+    })
 }

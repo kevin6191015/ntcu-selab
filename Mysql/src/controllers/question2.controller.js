@@ -83,3 +83,25 @@ exports.getQuestionByClass = (req,res)=>{
         res.send(question);
     })
 }
+
+
+
+//get teacher list
+exports.getteachers = (req,res)=>{
+    QuestionModel.getteachers((err,teachers)=>{
+        if(err)
+            res.send(err);
+        else
+            res.send(teachers);
+    })
+}
+
+//get  list
+exports.getclass = (req,res)=>{
+    QuestionModel.getclass((err,classes)=>{
+        if(err)
+            res.send(err);
+        else
+            res.send(classes);
+    })
+}

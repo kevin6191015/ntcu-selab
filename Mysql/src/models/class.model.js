@@ -5,10 +5,20 @@ var Class = function(CLass){
     this.class_name = CLass.class_name
     this.teacher = CLass.teacher
     this.TA = CLass.TA
+    this.semester = CLass.semester
 }
 
 Class.getclasslist = (result)=>{
     dbConn.query('SELECT * FROM classes_list', (err,res)=>{
+        if(err)
+            result(null,err);
+        else   
+            result(null,res);
+    })
+}
+
+Class.getSemester = (result)=>{
+    dbConn.query('SELECT DISTINCT semester FROM classes_list', (err,res)=>{
         if(err)
             result(null,err);
         else   
@@ -24,7 +34,7 @@ Class.createNewClass = (classReqData, result) =>{
         changeclass.class_id = class_id;       
         class_id = padLeft(class_id,3);
         console.log(changeclass);
-        var sql1 = 'CREATE TABLE class_' + class_id + '_questions (question_id TEXT, question_name TEXT, release_time DATE, deadline DATE)';
+        var sql1 = 'CREATE TABLE class_' + class_id + '_questions (question_id TEXT, question_name TEXT, release_time DATETIME , deadline DATETIME )';
         var sql2 = 'CREATE TABLE class_' + class_id + '_student (student_id TEXT, student_name TEXT)';
         dbConn.query(sql1,(err,res)=>{
             //if(err)
@@ -86,6 +96,15 @@ function padLeft(str,lenght){
         return str;
     else
         return padLeft("0"+str, lenght);
+}
+
+Class.getClassbysemester = (semester,result)=>{
+    dbConn.query("SELECT * FROM classes_list WHERE semester = ?",semester,(err,res)=>{
+        if(err)
+            result(null,err);
+        else   
+            result(null,res);
+    })
 }
 
 module.exports = Class;

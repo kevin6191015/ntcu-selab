@@ -57,7 +57,7 @@ Student.addStudentByclassId = (id, StudentReqData, result)=>{
         if(err)
             result(err);
         else   
-            result(null,res);
+            result(res);
     })   
 }
 
@@ -70,7 +70,7 @@ Student.updateStudentByclassIdandStudentId = (class_id , student_id, StudentReqD
         if(err){
             result(null,err);
         }else{
-            result(null,res);
+            result(res);
         }
     })
 }
@@ -83,6 +83,21 @@ Student.deleteStudentByclassIdandStudentId = (class_id, student_id,result)=>{
         if(err)
             result(err);
         else
+            result(res);
+    })
+}
+
+
+
+//check by class and student id
+Student.checkbyid = (class_id,student_id,result)=>{
+    var Class_id;
+    Class_id = padLeft(class_id,3);
+    var s = 'SELECT count(*) FROM class_' +Class_id + '_student WHERE student_id = ?'
+    dbConn.query(s,student_id, (err,res)=>{
+        if(err)
+            result(err);
+        else    
             result(null,res);
     })
 }

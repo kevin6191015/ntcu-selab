@@ -9,7 +9,7 @@ Sourcecoode.getSourcecodeByName = (name,result) =>{
     dbConn.query('SELECT * FROM sourcecode_list WHERE question_name=?', name, (err,res)=>{
         if(err){
             console.log("Error while fetching SourceCode by name");
-            ressult(null,err);
+            result(null,err);
         }else{
             result(null,res);
         }
@@ -26,6 +26,26 @@ Sourcecoode.addSourcecode = (sourcecodeReqData, result) =>{
             console.log('Sourcecode added successfully');
             result(null,res);
         }
+    })
+}
+
+//update sourcecode
+Sourcecoode.updateSourcecode = (name, sourcecodeReqData, result) =>{
+    dbConn.query('UPDATE sourcecode_list SET code=? WHERE question_name =?',[sourcecodeReqData.code, name], (err,res)=>{
+        if(err)
+            result(err);
+        else    
+            result(null,res);
+    })
+}
+
+//delete Sourcecode
+Sourcecoode.deleteSourcecode = (name,result)=>{
+    dbConn.query('DELETE FROM sourcecode_list WHERE question_name = ?',name, (err,res)=>{
+        if(err)
+            result(err);
+        else    
+            result(null,res);
     })
 }
 
