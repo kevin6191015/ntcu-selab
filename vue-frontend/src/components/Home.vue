@@ -48,7 +48,7 @@ export default {
       username: store.state.user.name,
       navList: [
         {name: '/home', title: '首頁', icon: 'el-icon-s-home'},
-        {name: '/user', title: '使用者管理', icon: 'el-icon-s-custom'},
+        {name: '/user', title: '學生管理', icon: 'el-icon-s-custom'},
         {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-s-custom'}
       ]
     }

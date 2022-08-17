@@ -46,9 +46,10 @@ export default {
             store.commit('SET_TOKENN', token)
             store.commit('SET_USER', user)
             store.commit('SET_ROLE', role)
-            var path = this.$route.query.redirect
+            // var path = this.$route.query.redirect
             this.$router.replace({
-              path: path === '/' || path === undefined ? '/home' : path})
+              path: '/chooseclass'
+            })
           } else {
             this.$message({
               showClose: true,

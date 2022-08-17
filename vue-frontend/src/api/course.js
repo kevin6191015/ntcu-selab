@@ -1,9 +1,19 @@
 import request from '@/utils/request'
 import store from '../store'
 
-export function getCourse () {
+export function getAllCourse () {
   return request({
-    url: '/course/getCourses',
+    url: '/course/getAllCourses',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function getCourseBySem (data) {
+  return request({
+    url: '/course/getCoursesBySemester?semester=' + data.sem,
     method: 'get',
     headers: {
       'Authorization': 'Bearer ' + store.state.token
