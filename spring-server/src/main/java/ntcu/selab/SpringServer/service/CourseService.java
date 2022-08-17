@@ -3,11 +3,6 @@ package ntcu.selab.SpringServer.service;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Course;
 import ntcu.selab.SpringServer.data.Question;
+import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.data.User;
 import ntcu.selab.SpringServer.db.CourseDBManager;
@@ -26,7 +22,6 @@ import ntcu.selab.SpringServer.db.UserDBManager;
 @RequestMapping(value = "/course")
 public class CourseService {
     public static CourseService cs = new CourseService();
-    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static CourseDBManager cDbManager = CourseDBManager.getObject();
     private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
@@ -37,10 +32,7 @@ public class CourseService {
     }
 
     @GetMapping("getAllCourses")
-    public ResponseEntity<Object> getAllCourses() throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-
+    public Result getAllCourses() throws Exception{
         List<Course> courses = cDbManager.getAllCourses();
         List<JSONObject> courseList = new ArrayList<>();
         try{
@@ -53,19 +45,15 @@ public class CourseService {
                 courseList.add(object);
             }
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Get Course Failed! " + e.getMessage(), "");
         }
         JSONObject root = new JSONObject();
         root.put("Courses", courseList);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
+        return new Result(200, "Get Course Successfull!", root.toMap());
     }
 
     @GetMapping("getCoursesBySemester")
-    public ResponseEntity<Object> getCoursesBySemester(@RequestParam String semester) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Type", "application/json");
-
+    public Result getCoursesBySemester(@RequestParam String semester) throws Exception{
         List<Course> courses = cDbManager.getCoursesBySemester(semester);
         List<JSONObject> courseList = new ArrayList<>();
         try{
@@ -78,36 +66,28 @@ public class CourseService {
                 courseList.add(object);
             }
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Get Course Failed! " + e.getMessage(), "");
         }
         JSONObject root = new JSONObject();
         root.put("Courses", courseList);
-        return new ResponseEntity<Object>(root.toMap(), header, HttpStatus.OK);
+        return new Result(200, "Get Course Successfull!", root.toMap());
     }
 
     @GetMapping("addCourse")
-    public ResponseEntity<Object> addCourse(@RequestParam String class_name, @RequestParam String semester, 
+    public Result addCourse(@RequestParam String class_name, @RequestParam String semester, 
     @RequestParam String teacher, @RequestParam String TA){
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             Course course = new Course(class_name, semester, teacher, TA);
             cDbManager.addCourse(course);
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Add Course Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        return new Result(200, "Add Course Successfull!", "");
     }
 
     @GetMapping("updateCourse")
-    public ResponseEntity<Object> updateCourse(@RequestParam String cid, @RequestParam String class_name
+    public Result updateCourse(@RequestParam String cid, @RequestParam String class_name
     , @RequestParam String teacher, @RequestParam String TA){
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
         try{
             //更新course資料
             Course course = new Course(class_name, teacher, TA);
@@ -120,17 +100,13 @@ public class CourseService {
                 qDbManager.updateQuestion(question.getId(), question);
             }
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Update Course Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK);
+        return new Result(200, "Update Course Successfull!", "");
     }
 
     @GetMapping("deleteCourse")
-    public ResponseEntity<Object> deleteCourse(@RequestParam String cid){
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content_Type", "application/json");
-
+    public Result deleteCourse(@RequestParam String cid){
         try{
             //刪除user的classes中該課程的id
             List<Student> students = sDbManager.getStudents(cid);
@@ -143,9 +119,8 @@ public class CourseService {
             //刪除course資料
             cDbManager.deleteCourse(cid);
         }catch(Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed!", header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Delete Course Failed! " + e.getMessage(), "");
         }
-        return new ResponseEntity<>(header, HttpStatus.OK); 
+        return new Result(200, "Delete Course Successfull!", "");
     }
 }
