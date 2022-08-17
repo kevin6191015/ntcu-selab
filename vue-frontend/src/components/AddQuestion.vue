@@ -53,11 +53,33 @@
       </FormulateForm>
     </div>
     </div>
+
+    <div id="footer-left" v-show="QuestionForm.upload_or_not">
+    <FormulateForm
+    @submit="sendData"
+  >
+      <FormulateInput
+      type="file"
+      name="file"
+      v-model="codefile"
+      label="上傳程式碼"
+      upload-url="/data/"
+      upload-behavior="delayed"
+  />
+  <FormulateInput
+      type="submit"
+      label="Save profile"
+    />
+  </FormulateForm>
+    </div>
     <div id="footer">
       <FormulateForm @submit="questionsumbit">
       <FormulateInput type="submit"  label="提交" />
       </FormulateForm>
     </div>
+    <h3>
+      {{QuestionForm}}
+    </h3>
   </div>
   </div>
 </template>
@@ -96,7 +118,9 @@ export default {
         output10: '',
         input_or_not: false,
         teacher: '',
-        class_id: ''
+        class_id: '',
+        sourcecode: '',
+        upload_or_not: false
       },
       responseResult: []
     }
@@ -148,7 +172,6 @@ export default {
         input_or_not: Inputornot
       })
     }
-
   }
 }
 </script>
@@ -195,10 +218,17 @@ export default {
 }
 #footer{
   clear:both;
-  height:80px;
   margin-right: 10%;
   text-align:center;
   line-height:80px;
   float:right;
+}
+#footer-left{
+  clear:both;
+  margin-right: 5%;
+  margin-left: 5%;
+  text-align:center;
+  line-height:80px;
+  float:center;
 }
 </style>
