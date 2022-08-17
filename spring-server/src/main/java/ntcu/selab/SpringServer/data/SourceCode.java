@@ -4,7 +4,8 @@ public class SourceCode {
     private String question_name = null;
     private String code = null;
 
-    public SourceCode(String code){
+    public SourceCode(String question_name, String code){
+        this.question_name = question_name;
         this.code = code;
     }
 

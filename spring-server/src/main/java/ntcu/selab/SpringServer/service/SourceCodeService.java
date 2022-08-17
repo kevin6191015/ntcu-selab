@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,20 +38,10 @@ public class SourceCodeService {
         return new Result(200, "Get Source Code Successfull!", object.toMap());
     }
 
-    @GetMapping("addSourceCode")
-    public Result addSourceCode(@RequestParam String question_name
-    , @RequestParam String filename) throws Exception{  
+    @PostMapping("addSourceCode")
+    public Result addSourceCode(@RequestBody SourceCode sourceCode, @RequestParam String question_name) throws Exception{  
         try{
-            InputStream is = this.getClass().getResourceAsStream("/" + filename);
-            Scanner obj = new Scanner(is);
-            String code = "";
-            while (obj.hasNextLine()){
-                code += obj.nextLine() +"\n";
-            }
-            obj.close();
-            SourceCode sourceCode = new SourceCode();
             sourceCode.setQuestionName(question_name);
-            sourceCode.setCode(code);
             scDbManager.addSourceCode(sourceCode);
         }catch(Exception e){
             return new Result(400, "Add Source Code Failed! " + e.getMessage(), "");
