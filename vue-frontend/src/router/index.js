@@ -7,6 +7,7 @@ import ChooseClass from '@/components/ChooseClass'
 
 // import GetStudent from '@/components/GetStudent'
 import AddQuestion from '@/components/AddQuestion'
+import ShowQuestion from '@/components/ShowQuestion'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -50,6 +51,14 @@ export default new Router({
           path: '/AddQuestion',
           name: 'AddQuestion',
           component: AddQuestion,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/ShowQuestion',
+          name: 'ShowQuestion',
+          component: ShowQuestion,
           meta: {
             requireAuth: true
           }

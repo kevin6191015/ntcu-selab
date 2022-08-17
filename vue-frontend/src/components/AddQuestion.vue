@@ -20,6 +20,7 @@
       help="請輸入網址(可將圖片上傳imgur)"
 />
       <FormulateInput  name="input_or_not" type="checkbox" label="有無輸出"/>
+      <FormulateInput  name="upload_or_not" type="checkbox" label="上傳程式碼"/>
 
       </FormulateForm>
    </div>
@@ -55,37 +56,21 @@
     </div>
 
     <div id="footer-left" v-show="QuestionForm.upload_or_not">
-    <FormulateForm
-    @submit="sendData"
-  >
-      <FormulateInput
-      type="file"
-      name="file"
-      v-model="codefile"
-      label="上傳程式碼"
-      upload-url="/data/"
-      upload-behavior="delayed"
-  />
-  <FormulateInput
-      type="submit"
-      label="Save profile"
-    />
-  </FormulateForm>
+    <FormulateForm v-model = "QuestionForm">
+      <FormulateInput type="textarea" name="sourcecode" label="題目程式碼" placeholder="題目程式碼" />
+    </FormulateForm>
     </div>
     <div id="footer">
       <FormulateForm @submit="questionsumbit">
       <FormulateInput type="submit"  label="提交" />
       </FormulateForm>
     </div>
-    <h3>
-      {{QuestionForm}}
-    </h3>
   </div>
   </div>
 </template>
 
 <script>
-import { AddQuestionbank2 } from '../api/question'
+import { AddQuestionbank2, AddSourceocde } from '../api/question'
 import store from '../store'
 export default {
   name: 'AddQuestion',
@@ -171,6 +156,12 @@ export default {
         description: description,
         input_or_not: Inputornot
       })
+      if (this.QuestionForm.upload_or_not) {
+        AddSourceocde({
+          question_name: this.QuestionForm.question_name,
+          code: this.QuestionForm.sourcecode
+        })
+      }
     }
   }
 }
