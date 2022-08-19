@@ -73,6 +73,14 @@ public class CourseService {
         return new Result(200, "Get Course Successfull!", root.toMap());
     }
 
+    @GetMapping("getSemester")
+    public Result getSemester() throws Exception{
+        List<String> classes = cDbManager.getSemester();
+        JSONObject root = new JSONObject();
+        root.put("Semester", classes);
+        return new Result(200, "Get Semesters Successfull!", root.toMap());
+    }
+
     @GetMapping("addCourse")
     public Result addCourse(@RequestParam String class_name, @RequestParam String semester, 
     @RequestParam String teacher, @RequestParam String TA){
