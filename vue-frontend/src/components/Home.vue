@@ -3,7 +3,8 @@
     <el-header style="margin-right: 15px; width: 100%">
       <span class="nav-logo">😀</span>
       <span class="head-title">DashBoard</span>
-      <el-dropdown style="float: right;">
+      <span class="head-center-title">當前課程: {{class_name}}</span>
+      <el-dropdown style="float:right">
         <el-button type="primary" plain>
           {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
@@ -46,6 +47,7 @@ export default {
   data () {
     return {
       username: store.state.user.name,
+      class_name: store.state.class,
       navList: [
         {name: '/home', title: '首頁', icon: 'el-icon-s-home'},
         {name: '/user', title: '學生管理', icon: 'el-icon-s-custom'},
@@ -81,6 +83,14 @@ export default {
   position: absolute;
   padding-top: 20px;
   left: 15%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.head-center-title {
+  position: absolute;
+  padding-top: 20px;
+  left: 50%;
   font-size: 20px;
   font-weight: bold;
 }

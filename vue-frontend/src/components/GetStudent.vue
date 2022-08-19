@@ -23,7 +23,7 @@ export default {
   methods: {
     getStudentList () {
       getStudent({class_id: this.classid}).then(res => {
-        this.content = res.data.Students
+        this.content = res.data.data.Students
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
           confirmButtonText: '確定'

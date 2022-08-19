@@ -9,10 +9,10 @@
         <el-header align="center">
             <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
                 <el-option
-                v-for="item in all_class"
-                :key="item.semester"
-                :label="item.semester"
-                :value="item.semester">
+                v-for="item in all_sem"
+                :key="item"
+                :label="item"
+                :value="item">
                 </el-option>
             </el-select>
             <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
@@ -25,7 +25,7 @@
             </el-select>
         </el-header>
         <el-header align="center">
-          <el-button v-for="item in content" :key="item.class_name">
+          <el-button v-for="item in content" :key="item.class_name" @click="changePage()">
             {{item.semester}} {{item.class_name}}
           </el-button>
         </el-header>
@@ -33,13 +33,14 @@
 </template>
 
 <script>
-import { getAllCourse, getCourseBySem } from '../api/course'
+import { getAllCourse, getCourseBySem, getSemester } from '../api/course'
 import store from '@/store'
 export default {
   name: 'chooseclass',
   data () {
     return {
       content: [],
+      all_sem: [],
       all_class: [],
       class_name: '',
       teacher: true,
@@ -51,42 +52,53 @@ export default {
     if (store.state.role === 'student') {
       this.teacher = false
     }
+    getSemester().then(res => {
+      this.all_sem = res.data.data.Semester
+    })
     getAllCourse().then(res => {
-      this.all_class = res.data.Courses
-      this.content = this.all_class
+      this.all_class = res.data.data.Courses
+      this.content = res.data.data.Courses
     }).catch(error => {
       this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
         confirmButtonText: '確定'
       })
-      var path = this.$route.query.redirect
       this.$router.replace({
-        path: path === '/' || path === undefined ? '/chooseclass' : path})
+        path: '/chooseclass'})
     })
   },
   methods: {
     ChangeSem: function () {
+      this.class_name = ''
       getCourseBySem({sem: this.sem}).then(res => {
-        this.class_by_sem = res.data.Courses
-        this.content = res.data.Courses
+        this.class_by_sem = res.data.data.Courses
+        this.content = res.data.data.Courses
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
           confirmButtonText: '確定'
         })
-        var path = this.$route.query.redirect
         this.$router.replace({
-          path: path === '/' || path === undefined ? '/chooseclass' : path})
+          path: '/chooseclass'})
       })
     },
     ChangeClass: function () {
-      let a = this.content
-      for (let i = 0; i < a.length; i++) {
-        if (a[i].class_name === this.class_name) {
-          this.content = []
-          this.content = a[i]
+      for (let i = 0; i < this.content.length; i++) {
+        if (this.content[i].class_name === this.class_name) {
+          this.content = [this.content[i]]
         }
       }
-      console.log(this.content.TA)
-      store.commit('SET_CLASS', this.semester)
+    },
+    changePage: function () {
+      if (this.sem !== '' && this.class_name !== '') {
+        store.commit('SET_CLASS', this.sem + this.class_name)
+        this.$router.replace({
+          path: '/home'})
+      } else {
+        this.$alert('請先選擇課程', 'ERROR', {
+          confirmButtonText: '確定'
+        })
+        this.$router.replace({
+          path: '/chooseclass'})
+      }
     }
   }
 }

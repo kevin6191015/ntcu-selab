@@ -20,3 +20,13 @@ export function getCourseBySem (data) {
     }
   })
 }
+
+export function getSemester () {
+  return request({
+    url: '/course/getSemester',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
