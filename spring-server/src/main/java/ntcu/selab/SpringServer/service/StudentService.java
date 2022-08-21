@@ -61,11 +61,12 @@ public class StudentService {
                 User user = uDbManager.getUserInfo(uid);
                 uDbManager.addClasses(user, cid);
                 uDbManager.updateUser(user);
+                return new Result(200, "Add Students Successfull!", "");
             }catch(Exception e){
                 return new Result(400, "Add Students Failed! " + e.getMessage(), "");
             }
         }     
-        return new Result(200, "Add Students Successfull!", "");
+        return new Result(400, "Add Students Failed! " + error, "");
     }
 
     // @GetMapping("updateStudent")
