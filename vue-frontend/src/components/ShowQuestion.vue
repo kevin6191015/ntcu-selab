@@ -1,37 +1,52 @@
 <template>
 <body>
-  <el-table :data="content" border stripe>
-      <el-table-column type="index" label="序號"></el-table-column>
+  <el-table
+  ref="multipleTable"
+  :data="content"
+  tooltip-effect="dark"
+  style="width: 100%"
+  @current-change="handleSelectionChange"
+  >
+  <el-table-column
+      label="操作"
+      width="55">
+    <template slot-scope="scope">
+      <el-checkbox v-model="scope.row.checked"></el-checkbox>
+    </template>
+  </el-table-column>
+    <el-table-column type="index" label="序號" ></el-table-column>
+    <el-table-column prop="question_name" label="題目名稱"></el-table-column>
   </el-table>
+  <div id="footer-left">
+    <el-button  @click='select'>確認</el-button>
+  </div>
+  <h3>variable:</h3>
+ {{this.selected}}
 </body>
 </template>
 <script>
-import {getStudent} from '../api/student'
 import {ShowQuestion1} from '../api/question'
 export default {
   name: 'GetStudent',
   data () {
     return {
       classid: '',
+      selected: {},
       content: []
     }
   },
   created () {
-    alert('good')
-    ShowQuestion1()
+    ShowQuestion1().then(res => {
+      this.content = JSON.parse(JSON.stringify(res.data.data.Questions))
+    }).catch(error => {
+      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+        confirmButtonText: '確定'
+      })
+    })
   },
   methods: {
-    getStudentList () {
-      getStudent({class_id: this.classid}).then(res => {
-        this.content = res.data.Students
-      }).catch(error => {
-        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-          confirmButtonText: '確定'
-        })
-        var path = this.$route.query.redirect
-        this.$router.replace({
-          path: path === '/' || path === undefined ? '/user' : path})
-      })
+    handleSelectionChange (row) {
+      this.selected = row
     }
   }
 }
@@ -63,6 +78,15 @@ export default {
     margin: 0 auto;
     margin-right: 20px;
   }
+
+  #footer-left{
+  clear:both;
+  margin-right: 5%;
+  margin-left: 5%;
+  text-align:center;
+  line-height:80px;
+  float:right;
+}
   .layout-footer-center{
     text-align: center;
   }
