@@ -24,7 +24,8 @@
     "vue-layer": "^1.2.5",
     "vue-router": "^3.0.1",
     "vuetify": "^2.6.9",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuex-along": "^1.2.13"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

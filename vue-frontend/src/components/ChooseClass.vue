@@ -3,10 +3,10 @@
         <el-header v-if="teacher">
             <h2 class="grid-content bg-purple-dark" align="center">課程選擇(老師)</h2>
         </el-header>
-        <el-header v-else>
+        <el-header v-if="student">
             <h2 class="grid-content bg-purple-dark" align="center">課程選擇(學生)</h2>
         </el-header>
-        <el-header align="center">
+        <el-header align="center" v-if="teacher">
             <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
                 <el-option
                 v-for="item in all_sem"
@@ -24,8 +24,31 @@
                 </el-option>
             </el-select>
         </el-header>
-        <el-header align="center">
+        <el-header align="center" v-if="student">
+            <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
+                <el-option
+                v-for="item in all_sem"
+                :key="item"
+                :label="item"
+                :value="item">
+                </el-option>
+            </el-select>
+            <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
+                <el-option
+                v-for="item in student_class"
+                :key="item.class_name"
+                :label="item.class_name"
+                :value="item.class_name">
+                </el-option>
+            </el-select>
+        </el-header>
+        <el-header align="center" v-if="teacher">
           <el-button v-for="item in content" :key="item.class_name" @click="changePage()">
+            {{item.semester}} {{item.class_name}}
+          </el-button>
+        </el-header>
+        <el-header align="center" v-if="student">
+          <el-button v-for="item in student_Allclass" :key="item.class_name" @click="changePage()">
             {{item.semester}} {{item.class_name}}
           </el-button>
         </el-header>
@@ -43,14 +66,19 @@ export default {
       all_sem: [],
       all_class: [],
       class_name: '',
-      teacher: true,
+      teacher: false,
+      student: false,
       sem: '',
-      class_by_sem: []
+      class_by_sem: [],
+      student_Allclass: [],
+      student_class: []
     }
   },
   created () {
     if (store.state.role === 'student') {
-      this.teacher = false
+      this.student = true
+    } else if (store.state.role === 'teacher') {
+      this.teacher = true
     }
     getSemester().then(res => {
       this.all_sem = res.data.data.Semester
@@ -58,6 +86,15 @@ export default {
     getAllCourse().then(res => {
       this.all_class = res.data.data.Courses
       this.content = res.data.data.Courses
+      if (this.student) {
+        for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
+          for (let j = 0; j < this.all_class.length; j++) {
+            if (this.all_class[j].class_id === store.state.user.classes.split(',')[i]) {
+              this.student_Allclass.push(this.all_class[j])
+            }
+          }
+        }
+      }
     }).catch(error => {
       this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
         confirmButtonText: '確定'
@@ -72,6 +109,16 @@ export default {
       getCourseBySem({sem: this.sem}).then(res => {
         this.class_by_sem = res.data.data.Courses
         this.content = res.data.data.Courses
+        if (this.student) {
+          for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
+            for (let j = 0; j < this.class_by_sem.length; j++) {
+              console.log(this.class_by_sem[j])
+              if (this.class_by_sem[j].class_id === store.state.user.classes.split(',')[i]) {
+                this.student_class.push(this.class_by_sem[j])
+              }
+            }
+          }
+        }
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
           confirmButtonText: '確定'
@@ -88,16 +135,18 @@ export default {
       }
     },
     changePage: function () {
-      if (this.sem !== '' && this.class_name !== '') {
-        store.commit('SET_CLASS', this.sem + this.class_name)
-        this.$router.replace({
-          path: '/home'})
-      } else {
+      if (this.sem === '') {
+        this.$alert('請先選擇學期', 'ERROR', {
+          confirmButtonText: '確定'
+        })
+      } else if (this.class_name === '') {
         this.$alert('請先選擇課程', 'ERROR', {
           confirmButtonText: '確定'
         })
+      } else {
+        store.commit('SET_CLASS', this.sem + this.class_name)
         this.$router.replace({
-          path: '/chooseclass'})
+          path: '/home'})
       }
     }
   }
