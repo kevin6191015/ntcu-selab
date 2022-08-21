@@ -52,6 +52,7 @@ public class CourseDBManager {
         for (int i = 0; i < jsonarray.length(); i++) {
             Course c = new Course();
     		jsonobject = jsonarray.getJSONObject(i); 
+            c.setId(String.valueOf(jsonobject.getInt("class_id")));
             c.setCourseName(jsonobject.getString("class_name"));
             c.setSemester(jsonobject.getString("semester"));
             c.setTeacher(jsonobject.getString("teacher"));
@@ -75,7 +76,8 @@ public class CourseDBManager {
         jsonarray = new JSONArray( response.toString());
         for (int i = 0; i < jsonarray.length(); i++) {
             Course c = new Course();
-    		jsonobject = jsonarray.getJSONObject(i);           
+    		jsonobject = jsonarray.getJSONObject(i);      
+            c.setId(String.valueOf(jsonobject.getInt("class_id")));     
             c.setCourseName(jsonobject.getString("class_name"));
             c.setSemester(jsonobject.getString("semester"));
             c.setTeacher(jsonobject.getString("teacher"));
@@ -89,9 +91,8 @@ public class CourseDBManager {
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "class/semester");       
         List<String> semesters = new ArrayList<>();
-        
-        Thread.sleep(100);
-        System.out.println(Thread.currentThread());
+
+        Thread.sleep(500);
         conn = database.getConnection(url, "GET");
         response = new StringBuilder();  
         br = new BufferedReader(new InputStreamReader(conn.getInputStream()));

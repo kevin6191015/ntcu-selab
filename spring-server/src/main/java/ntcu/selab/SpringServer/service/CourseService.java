@@ -42,6 +42,7 @@ public class CourseService {
                 object.put("semester", course.getSemester());
                 object.put("teacher", course.getTeacher());
                 object.put("TA", course.getTA());
+                object.put("class_id", course.getId());
                 courseList.add(object);
             }
         }catch(Exception e){
@@ -63,6 +64,7 @@ public class CourseService {
                 object.put("semester", course.getSemester());
                 object.put("teacher", course.getTeacher());
                 object.put("TA", course.getTA());
+                object.put("class_id", course.getId());
                 courseList.add(object);
             }
         }catch(Exception e){
