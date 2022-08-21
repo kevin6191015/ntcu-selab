@@ -43,15 +43,13 @@
 <script>
 import store from '@/store'
 export default {
-  name: 'Home',
+  name: 'StudentHome',
   data () {
     return {
       username: store.state.user.name,
       class_name: store.state.class,
       navList: [
-        {name: '/home', title: '首頁', icon: 'el-icon-s-home'},
-        {name: '/user', title: '學生管理', icon: 'el-icon-s-custom'},
-        {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-s-custom'}
+        {name: '/studenthome', title: '首頁', icon: 'el-icon-s-home'}
       ]
     }
   },

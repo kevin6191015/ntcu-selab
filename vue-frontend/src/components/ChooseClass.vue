@@ -145,8 +145,13 @@ export default {
         })
       } else {
         store.commit('SET_CLASS', this.sem + this.class_name)
-        this.$router.replace({
-          path: '/home'})
+        if (this.teacher) {
+          this.$router.replace({
+            path: '/teacherhome'})
+        } else if (this.student) {
+          this.$router.replace({
+            path: '/studenthome'})
+        }
       }
     }
   }

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import Home from '@/components/Home'
+import TeacherHome from '@/components/TeacherHome'
+import StudentHome from '@/components/StudentHome'
 import Login from '@/components/Login'
 import ChooseClass from '@/components/ChooseClass'
 
@@ -25,16 +26,16 @@ export default new Router({
     {
       path: '/',
       name: 'Default',
-      redirect: '/home',
-      component: Home,
+      redirect: '/teacherhome',
+      component: TeacherHome,
       meta: {
         requireAuth: true
       }
     },
     {
-      path: '/home',
+      path: '/teacherhome',
       name: 'Home',
-      component: Home,
+      component: TeacherHome,
       meta: {
         requireAuth: true
       },
@@ -80,6 +81,14 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/studenthome',
+      name: 'StudentHome',
+      component: StudentHome,
+      meta: {
+        requireAuth: true
+      }
     }
     // {
     //   path: '/getStudent',
