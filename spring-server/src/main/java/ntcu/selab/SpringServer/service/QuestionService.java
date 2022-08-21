@@ -32,6 +32,7 @@ public class QuestionService {
         try{
             for(Question question : questions){
                 JSONObject object = new JSONObject();
+                object.put("question_id", question.getId());
                 object.put("question_name", question.getName());
                 object.put("question_description", question.getDescription());
                 object.put("image1", question.getImage1());
