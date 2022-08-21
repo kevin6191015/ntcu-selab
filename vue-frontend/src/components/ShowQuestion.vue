@@ -25,7 +25,7 @@
 </body>
 </template>
 <script>
-import {ShowQuestion1} from '../api/question'
+import {ShowQuestion1, ShowQuestion2} from '../api/question'
 export default {
   name: 'GetStudent',
   data () {
@@ -43,10 +43,29 @@ export default {
         confirmButtonText: '確定'
       })
     })
+    this.sleep(1000)
+    alert('ok')
+    /* ShowQuestion2().then(res => {
+      this.content += JSON.parse(JSON.stringify(res.data.data.Questions))
+    }).catch(error => {
+      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+        confirmButtonText: '確定'
+      })
+    }) */
   },
   methods: {
-    handleSelectionChange (row) {
-      this.selected = row
+    handleSelectionChange (theval) {
+      this.multipleSelection = theval
+    },
+    sleep (ms) {
+      let now = new Date().getTime()
+      while (new Date().getTime() < now + ms) {
+
+      }
+    },
+    select () {
+      ShowQuestion2()
+      alert(this.multipleSelection[0].question_name)
     }
   }
 }
