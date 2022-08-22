@@ -32,3 +32,13 @@ export function ShowQuestion1 () {
     }
   })
 }
+
+export function ShowQuestion2 () {
+  return request({
+    url: '/question/getQuestionBank2',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

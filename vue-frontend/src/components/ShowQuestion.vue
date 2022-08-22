@@ -1,71 +1,122 @@
 <template>
 <body>
-  <el-table
-  ref="multipleTable"
-  :data="content"
-  tooltip-effect="dark"
-  style="width: 100%"
-  @current-change="handleSelectionChange"
-  >
-  <el-table-column
-      label="操作"
-      width="55">
-    <template slot-scope="scope">
-      <el-checkbox v-model="scope.row.checked"></el-checkbox>
-    </template>
-  </el-table-column>
-    <el-table-column type="index" label="序號" ></el-table-column>
-    <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-  </el-table>
+  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane label="預設題庫" name="first">
+      <el-table
+        ref="multipleTable"
+        :data="content1"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange1"
+      >
+        <el-table-column
+            type="selection"
+            width="55">
+        </el-table-column>
+        <el-table-column type="index" label="序號" ></el-table-column>
+        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+    <el-tab-pane label="用户管理" name="second">
+      <el-table
+        ref="multipleTable"
+        :data="content2"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange2"
+        >
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column type="index" label="序號" ></el-table-column>
+        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          >
+          <template slot-scope="scope">
+            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+  </el-tabs>
   <div id="footer-left">
     <el-button  @click='select'>確認</el-button>
   </div>
-  <h3>variable:</h3>
- {{this.selected}}
 </body>
 </template>
 <script>
 import {ShowQuestion1, ShowQuestion2} from '../api/question'
+import store from '../store'
 export default {
   name: 'GetStudent',
   data () {
     return {
       classid: '',
       selected: {},
-      content: []
+      content1: [],
+      content2: [],
+      multipleSelection1: [],
+      multipleSelection2: [],
+      activeName: 'first'
+
     }
   },
   created () {
     ShowQuestion1().then(res => {
-      this.content = JSON.parse(JSON.stringify(res.data.data.Questions))
+      this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
     }).catch(error => {
       this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
         confirmButtonText: '確定'
       })
     })
-    this.sleep(1000)
-    alert('ok')
-    /* ShowQuestion2().then(res => {
-      this.content += JSON.parse(JSON.stringify(res.data.data.Questions))
-    }).catch(error => {
-      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-        confirmButtonText: '確定'
-      })
-    }) */
   },
   methods: {
-    handleSelectionChange (theval) {
-      this.multipleSelection = theval
+    handleSelectionChange1 (theval) {
+      this.multipleSelection1 = theval
     },
-    sleep (ms) {
-      let now = new Date().getTime()
-      while (new Date().getTime() < now + ms) {
-
+    handleSelectionChange2 (theval) {
+      this.multipleSelection2 = theval
+    },
+    handleClick (tab) {
+      if (tab.name === 'second') {
+        ShowQuestion2().then(res => {
+          this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
+        }).catch(error => {
+          this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+            confirmButtonText: '確定'
+          })
+        })
       }
     },
     select () {
-      ShowQuestion2()
-      alert(this.multipleSelection[0].question_name)
+      let selectedQ = []
+      let num
+      for (let i = 0; i < this.multipleSelection1.length; i++) {
+        selectedQ[i] = this.multipleSelection1[i].question_id
+        num = i
+      }
+      for (let i = 0; i < this.multipleSelection2.length; i++) {
+        selectedQ[(i + num + 1)] = this.multipleSelection2[i].id
+      }
+      store.commit('SET_SELECTEDQUESTION', selectedQ)
+      alert(selectedQ)
+    },
+    Seequestion1 (row) {
+      alert(row.question_id)
+    },
+    Seequestion2 (row) {
+      alert(row.id)
     }
   }
 }
