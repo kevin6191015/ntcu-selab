@@ -77,7 +77,7 @@ export default {
   created () {
     if (store.state.role === 'student') {
       this.student = true
-    } else if (store.state.role === 'teacher') {
+    } else if (store.state.role === 'teacher' || store.state.role === 'TA') {
       this.teacher = true
     }
     getSemester().then(res => {
@@ -112,7 +112,6 @@ export default {
         if (this.student) {
           for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
             for (let j = 0; j < this.class_by_sem.length; j++) {
-              console.log(this.class_by_sem[j])
               if (this.class_by_sem[j].class_id === store.state.user.classes.split(',')[i]) {
                 this.student_class.push(this.class_by_sem[j])
               }
