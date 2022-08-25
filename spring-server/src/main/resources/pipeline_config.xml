@@ -57,7 +57,7 @@ node {
     String NAME = env.JOB_BASE_NAME.substring(0, env.JOB_BASE_NAME.indexOf(&apos;_&apos;))
     echo &quot;Project name is ${NAME}&quot;
     
-    String response = sh(script: &quot;curl -s &apos;http://120.108.204.152:3000/api/question/${NAME}&apos;&quot;, returnStdout: true).trim()
+    String response = sh(script: &quot;curl -s &apos;http://120.108.204.152:3000/api/question1/${NAME}&apos;&quot;, returnStdout: true).trim()
     echo &quot;${response}&quot;
     def json = new groovy.json.JsonSlurperClassic().parseText(response)
     env.input_or_not = json.input_or_not;
