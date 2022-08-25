@@ -67,27 +67,18 @@ public class UserService {
         return new Result(200, "Get Users Successfull!", root);
     }
 
-    @GetMapping("/addUser")
-    public ResponseEntity<Object> createAccount(
-            @RequestParam("id") String id,
-            @RequestParam("name") String name,
-            @RequestParam("username") String username,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            @RequestParam("role") String role) throws Exception{
-        HttpHeaders header = new HttpHeaders();
-        User user = new User(name, username, email, password, role);
-        user.setId(id);
+    @PostMapping("/addUser")
+    public Result createAccount(@RequestBody User user) throws Exception{
         String error = getErrorMessage(user);
         if (error.isEmpty()) {
             try {
                 register(user);
-                return new ResponseEntity<Object>(header, HttpStatus.OK);
+                return new Result(200, "Add User Successfull!", "");
             } catch (IOException e) {
-                return new ResponseEntity<Object>("Failed", header, HttpStatus.INTERNAL_SERVER_ERROR);
+                return new Result(400, "Add User failed! " + e.getMessage(), "");
             }
         } else {
-            return new ResponseEntity<Object>(error, header, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new Result(400, "Add User failed! " + error, "");
         }
     }
 
@@ -163,21 +154,20 @@ public class UserService {
 
     }
 
-    @GetMapping("updateUser")
-    public Result updateUser(@RequestParam String uid, @RequestParam String username
-    , @RequestParam String name, @RequestParam String password, @RequestParam String role
-    , @RequestParam String email) {
+    @PostMapping("updateUser")
+    public Result updateUser(@RequestBody User newUser) {
         try{
-            User user = dbManager.getUserInfo(uid);
+
+            User user = dbManager.getUserInfo(newUser.getId());
             //將user的資料同步到gitlab
             //gitlabService.updateEmail(user.getEmail(), user.getName());
-            gitlabService.updateName(name, user.getName());
-            gitlabService.updatePassword(password, user.getName());
-            gitlabService.updateUserName(username, user.getUserName());
+            // gitlabService.updateName(newUser.getName(), user.getName());
+            // gitlabService.updatePassword(newUser.getPassword(), user.getName());
+            // gitlabService.updateUserName(newUser.getUserName(), user.getUserName());
 
             //將user的資料同步到student(如果是學生)
-            if(user.getRole().equals("student")){
-                Student student = new Student(uid, username);
+            if(user.getRole().equals("student") && !user.getClasses().equals("")){
+                Student student = new Student(newUser.getId(), newUser.getName());
                 String[] split = user.getClasses().split(",");
                 for (int i=0; i<split.length; i++){
                     sDbManager.updateStudent(split[i], student);
@@ -190,14 +180,14 @@ public class UserService {
                     if(user.getRole().equals("teacher")){
                         //更新課程資訊
                         if(course.getTeacher() == user.getName()){
-                            course.setTeacher(name);
+                            course.setTeacher(newUser.getName());
                             cDbManager.updateCourse(course.getId(), course);
                         }
     
                         //更新question裡老師相關資料(question bank2)
                         List<Question> questions = qDbManager.getQuestionsByClass(course.getId());
                         for(Question question : questions){                
-                            question.setTeacher(name);
+                            question.setTeacher(newUser.getName());
                             qDbManager.updateQuestion(question.getId(), question);
                         }
                     }
@@ -205,7 +195,7 @@ public class UserService {
                     else{
                         //更新助教資料
                         if(course.getTA() == user.getName()){
-                            course.setTA(name);
+                            course.setTA(newUser.getName());
                             cDbManager.updateCourse(course.getId(), course);
                         }
                     }        
@@ -213,10 +203,10 @@ public class UserService {
             }
             
             //更新user資料(user database)
-            user.setName(name);
-            user.setPassword(password);            
+            user.setName(newUser.getName());
+            user.setPassword(newUser.getPassword());            
             //user.setRole(role);
-            user.setEmail(email);
+            user.setEmail(newUser.getEmail());
             dbManager.updateUser(user);
 
         }catch(Exception e){
@@ -319,18 +309,18 @@ public class UserService {
     }
 
     private void register(User user) throws Exception {
-        if(user.getRole().equals("student")){
-            GitlabUser gitlabUser = gitlabService.createUser(
-                user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
-            user.setGitlabToken(gitlabUser.getPrivateToken());
-            user.setGitlabId(String.valueOf(gitlabUser.getId()));
-        }
+        // if(user.getRole().equals("student")){
+        //     GitlabUser gitlabUser = gitlabService.createUser(
+        //         user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
+        //     user.setGitlabToken(gitlabUser.getPrivateToken());
+        //     user.setGitlabId(String.valueOf(gitlabUser.getId()));
+        // }
         dbManager.addUser(user);     
     }
 
     private void unregister(User user) throws Exception { 
-        if(user.getRole().equals("student") )    
-            gitlabService.deleteUserByID(Integer.valueOf(user.getGitlabId()));
+        // if(user.getRole().equals("student") )    
+        //     gitlabService.deleteUserByID(Integer.valueOf(user.getGitlabId()));
 
         dbManager.DeleteUserById(user.getId());
     }
