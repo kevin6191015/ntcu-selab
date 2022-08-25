@@ -5,6 +5,7 @@ import TeacherHome from '@/components/TeacherHome'
 import StudentHome from '@/components/StudentHome'
 import Login from '@/components/Login'
 import ChooseClass from '@/components/ChooseClass'
+import CourseAccount from '@/components/CourseAccount'
 
 // import GetStudent from '@/components/GetStudent'
 import AddQuestion from '@/components/AddQuestion'
@@ -70,6 +71,14 @@ export default new Router({
           path: '/SystemAccount',
           name: 'SystemAccount',
           component: SystemAccount,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/CourseAccount',
+          name: 'CourseAccount',
+          component: CourseAccount,
           meta: {
             requireAuth: true
           }
