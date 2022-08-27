@@ -50,7 +50,6 @@ export default {
       class_name: store.state.class,
       navList: [
         {name: '/teacherhome', title: '首頁', icon: 'el-icon-s-home'},
-        {name: '/user', title: '學生管理', icon: 'el-icon-s-custom'},
         {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-document'},
         {name: '/ShowQuestion', title: '顯示題目', icon: 'el-icon-document'},
         {name: '/SystemAccount', title: '系統帳號管理', icon: 'el-icon-s-custom'},

@@ -44,14 +44,6 @@ export default new Router({
       },
       children: [
         {
-          path: '/user',
-          name: 'User',
-          component: () => import('@/components/GetStudent'),
-          meta: {
-            requireAuth: true
-          }
-        },
-        {
           path: '/AddQuestion',
           name: 'AddQuestion',
           component: AddQuestion,
