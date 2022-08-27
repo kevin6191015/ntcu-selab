@@ -195,6 +195,7 @@ public class UserDBManager {
             user.setGitlabToken(jsonobject.getString("GITLAB_TOKEN"));
             user.setPassword(jsonobject.getString("PASSWORD"));
             user.setRole(jsonobject.getString("ROLE"));
+            user.setClasses(jsonobject.getString("CLASSES"));
             users.add(user); 
         }       
         return users;
