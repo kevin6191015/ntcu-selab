@@ -71,7 +71,10 @@ export default {
       sem: '',
       class_by_sem: [],
       student_Allclass: [],
-      student_class: []
+      student_class: [],
+      class_id: '',
+      teacher_back_up: [],
+      student_back_up: []
     }
   },
   created () {
@@ -109,6 +112,7 @@ export default {
       getCourseBySem({sem: this.sem}).then(res => {
         this.class_by_sem = res.data.data.Courses
         this.content = res.data.data.Courses
+        this.teacher_back_up = this.content
         if (this.student) {
           this.student_class = []
           for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
@@ -118,6 +122,8 @@ export default {
               }
             }
           }
+          this.student_Allclass = this.student_class
+          this.student_back_up = this.student_class
         }
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
@@ -128,9 +134,19 @@ export default {
       })
     },
     ChangeClass: function () {
-      for (let i = 0; i < this.content.length; i++) {
-        if (this.content[i].class_name === this.class_name) {
-          this.content = [this.content[i]]
+      if (this.teacher) {
+        for (let i = 0; i < this.teacher_back_up.length; i++) {
+          if (this.teacher_back_up[i].class_name === this.class_name) {
+            this.content = [this.teacher_back_up[i]]
+            this.class_id = this.content[0].class_id
+          }
+        }
+      } else if (this.student) {
+        for (let i = 0; i < this.student_back_up.length; i++) {
+          if (this.student_back_up[i].class_name === this.class_name) {
+            this.student_Allclass = [this.student_back_up[i]]
+            this.class_id = this.student_Allclass[0].class_id
+          }
         }
       }
     },
@@ -145,6 +161,7 @@ export default {
         })
       } else {
         store.commit('SET_CLASS', this.sem + this.class_name)
+        store.commit('SET_CLASS_ID', this.class_id)
         if (this.teacher) {
           this.$router.replace({
             path: '/teacherhome'})
