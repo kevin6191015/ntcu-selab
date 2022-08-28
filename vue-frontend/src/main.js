@@ -54,6 +54,21 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+  if (to.meta.Role) {
+    if (store.state.role === 'student') {
+      alert('權限不足!')
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 }
 )
 

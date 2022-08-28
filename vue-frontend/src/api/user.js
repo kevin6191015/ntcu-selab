@@ -40,3 +40,13 @@ export function updateUser (data) {
     data
   })
 }
+
+export function getUser () {
+  return request({
+    url: '/user/getUsers',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

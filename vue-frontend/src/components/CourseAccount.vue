@@ -2,15 +2,15 @@
   <el-container>
     <el-main class="container outer">
       <el-row :gutter="100" style="padding: 5%;">
-        <el-col :span="12"><div class="grid-content">未加入帳號</div></el-col>
-        <el-col :span="12"><div class="grid-content">已加入帳號</div></el-col>
+        <el-col :span="12" class="el-col1"><div class="grid-content">未加入帳號</div></el-col>
+        <el-col :span="12" class="el-col1"><div class="grid-content">已加入帳號</div></el-col>
       </el-row>
       <el-row :gutter="100">
         <el-col :span="11">
           <div class="grid-content2">
             <el-table
               ref="multipleTable"
-              :data="class_student"
+              :data="not_class_student"
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="handleSelectionChange">
@@ -21,7 +21,7 @@
               <el-table-column
                 label="student_name"
                 width="120">
-                <template slot-scope="scope">{{ scope.row.student_name }}</template>
+                <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
           </div>
@@ -41,7 +41,7 @@
               <el-table-column
                 label="student_name"
                 width="120">
-                <template slot-scope="scope">{{ scope.row.student_name }}</template>
+                <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
           </div>
@@ -52,23 +52,46 @@
 </template>
 
 <script>
-import { getStudent } from '@/api/student'
+import { getUser } from '@/api/user'
+import store from '../store'
 export default {
   name: 'CourseAccount',
   data () {
     return {
       class_student: [],
-      multipleSelection: []
+      not_class_student: [],
+      multipleSelection: [],
+      all_user: []
     }
   },
   created () {
-    getStudent({class_id: 2}).then(res => {
-      this.class_student = res.data.data.Students
+    getUser().then(res => {
+      this.class_student = []
+      this.not_class_student = []
+      for (let i = 0; i < res.data.data.Users.length; i++) {
+        for (let j = 0; j < res.data.data.Users[i].CLASSES.split(',').length; j++) {
+          if (res.data.data.Users[i].CLASSES.split(',')[j] === store.state.class_id) {
+            this.class_student.push(res.data.data.Users[i])
+          }
+        }
+      }
+      for (let i = 0; i < res.data.data.Users.length; i++) {
+        let check = true
+        for (let j = 0; j < this.class_student.length; j++) {
+          if (res.data.data.Users[i].role !== 'student' || res.data.data.Users[i].name === this.class_student[j].name) {
+            check = false
+          }
+        }
+        if (check) {
+          this.not_class_student.push(res.data.data.Users[i])
+        }
+      }
     })
   },
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val
+      console.log(this.multipleSelection)
     }
   }
 }
@@ -85,7 +108,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.el-col {
+.el-col1 {
   border-radius: 10px;
   min-height: 36px;
 }
@@ -105,16 +128,9 @@ export default {
   }
 
 .outer {
-  background-color: rgb(111, 122, 144);
+  background-color: rgba(111, 122, 144, 0.555);
   height: 700px;
   padding: 15px;
 }
 
-.el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-}
-.el-icon-arrow-down {
-    font-size: 13px;
-}
 </style>

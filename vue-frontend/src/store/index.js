@@ -9,6 +9,7 @@ export default new Vuex.Store({
     user: JSON.parse(sessionStorage.getItem('user')),
     role: sessionStorage.getItem('role'),
     class: sessionStorage.getItem('class'),
+    class_id: sessionStorage.getItem('class_id'),
     selectedQuestion: sessionStorage.getItem('selectedQuestion'),
     Question_To_Show: sessionStorage.getItem('Question_To_Show')
   },
@@ -29,14 +30,24 @@ export default new Vuex.Store({
       state.class = Class
       sessionStorage.setItem('class', Class)
     },
+    SET_CLASS_ID: (state, Classid) => {
+      state.class_id = Classid
+      sessionStorage.setItem('class_id', Classid)
+    },
     REMOVE_INFO: (state) => {
       state.token = ''
       state.user = {
       }
       state.role = ''
+      state.selectedQuestion = ''
+      state.class = ''
+      state.class_id = ''
       sessionStorage.setItem('token', '')
       sessionStorage.setItem('user', JSON.stringify(''))
       sessionStorage.setItem('role', '')
+      sessionStorage.setItem('class', '')
+      sessionStorage.setItem('class_id', '')
+      sessionStorage.setItem('selectedQuestion', '')
     },
     SET_SELECTEDQUESTION: (state, selectedQuestion) => {
       state.selectedQuestion = selectedQuestion

@@ -189,7 +189,7 @@ export default {
 }
 
 .outer {
-  background-color: rgb(111, 122, 144);
+  background-color: rgba(111, 122, 144, 0.555);
   height: 700px;
   padding: 15px;
 }

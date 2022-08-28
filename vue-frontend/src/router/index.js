@@ -32,7 +32,8 @@ export default new Router({
       redirect: '/teacherhome',
       component: TeacherHome,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        Role: true
       }
     },
     {
@@ -40,7 +41,8 @@ export default new Router({
       name: 'Home',
       component: TeacherHome,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        Role: true
       },
       children: [
         {
@@ -48,7 +50,8 @@ export default new Router({
           name: 'AddQuestion',
           component: AddQuestion,
           meta: {
-            requireAuth: true
+            requireAuth: true,
+            Role: true
           }
         },
         {
@@ -56,7 +59,8 @@ export default new Router({
           name: 'SelectQuestion',
           component: SelectQuestion,
           meta: {
-            requireAuth: true
+            requireAuth: true,
+            Role: true
           }
         },
         {
@@ -64,7 +68,8 @@ export default new Router({
           name: 'SystemAccount',
           component: SystemAccount,
           meta: {
-            requireAuth: true
+            requireAuth: true,
+            Role: true
           }
         },
         {
@@ -72,7 +77,8 @@ export default new Router({
           name: 'CourseAccount',
           component: CourseAccount,
           meta: {
-            requireAuth: true
+            requireAuth: true,
+            Role: true
           }
         }
       ]
