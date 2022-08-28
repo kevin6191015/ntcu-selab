@@ -5,6 +5,7 @@
       <el-table
         ref="multipleTable1"
         :data="content1"
+        stripe
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange1"
@@ -29,6 +30,7 @@
       <el-table
         ref="multipleTable2"
         :data="content2"
+        stripe
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange2"

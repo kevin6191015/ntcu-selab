@@ -1,9 +1,9 @@
 <template>
   <el-container>
-    <el-main class="container outer">
+    <el-main class="container1 outer1">
       <el-row :gutter="100" style="padding: 5%;">
-        <el-col :span="12" class="el-col1"><div class="grid-content">未加入帳號</div></el-col>
-        <el-col :span="12" class="el-col1"><div class="grid-content">已加入帳號</div></el-col>
+        <el-col :span="12" class="el-col1"><div class="grid-content1">未加入帳號</div></el-col>
+        <el-col :span="12" class="el-col1"><div class="grid-content1">已加入帳號</div></el-col>
       </el-row>
       <el-row :gutter="100">
         <el-col :span="11">
@@ -98,12 +98,12 @@ export default {
 </script>
 
 <style>
-.container {
+.container1 {
   width: 800px;
   margin: 0 auto;
 }
 
-.d-flex {
+.d-flex1 {
   display: flex;
   flex-wrap: wrap;
 }
@@ -113,21 +113,21 @@ export default {
   min-height: 36px;
 }
 
-.grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-    font-size: 30px;
-    background-color: orange;
-    padding-left: 36%
-  }
+.grid-content1 {
+  border-radius: 4px;
+  min-height: 36px;
+  font-size: 30px;
+  background-color: orange;
+  padding-left: 36%
+}
 
-  .grid-content2 {
-    min-height: 36px;
-    font-size: 30px;
-    padding-left: 25%
-  }
+.grid-content2 {
+  min-height: 36px;
+  font-size: 30px;
+  padding-left: 25%
+}
 
-.outer {
+.outer1 {
   background-color: rgba(111, 122, 144, 0.555);
   height: 700px;
   padding: 15px;
