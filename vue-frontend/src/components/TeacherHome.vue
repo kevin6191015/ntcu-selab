@@ -54,7 +54,6 @@ export default {
         {name: '/SelectQuestion', title: '選擇題目', icon: 'el-icon-document'},
         {name: '/SystemAccount', title: '系統帳號管理', icon: 'el-icon-s-custom'},
         {name: '/CourseAccount', title: '課程帳號管理', icon: 'el-icon-s-custom'}
-        
       ]
     }
   },
