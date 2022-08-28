@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<script scoped>
 import { AddQuestionbank2, AddSourceocde } from '../api/question'
 import store from '../store'
 export default {

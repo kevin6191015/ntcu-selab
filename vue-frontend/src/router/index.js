@@ -9,8 +9,8 @@ import CourseAccount from '@/components/CourseAccount'
 
 // import GetStudent from '@/components/GetStudent'
 import AddQuestion from '@/components/AddQuestion'
+import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
-
 import SystemAccount from '@/components/SystemAccount'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -52,9 +52,9 @@ export default new Router({
           }
         },
         {
-          path: '/ShowQuestion',
-          name: 'ShowQuestion',
-          component: ShowQuestion,
+          path: '/SelectQuestion',
+          name: 'SelectQuestion',
+          component: SelectQuestion,
           meta: {
             requireAuth: true
           }
@@ -97,6 +97,14 @@ export default new Router({
       path: '/studenthome',
       name: 'StudentHome',
       component: StudentHome,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/ShowQuestion',
+      name: 'ShowQuestion',
+      component: ShowQuestion,
       meta: {
         requireAuth: true
       }

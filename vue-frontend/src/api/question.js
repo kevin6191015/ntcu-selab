@@ -42,3 +42,23 @@ export function ShowQuestion2 () {
     }
   })
 }
+
+export function ShowSelectedQuestion1 (id) {
+  return request({
+    url: '/question/getQuestionFromBank1?id=' + id,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function ShowSelectedQuestion2 (id) {
+  return request({
+    url: '/question/getQuestionFromBank2?id=' + id,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

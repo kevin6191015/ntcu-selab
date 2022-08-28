@@ -10,6 +10,7 @@ import './assets/formulate.css'
 import VueFormulate from '@braid/vue-formulate'
 import locale from 'element-ui/lib/locale/lang/zh-TW'
 
+import locale from 'element-ui/lib/locale/lang/zh-TW'
 import store from './store'
 
 Vue.use(VueFormulate)

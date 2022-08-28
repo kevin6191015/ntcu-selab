@@ -9,7 +9,8 @@ export default new Vuex.Store({
     user: JSON.parse(sessionStorage.getItem('user')),
     role: sessionStorage.getItem('role'),
     class: sessionStorage.getItem('class'),
-    selectedQuestion: sessionStorage.getItem('selectedQuestion')
+    selectedQuestion: sessionStorage.getItem('selectedQuestion'),
+    Question_To_Show: sessionStorage.getItem('Question_To_Show')
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -43,6 +44,13 @@ export default new Vuex.Store({
     },
     REMOVE_SELECTEDQUESTION: () => {
       sessionStorage.setItem('selectedQuestion', '')
+    },
+    SET_QUESTION_TO_SHOW: (state, questiontoshow) => {
+      state.Question_To_Show = questiontoshow
+      sessionStorage.setItem('Question_To_Show', questiontoshow)
+    },
+    REMOVE_QUESTION_TO_SHOW: () => {
+      sessionStorage.setItem('Question_To_Show', '')
     }
   },
   getters: {

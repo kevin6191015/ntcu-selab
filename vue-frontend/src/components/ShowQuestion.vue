@@ -1,163 +1,170 @@
 <template>
-<body>
-  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="預設題庫" name="first">
-      <el-table
-        ref="multipleTable"
-        :data="content1"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange1"
-      >
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-        <el-table-column type="index" label="序號" ></el-table-column>
-        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-        >
-          <template slot-scope="scope">
-            <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-    <el-tab-pane label="用户管理" name="second">
-      <el-table
-        ref="multipleTable"
-        :data="content2"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange2"
-        >
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column type="index" label="序號" ></el-table-column>
-        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          >
-          <template slot-scope="scope">
-            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-  </el-tabs>
-  <div id="footer-left">
-    <el-button  @click='select'>確認</el-button>
+  <div>
+    <div id="sitebody">
+      <div id="header">
+        <div id="space-top"></div>
+        <div id="qname-green">
+          <h3>題目名稱:{{QuestionForm.question_name}}</h3>
+        </div>
+      </div>
+      <div id="content">
+        <h3>題目敘述:{{QuestionForm.image1}}</h3>
+        <el-image
+          style="width: 100px; height: 100px"
+          src= "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          fit = "contain"></el-image>
+      </div>
+        <h3>Values:</h3>
+        {{content}}
+        <h3>Values:</h3>
+        {{QuestionForm}}
+      <div id="footer">footer
+        <el-button  @click='goback'>確認</el-button>
+      </div>
+    </div>
   </div>
-</body>
 </template>
 <script>
-import {ShowQuestion1, ShowQuestion2} from '../api/question'
+import {ShowSelectedQuestion1, ShowSelectedQuestion2} from '../api/question'
 import store from '../store'
 export default {
-  name: 'GetStudent',
   data () {
     return {
-      classid: '',
-      selected: {},
-      content1: [],
-      content2: [],
-      multipleSelection1: [],
-      multipleSelection2: [],
-      activeName: 'first'
-
+      QuestionForm: {
+        question_name: '',
+        question_description: '',
+        image1: '',
+        image2: '',
+        input1: '',
+        input2: '',
+        input3: '',
+        input4: '',
+        input5: '',
+        input6: '',
+        input7: '',
+        input8: '',
+        input9: '',
+        input10: '',
+        output1: '',
+        output2: '',
+        output3: '',
+        output4: '',
+        output5: '',
+        output6: '',
+        output7: '',
+        output8: '',
+        output9: '',
+        output10: '',
+        input_or_not: false
+      },
+      content: []
     }
   },
   created () {
-    ShowQuestion1().then(res => {
-      this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
-    }).catch(error => {
-      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-        confirmButtonText: '確定'
+    let id = store.state.Question_To_Show
+    if (id.charAt(0) === 'a') {
+      ShowSelectedQuestion1(id).then(res => {
+        this.content = res.data.data
+      }).catch(error => {
+        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+          confirmButtonText: '確定'
+        })
       })
-    })
+    } else {
+      ShowSelectedQuestion2(id).then(res => {
+        this.content = res.data.data
+      }).catch(error => {
+        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+          confirmButtonText: '確定'
+        })
+      })
+    }
+  },
+  beforeUpdate () {
+    this.QuestionForm.question_name = this.content.question_name.replace('"', '')
+    this.QuestionForm.question_description = this.content.question_description
+    this.QuestionForm.image1 = this.content.image1
+    this.QuestionForm.image2 = this.content.image2
+    this.QuestionForm.input1 = this.content.input1
+    this.QuestionForm.input2 = this.content.input2
+    this.QuestionForm.input3 = this.content.input3
+    this.QuestionForm.input4 = this.content.input4
+    this.QuestionForm.input5 = this.content.input5
+    this.QuestionForm.input6 = this.content.input6
+    this.QuestionForm.input7 = this.content.input7
+    this.QuestionForm.input8 = this.content.input8
+    this.QuestionForm.input9 = this.content.input9
+    this.QuestionForm.input10 = this.content.input10
+    this.QuestionForm.output1 = this.content.output1
+    this.QuestionForm.output2 = this.content.output2
+    this.QuestionForm.output3 = this.content.output3
+    this.QuestionForm.output4 = this.content.output4
+    this.QuestionForm.output5 = this.content.output5
+    this.QuestionForm.output6 = this.content.output6
+    this.QuestionForm.output7 = this.content.output7
+    this.QuestionForm.output8 = this.content.output8
+    this.QuestionForm.output9 = this.content.output9
+    this.QuestionForm.output10 = this.content.output10
+    this.QuestionForm.input_or_not = this.content.input_or_not
   },
   methods: {
-    handleSelectionChange1 (theval) {
-      this.multipleSelection1 = theval
-    },
-    handleSelectionChange2 (theval) {
-      this.multipleSelection2 = theval
-    },
-    handleClick (tab) {
-      if (tab.name === 'second') {
-        ShowQuestion2().then(res => {
-          this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
-        }).catch(error => {
-          this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-            confirmButtonText: '確定'
-          })
-        })
-      }
-    },
-    select () {
-      let selectedQ = []
-      let num
-      for (let i = 0; i < this.multipleSelection1.length; i++) {
-        selectedQ[i] = this.multipleSelection1[i].question_id
-        num = i
-      }
-      for (let i = 0; i < this.multipleSelection2.length; i++) {
-        selectedQ[(i + num + 1)] = this.multipleSelection2[i].id
-      }
-      store.commit('SET_SELECTEDQUESTION', selectedQ)
-      alert(selectedQ)
-    },
-    Seequestion1 (row) {
-      alert(row.question_id)
-    },
-    Seequestion2 (row) {
-      alert(row.id)
+    goback () {
+      window.close()
     }
   }
 }
 </script>
 <style scoped>
-  .layout{
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    height: 100%;
-  }
-  .layout-logo{
-    width: 100px;
-    height: 30px;
-    background: #5b6270;
-    border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #49ffcc;
-  }
-  .layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    margin-right: 20px;
-  }
-
-  #footer-left{
-  clear:both;
-  margin-right: 5%;
-  margin-left: 5%;
+#sitebody{
+  width:100%;
+  margin:0 auto;
+  font-size:20px;
+  background-color: rgb(111, 122, 144);
+}
+#header{
+  height:65px;
   text-align:center;
-  line-height:80px;
+  line-height:65px;
+}
+#space-top{
+  height:10px;
+}
+#qname-green{
+  margin-left:2%;
+  width:fit-content;
+  padding: 1px;
+  text-align:left;
+  background-color: rgb(127, 185, 121);
+}
+#sidebar_left{
+  width:120px;
+  height:400px;
+  text-align:center;
+  line-height:400px;
+  float:left;
+}
+#sidebar_right{
+  width:120px;
+  height:400px;
+  text-align:center;
+  line-height:400px;
   float:right;
 }
-  .layout-footer-center{
-    text-align: center;
-  }
+#content{
+  border: 3px solid rgb(43, 60, 214);
+  background-color:  rgb(43, 160, 214);
+  border-radius: 12px;
+  padding: 5px;
+  margin-left:2%;
+  margin-right:2%;
+  height: 100%;
+  text-align:left;
+  line-height:400px;
+}
+#footer{
+  clear:both;
+  height:80px;
+  text-align:center;
+  line-height:80px;
+}
 </style>
