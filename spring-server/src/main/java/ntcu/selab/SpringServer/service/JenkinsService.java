@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.Base64;
 
+import ntcu.selab.SpringServer.config.GitlabConfig;
+import ntcu.selab.SpringServer.config.MysqlConfig;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,8 @@ import ntcu.selab.SpringServer.config.JenkinsConfig;
 public class JenkinsService {
     private static final Logger logger = LoggerFactory.getLogger(JenkinsService.class);
     private static JenkinsService object = new JenkinsService();
+    private static GitlabConfig gitlabConfig = GitlabConfig.getObject();
+    private static MysqlConfig mysqlConfig = MysqlConfig.getObject();
     private JenkinsConfig jenkinsConfig;
     private String jenkinsRootUsername;
     private String jenkinsApiToken;
@@ -70,17 +75,26 @@ public class JenkinsService {
         return jenkinsCrumb;
     }
 
-    public String getConfig(){
+    public String getConfig() throws Exception {
         StringBuilder sb = new StringBuilder();
         String strConfig = null;
+        System.out.println(gitlabConfig.getGitlabHostUrl());
+        System.out.println( jenkinsConfig.getCredentialId());
+        System.out.println(mysqlConfig.getDBUrl());
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream("pipeline_config.xml");
             InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
             BufferedReader buf = new BufferedReader(reader);) {
-        while ((strConfig = buf.readLine()) != null) {
-            sb.append(strConfig);
-            sb.append("\n");
-        }
-        } catch (IOException e) {
+
+            while ((strConfig = buf.readLine()) != null) {
+                strConfig=strConfig.replaceFirst("\\{GitLab-url\\}", gitlabConfig.getGitlabHostUrl());
+                strConfig=strConfig.replaceFirst("\\{GitLab-crdential\\}", jenkinsConfig.getCredentialId());
+                strConfig=strConfig.replaceFirst("\\{Mysql-url\\}", mysqlConfig.getDBUrl());
+                System.out.println(strConfig);
+                sb.append(strConfig);
+                sb.append("\n");
+            }
+
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return sb.toString();

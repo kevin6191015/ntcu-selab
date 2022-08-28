@@ -10,7 +10,7 @@ public class MysqlConfig {
     private static final String PROPERTY_FILE = "/mysql.properties";
     private static MysqlConfig object = new MysqlConfig();
     private static final Logger logger = LoggerFactory.getLogger(MysqlConfig.class);
-    private Properties props;
+    private static Properties props;
 
     public MysqlConfig() {
         InputStream is = this.getClass().getResourceAsStream(PROPERTY_FILE);
@@ -26,7 +26,7 @@ public class MysqlConfig {
         return object;
     }
 
-    public String getDBUrl() throws Exception {
+    public static String getDBUrl() throws Exception {
         String dbuser = System.getenv("DB_URL");
         if (dbuser != null && !dbuser.equals("")) {
             return dbuser;

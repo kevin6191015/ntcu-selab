@@ -12,10 +12,11 @@ import ntcu.selab.SpringServer.db.LoginDBManager;
 @RestController
 public class LoginService {
     private LoginDBManager lDbManager = LoginDBManager.getObject();
-
+    private JenkinsService jenkinsService = JenkinsService.getObject();
     @PostMapping("/login")
-    @CrossOrigin
     public Result login(@RequestBody Login login) throws Exception{
+        System.out.println("adsd");
+        jenkinsService.createJob("dsfsdfaaa");
         return lDbManager.login(login);
     }
 }
