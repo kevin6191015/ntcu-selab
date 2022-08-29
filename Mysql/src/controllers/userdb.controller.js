@@ -130,6 +130,21 @@ exports.addUser = (req,res) =>{
     }
 }
 
+//add users in one time
+exports.addUsers = (req,res) =>{
+    const UserReqData = new UserdbModel(req.body);
+    if(req.body.constructor === Object && Object.keys(req.body).length === 0){
+        res.send(400).send({success: false, message: 'Please all fields'});
+    }else{
+        console.log('valid data');
+        UserdbModel.addUsers(UserReqData, (err, user)=>{
+            if(err)
+                res.send(err);
+                res.json({status: true, message: 'User Created Successfully'});
+        })
+    }
+}
+
 //update User by username
 exports.updateUser = (req,res) =>{
     const UserReqData = new UserdbModel(req.body);

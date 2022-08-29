@@ -10,19 +10,28 @@ var Class = function(CLass){
 
 Class.getclasslist = (result)=>{
     dbConn.query('SELECT * FROM classes_list', (err,res)=>{
-        if(err)
+        if(err){
             result(null,err);
-        else   
+            console.log(err);
+            }
+        else{
             result(null,res);
+            console.log(res);
+        }
+            
     })
 }
 
 Class.getSemester = (result)=>{
     dbConn.query('SELECT DISTINCT semester FROM classes_list', (err,res)=>{
-        if(err)
+        if(err){
             result(null,err);
-        else   
+            console.log(err);
+            }
+        else{
             result(null,res);
+            console.log(res);
+        }
     })
 }
 

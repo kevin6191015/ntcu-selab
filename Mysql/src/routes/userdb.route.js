@@ -37,6 +37,9 @@ router.get('/checkbyid/:id',UserdbController.checkbyid);
 //add user
 router.post('/add/',UserdbController.addUser);
 
+//add users in one time
+router.post('/addusers/',UserdbController.addUsers);
+
 //delete user by id
 router.post('/delete/:id',UserdbController.deleteUser);
 

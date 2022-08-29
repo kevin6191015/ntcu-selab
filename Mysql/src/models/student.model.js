@@ -49,11 +49,42 @@ Student.getStudentByclassId = (id,result) =>{
     })
 }
 
+
+//add student
 Student.addStudentByclassId = (id, StudentReqData, result)=>{
     var class_id;
     class_id = padLeft(id,3);
     var s = 'INSERT INTO class_' + class_id +'_student SET ?';
     dbConn.query(s,StudentReqData,(err,res)=>{
+        if(err)
+            result(err);
+        else   
+            result(res);
+    })   
+}
+
+//add students 
+Student.addStudentsByclassId = (id, StudentReqData, result)=>{
+    var class_id;
+    class_id = padLeft(id,3);
+    let students = JSON.parse(JSON.stringify(StudentReqData));
+    let studentlist = []
+    studentlist[0] = students.student_id.split(' ')
+    studentlist[1] = students.student_name.split(' ')
+    let final = []
+    for (i = 0; i < studentlist[1].length; i++)
+    {
+        final[i] = []
+    }
+    for (i = 0; i < studentlist[1].length; i++)
+    {
+        let temp = []
+        temp.push(studentlist[0][i])
+        temp.push(studentlist[1][i])
+        final[i] = temp
+    }
+    var sql = 'INSERT INTO class_' + class_id +'_student (student_id,student_name) VALUES ?';
+    dbConn.query(sql,[final],(err,res)=>{
         if(err)
             result(err);
         else   

@@ -39,5 +39,21 @@ exports.addStudentByclassId = (req,res)=>{
     }
 }
 
+//add students by class id 
+exports.addStudentsByclassId = (req,res)=>{
+    const StudentReqData = new StudentModel(req.body);
+    if(req.body.constructor === Object && Object.keys(req.body).length === 0){
+        es.send(400).send({success: false, message: 'Please all fields'});
+    }else{
+        StudentModel.addStudentsByclassId(req.params.id, StudentReqData, (err,student) =>{
+            if(err)
+                res.send(err);
+            else
+            res.json({status: true, message: 'Student Added Successfully',data: student.insertId})
+            
+        })
+    }
+}
+
 
 

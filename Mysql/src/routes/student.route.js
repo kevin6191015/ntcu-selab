@@ -13,6 +13,9 @@ router.get('/:id',StudentController.getStudentByclassId);
 //add by class id
 router.post('/add/:id',StudentController.addStudentByclassId);
 
+//add students by class id
+router.post('/addstudents/:id',StudentController.addStudentsByclassId);
+
 router.post('/update/:class_id/:student_id', function(req,res) {
     const StudentReqData = new StudentModel(req.body);
     StudentModel.updateStudentByclassIdandStudentId(req.params.class_id,req.params.student_id,StudentReqData, (err, Student)=>{

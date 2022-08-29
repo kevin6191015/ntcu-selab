@@ -148,6 +148,48 @@ Userdb.addUser = (UserReqData, result)=>{
      })
 }
 
+//add users in one time
+Userdb.addUsers = (UserReqData, result)=>{
+    let users = JSON.parse(JSON.stringify(UserReqData));
+    let userlist = []
+    userlist[0] = users.ID.split(' ');
+    userlist[1] = users.GITLAB_ID.split(' ');
+    userlist[2] = users.USERNAME.split(' ');
+    userlist[3] = users.NAME.split(' ');
+    userlist[4] = users.PASSWORD.split(' ');
+    userlist[5] = users.GITLAB_TOKEN.split(' ');
+    userlist[6] = users.ROLE.split(' ');
+    userlist[7] = users.EMAIL.split(' ');
+    userlist[8] = users.CLASSES.split(' ');
+    let final = []
+    for (i = 0; i < userlist[1].length; i++)
+    {
+        final[i] = []
+    }
+    for (i = 0; i < userlist[1].length; i++)
+    {
+        let temp = []
+        temp.push(userlist[0][i])
+        temp.push(userlist[1][i])
+        temp.push(userlist[2][i])
+        temp.push(userlist[3][i])
+        temp.push(userlist[4][i])
+        temp.push(userlist[5][i])
+        temp.push(userlist[6][i])
+        temp.push(userlist[7][i])
+        temp.push(userlist[8][i])
+        final[i] = temp
+    }
+    let sql = "INSERT INTO User (ID,GITLAB_ID,USERNAME,NAME,PASSWORD,GITLAB_TOKEN,ROLE,EMAIL,CLASSES) VALUES ?"
+    dbConn.query(sql,[final], (err, res)=>{
+        if(err){
+             result(err);
+         }else{
+             result(null,res);
+         }
+     })
+}
+
 //delete by id
 Userdb.deleteUser = (id,result)=>{
     dbConn.query('DELETE FROM User WHERE id = ?',id, (err,res)=>{
