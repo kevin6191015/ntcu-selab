@@ -86,8 +86,10 @@ export default {
   },
   updated () {
     this.temp = store.state.selectedQuestion
-    this.toggleSelection1(this.temp)
-    this.toggleSelection2(this.temp)
+    if (this.temp) {
+      this.toggleSelection1(this.temp)
+      this.toggleSelection2(this.temp)
+    }
   },
   methods: {
     handleSelectionChange1 (theval) {
