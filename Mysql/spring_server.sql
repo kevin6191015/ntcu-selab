@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 08 月 17 日 13:36
+-- 產生時間： 2022 年 08 月 31 日 13:04
 -- 伺服器版本： 8.0.29
 -- PHP 版本： 8.0.15
 
@@ -44,10 +44,11 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`ID`, `GITLAB_ID`, `USERNAME`, `NAME`, `PASSWORD`, `GITLAB_TOKEN`, `ROLE`, `EMAIL`, `CLASSES`) VALUES
-('acs108101', '17', '12345678', '冰鳥', '12345678', 'null', 'student', '1@example.com', '1,1'),
-('acs108122', '18', '23456789', '閃電鳥', '23456789', 'null', 'student', '4@example.com', '1,1'),
+('acs108101', '17', '12345678', '冰鳥2', '12345678', 'null', 'student', '1@example.com', '2'),
+('acs108122', '18', '23456789', '閃電鳥', '23456789', 'null', 'student', '4@example.com', '1,2,4'),
 ('b1012', 'null', '32345678', '小智', '32345678', 'null', 'teacher', '3@example.com', ''),
-('bcs108101', 'null', '42345678', '小剛', '42345678', 'null', 'TA', '2@example.com', '');
+('bcs108101', 'null', '42345678', '小剛', '42345678', 'null', 'TA', '2@example.com', ''),
+('ROOT', 'ROOT', '123', 'ROOT', '123', 'ROOT', 'teacher', 'ROOT', '001,002');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

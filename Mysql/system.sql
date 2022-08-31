@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 08 月 17 日 13:36
+-- 產生時間： 2022 年 08 月 31 日 13:04
 -- 伺服器版本： 8.0.29
 -- PHP 版本： 8.0.15
 
@@ -82,8 +82,7 @@ CREATE TABLE `class_001_student` (
 --
 
 INSERT INTO `class_001_student` (`student_id`, `student_name`) VALUES
-('acs108122', '閃電鳥'),
-('acs108101', '冰鳥');
+('acs108122', '閃電鳥');
 
 -- --------------------------------------------------------
 
@@ -108,6 +107,14 @@ CREATE TABLE `class_002_student` (
   `student_id` text,
   `student_name` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `class_002_student`
+--
+
+INSERT INTO `class_002_student` (`student_id`, `student_name`) VALUES
+('acs108122', '閃電鳥'),
+('acs108101', '冰鳥2');
 
 -- --------------------------------------------------------
 
@@ -156,6 +163,13 @@ CREATE TABLE `class_004_student` (
   `student_id` text,
   `student_name` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `class_004_student`
+--
+
+INSERT INTO `class_004_student` (`student_id`, `student_name`) VALUES
+('acs108122', '閃電鳥');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
