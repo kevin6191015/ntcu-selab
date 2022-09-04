@@ -52,7 +52,7 @@ public class AssignmentService {
             return new Result(400, "Get Assignments Failed! " + e.getMessage(), "");
         }
         JSONObject root = new JSONObject();
-        root.put("Courses", assignmeList);
+        root.put("Assignments", assignmeList);
         return new Result(200, "Get Assignments Successfull!", root.toMap());
     }
     
