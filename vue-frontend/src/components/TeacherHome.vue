@@ -10,7 +10,10 @@
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <el-button type="text" @click='logout'>logout</el-button>
+            <el-button type="text" @click='logout'>登出</el-button>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <el-button type="text" @click='chooseCourse'>選擇課程</el-button>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -53,7 +56,8 @@ export default {
         {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-document'},
         {name: '/SelectQuestion', title: '選擇題目', icon: 'el-icon-document'},
         {name: '/SystemAccount', title: '系統帳號管理', icon: 'el-icon-s-custom'},
-        {name: '/CourseAccount', title: '課程帳號管理', icon: 'el-icon-s-custom'}
+        {name: '/CourseAccount', title: '課程帳號管理', icon: 'el-icon-s-custom'},
+        {name: '/ShowHomework', title: '顯示作業', icon: 'el-icon-s-custom'}
       ]
     }
   },
@@ -68,6 +72,11 @@ export default {
       var path = this.$route.query.redirect
       this.$router.replace({
         path: path === '/' || path === undefined ? '/login' : path})
+    },
+    chooseCourse () {
+      var path = this.$route.query.redirect
+      this.$router.replace({
+        path: path === '/' || path === undefined ? '/chooseclass' : path})
     }
   }
 }
@@ -95,5 +104,14 @@ export default {
   left: 50%;
   font-size: 20px;
   font-weight: bold;
+}
+
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+}
+
+.el-icon-arrow-down {
+    font-size: 13px;
 }
 </style>

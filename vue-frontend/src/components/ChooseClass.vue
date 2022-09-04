@@ -90,6 +90,7 @@ export default {
       this.all_class = res.data.data.Courses
       this.content = res.data.data.Courses
       if (this.student) {
+        this.student_Allclass = []
         for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
           for (let j = 0; j < this.all_class.length; j++) {
             if (this.all_class[j].class_id === store.state.user.classes.split(',')[i]) {

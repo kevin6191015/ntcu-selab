@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
+
 import TeacherHome from '@/components/TeacherHome'
 import StudentHome from '@/components/StudentHome'
 import Login from '@/components/Login'
 import ChooseClass from '@/components/ChooseClass'
 import CourseAccount from '@/components/CourseAccount'
-
-// import GetStudent from '@/components/GetStudent'
+import ShowHomework from '@/components/ShowHomework'
 import AddQuestion from '@/components/AddQuestion'
 import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
@@ -80,19 +79,17 @@ export default new Router({
             requireAuth: true,
             Role: true
           }
+        },
+        {
+          path: '/ShowHomework',
+          name: 'ShowHomework',
+          component: ShowHomework,
+          meta: {
+            requireAuth: true,
+            Role: true
+          }
         }
       ]
-      // redirect: '/index',
-      // children:[
-      //   {
-      //     path:'/index',
-      //     name:'Index',
-      //     component:() => import('@/views/home/index'),
-      //     meta:{
-      //       requireAuth:true
-      //     }
-      //   }
-      // ]
     },
     {
       path: '/login',
@@ -115,13 +112,5 @@ export default new Router({
         requireAuth: true
       }
     }
-    // {
-    //   path: '/getStudent',
-    //   name: 'GetStudent',
-    //   component: GetStudent,
-    //   meta: {
-    //     requireAuth: true
-    //   }
-    // }
   ]
 })

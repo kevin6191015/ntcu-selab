@@ -9,7 +9,7 @@
                             v-for="item in auth"
                             :key="item.value"
                             :label="item.label"
-                            :value="item.label">
+                            :value=item.value>
                         </el-option>
                     </el-select>
                    </el-col>
@@ -87,13 +87,13 @@ export default {
   data () {
     return {
       auth: [{
-        value: '1',
+        value: 'student',
         label: 'student'
       }, {
-        value: '2',
+        value: 'teacher',
         label: 'teacher'
       }, {
-        value: '3',
+        value: 'TA',
         label: 'TA'
       }],
       account_type: '',
@@ -123,8 +123,8 @@ export default {
         }).then(res => {
           this.$message({
             showClose: true,
-            message: res.data.message,
-            type: 'succes'
+            message: res.data.data.message,
+            type: 'success'
           })
         }).catch(error => {
           this.$message({
@@ -142,7 +142,7 @@ export default {
         this.$message({
           showClose: true,
           message: res.data.message,
-          type: 'succes'
+          type: 'success'
         })
       }).catch(error => {
         this.$message({
@@ -194,11 +194,7 @@ export default {
   padding: 15px;
 }
 
-.el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-}
-.el-icon-arrow-down {
-    font-size: 13px;
+.box {
+  width: 100%;
 }
 </style>
