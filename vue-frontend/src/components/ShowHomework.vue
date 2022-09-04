@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { getAllAssignments } from '@/api/assignment'
+import store from '../store'
 export default {
   name: 'ShowHomework',
   data () {
@@ -50,6 +52,13 @@ export default {
         deadline: '2020/3/3'
       }]
     }
+  },
+  created () {
+    getAllAssignments({
+      cid: store.state.class_id
+    }).then(res => {
+      this.tableData = res.data.data.Assignments
+    })
   }
 }
 </script>
