@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Assignment;
+import ntcu.selab.SpringServer.data.Course;
 import ntcu.selab.SpringServer.data.Question;
 import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.db.AssignmentDBManager;
+import ntcu.selab.SpringServer.db.CourseDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
@@ -30,6 +32,7 @@ public class AssignmentService {
     private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static UserDBManager uDbManager = UserDBManager.getObject();
+    private static CourseDBManager cDbManager = CourseDBManager.getObject();
 
     public static AssignmentService getObject(){
         return object;
@@ -74,8 +77,16 @@ public class AssignmentService {
              */
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
-                //設定project name
-                String project_name = student.getId() + "_" + question.getName().replace(" ", "");
+                //得到project_name
+                List<Course> courses = cDbManager.getAllCourses();
+                String semester = null;
+                for(Course course : courses){
+                    if(course.getId() == cid){
+                        semester = course.getSemester();
+                        break;
+                    }
+                }
+                String project_name = qid + "_" +  semester + "_" + release_time + "_" + student.getId();
 
                 //創建jenkins project
                 jenkinsService.createJob(project_name);
@@ -127,7 +138,23 @@ public class AssignmentService {
                 if(question == null){
                     question = qDbManager.getQuestionFromBank2ById(qid);
                 }
-                String project_name = student.getId() + "_"  + question.getName().replace(" ", "");
+                List<Course> courses = cDbManager.getAllCourses();
+                String semester = null;
+                String release = null;
+                for(Course course : courses){
+                    if(course.getId() == cid){
+                        semester = course.getSemester();
+                        break;
+                    }
+                }
+                List<Assignment> assignments = aDbManager.getAllAssignment(cid);
+                for(Assignment assignment : assignments){
+                    if(assignment.getId() == qid){
+                        release = assignment.getReleaseTime();
+                        break;
+                    }
+                }
+                String project_name = qid + "_" +  semester + "_" + release + "_" + student.getId();
 
                 //刪除jenkins project
                 jenkinsService.deleteJob(project_name);
