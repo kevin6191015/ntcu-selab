@@ -12,6 +12,7 @@ import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
 import SystemAccount from '@/components/SystemAccount'
 import ShowSourcecode from '@/components/ShowSourcecode'
+import PublishAssignment from '@/components/PublishAssignment'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -85,6 +86,15 @@ export default new Router({
           path: '/ShowHomework',
           name: 'ShowHomework',
           component: ShowHomework,
+          meta: {
+            requireAuth: true,
+            Role: true
+          }
+        },
+        {
+          path: '/PublishAssignment',
+          name: 'PublishAssignment',
+          component: PublishAssignment,
           meta: {
             requireAuth: true,
             Role: true

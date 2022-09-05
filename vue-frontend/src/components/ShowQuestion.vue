@@ -72,7 +72,6 @@ export default {
 <style scoped>
 #sitebody{
   width:100%;
-  height:700px;
   margin:0 auto;
   font-size:20px;
   background-color: rgba(111, 122, 144, 0.555);
@@ -103,7 +102,7 @@ export default {
   margin-left:1%;
   margin-right:1%;
   text-align:left;
-  white-space: pre;
+  white-space: pre-line;
 }
 #footer{
   clear:both;

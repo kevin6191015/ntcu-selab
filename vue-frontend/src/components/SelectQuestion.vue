@@ -137,6 +137,9 @@ export default {
         selectedQ[(i + num + 1)] = this.multipleSelection2[i].id
       }
       store.commit('SET_SELECTEDQUESTION', selectedQ)
+      this.$router.replace({
+        path: '/PublishAssignment'
+      })
     },
     Seequestion1 (row) {
       store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
