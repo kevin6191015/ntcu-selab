@@ -11,6 +11,7 @@ import AddQuestion from '@/components/AddQuestion'
 import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
 import SystemAccount from '@/components/SystemAccount'
+import ShowSourcecode from '@/components/ShowSourcecode'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -108,6 +109,14 @@ export default new Router({
       path: '/ShowQuestion',
       name: 'ShowQuestion',
       component: ShowQuestion,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/ShowSourcecode',
+      name: 'ShowSourcecode',
+      component: ShowSourcecode,
       meta: {
         requireAuth: true
       }

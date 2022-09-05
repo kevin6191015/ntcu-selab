@@ -23,6 +23,16 @@ export function AddSourceocde (data) {
   })
 }
 
+export function getSourcecode (questionname) {
+  return request({
+    url: '/sourcecode/getSourceCode?question_name=' + questionname,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
 export function ShowQuestion1 () {
   return request({
     url: '/question/getQuestionBank1',

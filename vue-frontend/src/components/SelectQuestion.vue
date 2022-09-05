@@ -18,10 +18,18 @@
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
         <el-table-column
           fixed="right"
-          label="操作"
+          label="題目預覽"
         >
           <template slot-scope="scope">
             <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="題目程式碼"
+        >
+          <template slot-scope="scope">
+            <el-button @click="SeeCode1(scope.row)" type="text" size="small">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -47,6 +55,14 @@
           >
           <template slot-scope="scope">
             <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="題目程式碼"
+        >
+          <template slot-scope="scope">
+            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -123,7 +139,7 @@ export default {
       store.commit('SET_SELECTEDQUESTION', selectedQ)
     },
     Seequestion1 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.question_id)
+      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
@@ -131,9 +147,25 @@ export default {
       store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     Seequestion2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id)
+      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      store.commit('REMOVE_QUESTION_TO_SHOW')
+    },
+    SeeCode1 (row) {
+      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowSourcecode'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      store.commit('REMOVE_QUESTION_TO_SHOW')
+    },
+    SeeCode2 (row) {
+      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowSourcecode'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
       store.commit('REMOVE_QUESTION_TO_SHOW')
