@@ -33,7 +33,7 @@
                     <excludeBranchesSpec></excludeBranchesSpec>
                     <sourceBranchRegex></sourceBranchRegex>
                     <targetBranchRegex></targetBranchRegex>
-                    <secretToken>{AQAAABAAAAAQ1yoAjjTPluuNJ89I9CwepgXYICSxkb+StMzJxOiM61Y=}</secretToken>
+                    <secretToken>{AQAAABAAAAAQLgE3hshi0cfnoHRDPJ70dMGRS3z0O377BYVVouAkL38=}</secretToken>
                     <pendingBuildName></pendingBuildName>
                     <cancelPendingBuildsOnUpdate>false</cancelPendingBuildsOnUpdate>
                 </com.dabsquared.gitlabjenkins.GitLabPushTrigger>
@@ -47,24 +47,47 @@
             String input_or_not = &quot;[0]&quot;;
             String compile_result = &quot;&quot;;
             String test_result=&quot;&quot;;
+            String token = &quot;&quot;;
             }
             stage(&apos;Clone the Git&apos;) {
+            //clone git project
             String url = &quot;{GitLab-url}/root/&quot;+ env.JOB_BASE_NAME +&quot;.git&quot;
-            git branch: &apos;main&apos;, credentialsId: &apos;{GitLab-crdential}&apos;, url: url
+            git branch: &apos;main&apos;, credentialsId: &apos;gitlab-cridential&apos;, url: url
             }
             stage(&apos;Prepare testfile&apos;){
-            env.WORKSPACE = pwd()
+
+            //get token to call api
+            String response1 =sh (script: &apos;&apos;&apos;curl --location --request POST \&apos;{Spring-url}/login\&apos; \\
+            --header \&apos;Content-Type: application/json\&apos; \\
+            --data-raw \&apos;{
+            &quot;username&quot; : {SPRING_ROOT_USERNAME},
+            &quot;password&quot; : {SPRING_ROOT_PASSWORD}
+            }\&apos;&apos;&apos;&apos;, returnStdout: true).trim()
+
+            echo &quot;response1 : ${response1}&quot;
+
+            def json1 = new groovy.json.JsonSlurperClassic().parseText(response1)
+            env.token = json1.data.token;
+            echo &quot;token : ${env.token}&quot;
+
+            //get project name
             String NAME = env.JOB_BASE_NAME.substring(0, env.JOB_BASE_NAME.indexOf(&apos;_&apos;))
             echo &quot;Project name is ${NAME}&quot;
 
+            //get question data to test whether need to prepare test file
             String response = sh(script: &quot;curl -s &apos;{Mysql-url}question1/${NAME}&apos;&quot;, returnStdout: true).trim()
             echo &quot;${response}&quot;
             def json = new groovy.json.JsonSlurperClassic().parseText(response)
             env.input_or_not = json.input_or_not;
+
+            //print jenkins workspace
+            env.WORKSPACE = pwd()
+
             if(env.input_or_not.equals(&quot;[0]&quot;)){
+            //if don&apos;t have to prepare test file quit stage
             org.jenkinsci.plugins.pipeline.modeldefinition.Utils.markStageSkippedForConditional(&apos;Prepare testfile&apos;)
             }else{
-
+            //check if testfile directory is build
             if(fileExists(&quot;${env.WORKSPACE}/../testfile&quot;)){
             echo &quot;Directory ${env.WORKSPACE}/../testfile exists.&quot;
             }else{

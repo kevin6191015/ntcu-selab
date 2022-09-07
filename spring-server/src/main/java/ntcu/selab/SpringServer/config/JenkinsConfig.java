@@ -87,14 +87,4 @@ public class JenkinsConfig {
         throw new Exception("Could not found JENKINS_ROOT_URL");
     }
 
-    public String getCredentialId() throws Exception{
-        String gitlab_id= System.getenv("GITLAB_CREDENTIALS_ID");
-        if (gitlab_id != null && !gitlab_id.equals("")){
-            return gitlab_id;
-        }
-        if(props != null){
-            return props.getProperty("GITLAB_CREDENTIALS_ID").trim();
-        }
-        throw new Exception("Could not found GITLAB_CREDENTIALS_ID");
-    }
 }

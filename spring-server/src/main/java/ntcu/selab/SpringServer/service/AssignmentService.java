@@ -58,7 +58,7 @@ public class AssignmentService {
         root.put("Assignments", assignmeList);
         return new Result(200, "Get Assignments Successfull!", root.toMap());
     }
-    
+    //mvn archetype:generate -DgroupId=ntcu.selab -DartifactId=a0001_110_2_20220527_a001 -DinteractiveMode=false
     @GetMapping("addAssignment")
     public Result addAssignment(@RequestParam String cid, @RequestParam String qid
     , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
@@ -75,24 +75,22 @@ public class AssignmentService {
             /*
              * 對該班的student
              */
+            List<Course> courses = cDbManager.getAllCourses();
+            String semester = null;
+            for(Course course : courses){
+                if(course.getId() .equals(cid)){
+                    semester = course.getSemester();
+                    break;
+                }
+            }
+
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
-                List<Course> courses = cDbManager.getAllCourses();
-                String semester = null;
-                for(Course course : courses){
-                    if(course.getId() == cid){
-                        semester = course.getSemester();
-                        break;
-                    }
-                }
-                String project_name = qid + "_" +  semester + "_" + release_time + "_" + student.getId();
+                String project_name = qid + "_" +  semester + "_" + release_time+"_" + student.getId();
 
                 //創建jenkins project
                 jenkinsService.createJob(project_name);
-
-                //build jenkins job
-                jenkinsService.buildJob(project_name);
 
                 //創建gitlab project
                 GitlabProject gitlabProject = gitlabService.createRootProject(project_name);
@@ -142,19 +140,20 @@ public class AssignmentService {
                 String semester = null;
                 String release = null;
                 for(Course course : courses){
-                    if(course.getId() == cid){
+                    if(course.getId().equals(cid)){
                         semester = course.getSemester();
                         break;
                     }
                 }
                 List<Assignment> assignments = aDbManager.getAllAssignment(cid);
                 for(Assignment assignment : assignments){
-                    if(assignment.getId() == qid){
+                    if(assignment.getId().equals(qid)){
                         release = assignment.getReleaseTime();
                         break;
                     }
                 }
                 String project_name = qid + "_" +  semester + "_" + release + "_" + student.getId();
+                System.out.println(project_name);
 
                 //刪除jenkins project
                 jenkinsService.deleteJob(project_name);

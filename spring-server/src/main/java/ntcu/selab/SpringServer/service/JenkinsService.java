@@ -12,6 +12,7 @@ import java.util.Base64;
 
 import ntcu.selab.SpringServer.config.GitlabConfig;
 import ntcu.selab.SpringServer.config.MysqlConfig;
+import ntcu.selab.SpringServer.config.SpringConfig;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class JenkinsService {
     private static JenkinsService object = new JenkinsService();
     private static GitlabConfig gitlabConfig = GitlabConfig.getObject();
     private static MysqlConfig mysqlConfig = MysqlConfig.getObject();
+    private static SpringConfig springConfig =SpringConfig.getObject();
     private JenkinsConfig jenkinsConfig;
     private String jenkinsRootUsername;
     private String jenkinsApiToken;
@@ -79,7 +81,6 @@ public class JenkinsService {
         StringBuilder sb = new StringBuilder();
         String strConfig = null;
         System.out.println(gitlabConfig.getGitlabHostUrl());
-        System.out.println( jenkinsConfig.getCredentialId());
         System.out.println(mysqlConfig.getDBUrl());
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream("pipeline_config.xml");
             InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
@@ -87,9 +88,10 @@ public class JenkinsService {
 
             while ((strConfig = buf.readLine()) != null) {
                 strConfig=strConfig.replaceFirst("\\{GitLab-url\\}", gitlabConfig.getGitlabHostUrl());
-                strConfig=strConfig.replaceFirst("\\{GitLab-crdential\\}", jenkinsConfig.getCredentialId());
                 strConfig=strConfig.replaceFirst("\\{Mysql-url\\}", mysqlConfig.getDBUrl());
-                System.out.println(strConfig);
+                strConfig=strConfig.replaceFirst("\\{Spring-url\\}", springConfig.getSpringHostUrl());
+                strConfig=strConfig.replaceFirst("\\{SPRING_ROOT_USERNAME\\}", springConfig.getSpringRootUserName());
+                strConfig=strConfig.replaceFirst("\\{SPRING_ROOT_PASSWORD\\}", springConfig.getSpringRootUserPassword());
                 sb.append(strConfig);
                 sb.append("\n");
             }

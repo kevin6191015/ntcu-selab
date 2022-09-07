@@ -2,6 +2,7 @@ package ntcu.selab.SpringServer.service;
 
 import ntcu.selab.SpringServer.config.GitlabConfig;
 import ntcu.selab.SpringServer.config.JenkinsConfig;
+import ntcu.selab.SpringServer.config.Linux;
 import org.gitlab.api.AuthMethod;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.TokenType;
@@ -12,8 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,7 +173,7 @@ public class GitlabService {
     /*
      * Get a list of project of user
      */
-    public List<GitlabProject> getProject(int userGitlabId) {
+    public List<GitlabProject> getProjectList(int userGitlabId) {
         GitlabUser gitlabUser = getUserById(userGitlabId);
         List<GitlabProject> projects = new ArrayList<>();
         try {
@@ -220,6 +224,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -259,6 +264,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -283,6 +289,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -298,7 +305,7 @@ public class GitlabService {
         HttpURLConnection conn = null;
         try {
             String urls = hostUrl + API_NAMESPACE + "/projects?name=" + proName
-                    + "&visibility=private&default_branch=main&initialize_with_readme=true";
+                    + "&visibility=public&default_branch=main&initialize_with_readme=true";
             URL url = new URL(urls);
             conn = (HttpURLConnection) url.openConnection();
             String input = gitlabConfig.getGitlabApiToken();
@@ -308,6 +315,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -339,6 +347,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -361,6 +370,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
+            InputStream stream = conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -389,6 +399,49 @@ public class GitlabService {
             logger.error(e.getMessage());
         }
         return user;
+    }
+    public boolean cloneProject(String username, String projectName, Path targetPath) throws Exception {
+
+        if (Files.exists(targetPath)) { // is existed
+            logger.error("In cloneProject(), " + targetPath.toString() + " folder is exist.");
+            return false;
+        }
+
+        GitlabProject gitlabProject = getProject( username , projectName );
+        if (gitlabProject == null) {
+            logger.error("In cloneProject(), username: " + username + " projectName: "
+                    + projectName + " is not exist.");
+            return false;
+        }
+
+        String repositoryUrl = gitlabConfig.getGitlabRootUrl() + "/" + username + "/" + projectName + ".git";
+        String cloneCommand = "git clone " + repositoryUrl + " " + targetPath.toString();
+        Linux linux = new Linux();
+        linux.execLinuxCommand(cloneCommand);
+
+        return true;
+    }
+
+    public GitlabProject getProject(String username, String proName) {
+        GitlabProject gitlabProject = null;
+        try {
+            gitlabProject = gitlab.getProject(username,proName);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return gitlabProject;
+    }
+
+    public void pushProject(String cloneDirectoryPath) {
+        Linux linux = new Linux();
+        String[] addCommand = {"git", "add", "."};
+        linux.execLinuxCommandInFile(addCommand, cloneDirectoryPath);
+
+        String[] commitCommand = {"git", "commit", "-m", "Instructor Commit"};
+        linux.execLinuxCommandInFile(commitCommand, cloneDirectoryPath);
+
+        String[] pushCommand = {"git", "push"};
+        linux.execLinuxCommandInFile(pushCommand, cloneDirectoryPath);
     }
 
 }

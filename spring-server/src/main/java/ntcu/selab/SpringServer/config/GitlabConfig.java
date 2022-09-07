@@ -12,7 +12,7 @@ import java.util.Properties;
 public class GitlabConfig {
     private static final String PROPERTY_FILE = "/gitlab.properties";
     private Properties props;
-    private static  GitlabConfig object = new GitlabConfig();
+    private static final GitlabConfig object = new GitlabConfig();
     private static final Logger logger = LoggerFactory.getLogger(GitlabConfig.class);
 
     public GitlabConfig() {
@@ -30,7 +30,7 @@ public class GitlabConfig {
     }
 
     public String getGitlabHostUrl() throws Exception {
-        String gitlabHost = System.getenv("GITLAB_HOST");
+        String gitlabHost = System.getenv("GITLAB_HOST_URL");
         if (gitlabHost != null && !gitlabHost.equals("")) {
             return gitlabHost;
         }

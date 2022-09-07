@@ -25,16 +25,13 @@ public class SonarQubeService {
     }
 
     public String getSonarHost() throws Exception {
-            return SonarConfig.getSonarHostUrl();
+        return sonarConfig.getSonarHostUrl();
     }
 
     public String getSonarToken() throws Exception{
         return sonarConfig.getSonarApiToken();
     }
 
-    public String getCredentialId() throws Exception {
-        return jenkinsConfig.getCredentialId();
-    }
 
     public String getMySqlHost() throws Exception {
         return mysqlConfig.getDBUrl();
