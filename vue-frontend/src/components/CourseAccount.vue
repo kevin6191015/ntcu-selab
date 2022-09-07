@@ -52,17 +52,12 @@
       <el-row :gutter="10">
         <el-col :span="5">
           <div>
-            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 65%; color: black;">新增</el-button>
+            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 65%; color: black;" @click="addStudent()">新增</el-button>
           </div>
         </el-col>
         <el-col :span="5">
           <div>
-            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left:90%; color: black;">匯入</el-button>
-          </div>
-        </el-col>
-        <el-col :span="5">
-          <div>
-            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 85%; color: black;">刪除</el-button>
+            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 322%; color: black;" @click="deleteStudent()">刪除</el-button>
           </div>
         </el-col>
       </el-row>
@@ -76,12 +71,12 @@ import store from '../store'
 import { addStudent, deleteStudent } from '@/api/student'
 export default {
   name: 'CourseAccount',
+  inject: ['reload'],
   data () {
     return {
       class_student: [],
       not_class_student: [],
-      multipleSelection: [],
-      all_user: []
+      seleted: []
     }
   },
   created () {
@@ -98,11 +93,11 @@ export default {
       for (let i = 0; i < res.data.data.Users.length; i++) {
         let check = true
         for (let j = 0; j < this.class_student.length; j++) {
-          if (res.data.data.Users[i].role !== 'student' || res.data.data.Users[i].name === this.class_student[j].name) {
+          if (res.data.data.Users[i].name === this.class_student[j].name) {
             check = false
           }
         }
-        if (check) {
+        if (check && res.data.data.Users[i].role === 'student') {
           this.not_class_student.push(res.data.data.Users[i])
         }
       }
@@ -110,16 +105,23 @@ export default {
   },
   methods: {
     not_in_Course (val) {
-      this.not_class_student = val
-      console.log(this.not_class_student)
-      for (let i = 0; i < this.not_class_student.length; i++) {
+      this.seleted = val
+      console.log(this.seleted)
+    },
+    in_Course (val) {
+      this.seleted = val
+      console.log(this.seleted)
+    },
+    addStudent () {
+      for (let i = 0; i < this.seleted.length; i++) {
         addStudent({
           class_id: store.state.class_id,
-          user_id: this.not_class_student[i].id
+          user_id: this.seleted[i].id
         }).then(res => {
+          this.reload()
           this.$message({
             showClose: true,
-            message: res.data.data.message,
+            message: res.data.message,
             type: 'success'
           })
         }).catch(error => {
@@ -128,20 +130,20 @@ export default {
             message: error,
             type: 'warning'
           })
+          this.reload()
         })
       }
     },
-    in_Course (val) {
-      this.class_student = val
-      console.log(this.class_student)
-      for (let i = 0; i < this.class_student.length; i++) {
+    deleteStudent () {
+      for (let i = 0; i < this.seleted.length; i++) {
         deleteStudent({
           class_id: store.state.class_id,
-          user_id: this.class_student[i].id
+          user_id: this.seleted[i].id
         }).then(res => {
+          this.reload()
           this.$message({
             showClose: true,
-            message: res.data.data.message,
+            message: res.data.message,
             type: 'success'
           })
         }).catch(error => {
@@ -150,6 +152,7 @@ export default {
             message: error,
             type: 'warning'
           })
+          this.reload()
         })
       }
     }
