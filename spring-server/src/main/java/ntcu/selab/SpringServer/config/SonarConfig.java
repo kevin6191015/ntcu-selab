@@ -25,7 +25,7 @@ public class SonarConfig {
         return  object;
     }
 
-    public static String getSonarHostUrl() throws Exception{
+    public String getSonarHostUrl() throws Exception{
         String SonarUrl = System.getenv("SONAR_HOST_URL");
         if (SonarUrl != null && !SonarUrl.equals("")){
             return SonarUrl;

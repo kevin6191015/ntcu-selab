@@ -80,8 +80,6 @@ public class JenkinsService {
     public String getConfig() throws Exception {
         StringBuilder sb = new StringBuilder();
         String strConfig = null;
-        System.out.println(gitlabConfig.getGitlabHostUrl());
-        System.out.println(mysqlConfig.getDBUrl());
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream("pipeline_config.xml");
             InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
             BufferedReader buf = new BufferedReader(reader);) {

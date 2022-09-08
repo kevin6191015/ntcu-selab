@@ -1,5 +1,6 @@
 package ntcu.selab.SpringServer.service;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,9 +90,6 @@ public class AssignmentService {
                 //得到project_name
                 String project_name = qid + "_" +  semester + "_" + release_time+"_" + student.getId();
 
-                //創建jenkins project
-                jenkinsService.createJob(project_name);
-
                 //創建gitlab project
                 GitlabProject gitlabProject = gitlabService.createRootProject(project_name);
 
@@ -101,8 +99,24 @@ public class AssignmentService {
                 //將學生加進該project
                 gitlabService.addMember(gitlabUser, project_name);
 
-                //設定gitlab使其與jenkins連接
-                gitlabService.setGitlabIntegrations(gitlabProject, project_name);              
+                //clone 此次建立的 gitlab project
+                gitlabService.cloneProject(gitlabUser.getUsername(),project_name,".\\src\\main\\resources\\maven\\"+project_name);
+
+                //copy project內容 加入src跟.validate
+                gitlabService.copyProject(project_name);
+
+                //push 此次建立的 gitlab project
+                gitlabService.pushProject(".\\src\\main\\resources\\maven\\"+project_name,project_name);
+
+                //delete 此次建立的 gitlab project
+                gitlabService.DeleteProject(project_name);
+
+                //設定gitlab使其與jenkins連接(必須最後設定不然會直接執行)
+                gitlabService.setGitlabIntegrations(gitlabProject, project_name);
+
+                //創建jenkins project
+                jenkinsService.createJob(project_name);
+
             }
         }catch(Exception e){
             return new Result(400, "Add Assignment Failed! " + e.getMessage(), "");

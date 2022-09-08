@@ -25,8 +25,8 @@ public class testfile_generator
 	}
 	public  void Write_testdata(String name)throws Exception{
 		String input="";
-		String path = "./testfile/"+name+"/AppTest.java";
-		String template_path="template.txt";
+		String path = "../../testfile/"+name+"/AppTest.java";
+		String template_path="./template.txt";
 		//System.out.println(path);
 		File writename = new File(path);
 		writename.createNewFile();
@@ -49,7 +49,7 @@ public class testfile_generator
 		out.close();
 	}
 	public  void GetTestData(String name)throws Exception{
-		String urls = "http://120.108.204.152:3000/api/testdata/"+name;
+		String urls = "{Mysql-url}testdata/"+name;
 		System.out.println(urls);
 	    BufferedReader reader;
 		String line;

@@ -55,7 +55,7 @@ public class sonarqube_report_analyzer
           }
      }
      public  void  WriteData() throws Exception{
-          String urls = "http://120.108.204.152:3000/api/sqreport";
+          String urls = "{Mysql-url}sqreport/add";
           System.out.println("\n"+postparm);
           byte[] postData = postparm.getBytes( StandardCharsets.UTF_8 );
           int postDataLength = postData.length;
@@ -94,8 +94,8 @@ public class sonarqube_report_analyzer
           BufferedReader reader;
 		int line;
 		StringBuilder responseContent = new StringBuilder();
-          String urls = "http://120.108.204.152:9000/api/sources/raw?key=edu.selab:"+name+":src/main/java/edu/selab/App.java";
-          String token = "281773e636d8065856593e8633545903a553de1c"+":";
+          String urls = "{Sonar-url}/api/sources/raw?key=edu.selab:"+name+":src/main/java/edu/selab/App.java";
+          String token = "{Sonar-token}"+":";
           String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
           URL url = new URL(urls);
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -117,9 +117,9 @@ public class sonarqube_report_analyzer
 		String line;
 		StringBuilder responseContent = new StringBuilder();
 
-          String urls = "http://120.108.204.152:9000/api/measures/component?component=edu.selab:"+name+"&metricKeys=sqale_rating,security_rating,security_review_rating,reliability_rating,code_smells,bugs,vulnerabilities";
+          String urls = "{Sonar-url}/api/measures/component?component=edu.selab:"+name+"&metricKeys=sqale_rating,security_rating,security_review_rating,reliability_rating,code_smells,bugs,vulnerabilities";
           //System.out.println(urls);
-          String token = "281773e636d8065856593e8633545903a553de1c"+":";
+          String token = "{Sonar-token}"+":";
           String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
 
           URL url = new URL(urls);

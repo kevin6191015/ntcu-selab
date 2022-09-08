@@ -1,8 +1,7 @@
 package ntcu.selab.SpringServer.service;
 
-import ntcu.selab.SpringServer.config.GitlabConfig;
-import ntcu.selab.SpringServer.config.JenkinsConfig;
-import ntcu.selab.SpringServer.config.Linux;
+import ntcu.selab.SpringServer.config.*;
+import org.apache.commons.io.FileUtils;
 import org.gitlab.api.AuthMethod;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.TokenType;
@@ -12,19 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GitlabService {
     private static final Logger logger = LoggerFactory.getLogger(GitlabConfig.class);
     private static final GitlabService object = new GitlabService();
+
+    SonarConfig sonarConfig = SonarConfig.getObject();
     GitlabConfig gitlabConfig = GitlabConfig.getObject();
+    MysqlConfig mysqlConfig = MysqlConfig.getObject();
     private final GitlabAPI gitlab;
     private String hostUrl;
     private String apiToken;
@@ -305,7 +306,7 @@ public class GitlabService {
         HttpURLConnection conn = null;
         try {
             String urls = hostUrl + API_NAMESPACE + "/projects?name=" + proName
-                    + "&visibility=public&default_branch=main&initialize_with_readme=true";
+                    + "&visibility=public&default_branch=main&initialize_with_readme=true&auto_devops_enabled=false";
             URL url = new URL(urls);
             conn = (HttpURLConnection) url.openConnection();
             String input = gitlabConfig.getGitlabApiToken();
@@ -400,28 +401,141 @@ public class GitlabService {
         }
         return user;
     }
-    public boolean cloneProject(String username, String projectName, Path targetPath) throws Exception {
+    public boolean cloneProject(String username, String projectName, String targetPath) throws Exception {
 
-        if (Files.exists(targetPath)) { // is existed
-            logger.error("In cloneProject(), " + targetPath.toString() + " folder is exist.");
-            return false;
-        }
-
-        GitlabProject gitlabProject = getProject( username , projectName );
+        GitlabProject gitlabProject = getRootProject( projectName );
         if (gitlabProject == null) {
             logger.error("In cloneProject(), username: " + username + " projectName: "
                     + projectName + " is not exist.");
             return false;
         }
 
-        String repositoryUrl = gitlabConfig.getGitlabRootUrl() + "/" + username + "/" + projectName + ".git";
-        String cloneCommand = "git clone " + repositoryUrl + " " + targetPath.toString();
+        String repositoryUrl = gitlabConfig.getGitlabHostUrl() + "/" + "root" + "/" + projectName + ".git";
+        String cloneCommand = "git clone " + repositoryUrl + " " + targetPath;
+        System.out.println(cloneCommand);
         Linux linux = new Linux();
         linux.execLinuxCommand(cloneCommand);
+        System.out.println("clone successful");
 
         return true;
     }
 
+
+    public boolean copyProject(String projectName) throws Exception {
+        File fromv = new File(".\\src\\main\\resources\\maven\\MavenTemplate\\.validate");
+        File tov = new File(".\\src\\main\\resources\\maven\\"+projectName+"\\.validate");
+        File froms = new File(".\\src\\main\\resources\\maven\\MavenTemplate\\src");
+        File tos = new File(".\\src\\main\\resources\\maven\\"+projectName+"\\src");
+        File fromp = new File(".\\src\\main\\resources\\maven\\MavenTemplate\\pom.xml");
+        File top = new File(".\\src\\main\\resources\\maven\\"+projectName+"\\pom.xml");
+        try {
+            FileUtils.copyDirectory(fromv, tov);
+            FileUtils.copyDirectory(froms, tos);
+            FileUtils.copyFile(fromp, top);
+            System.out.println("Directory moved successfully.");
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+        StringBuilder sb = new StringBuilder();
+        String strConfig = null;
+        try{
+            InputStream fis = null;
+            while(fis==null) {
+                fis = new FileInputStream(
+                    ".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\sonarqube_report_analyzer.java");
+            }
+            try (InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                 BufferedReader buf = new BufferedReader(reader);) {
+                while ((strConfig = buf.readLine()) != null) {
+                    strConfig = strConfig.replaceAll("\\{Sonar-url\\}", sonarConfig.getSonarHostUrl());
+                    strConfig = strConfig.replaceAll("\\{Sonar-token\\}", sonarConfig.getSonarApiToken());
+                    strConfig = strConfig.replaceAll("\\{Mysql-url\\}", mysqlConfig.getDBUrl());
+                    sb.append(strConfig);
+                    sb.append("\n");
+                }
+                try {
+                    File path = new File(".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\sonarqube_report_analyzer.java");
+
+                    // Declaring the print writer with path
+                    PrintWriter pw = new PrintWriter(path);
+                    pw.write(sb.toString());
+                    pw.flush();
+                    pw.close();
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
+        StringBuilder sb2 = new StringBuilder();
+        String strConfig2 = null;
+        try {
+            InputStream fis=null;
+            while (fis==null) {
+                fis = fis = new FileInputStream(
+                        ".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\testfile_generator.java");
+            }
+            try (InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                 BufferedReader buf = new BufferedReader(reader);) {
+                while ((strConfig2 = buf.readLine()) != null) {
+                    strConfig2 = strConfig2.replaceAll("\\{Mysql-url\\}", mysqlConfig.getDBUrl());
+                    sb2.append(strConfig2);
+                    sb2.append("\n");
+                }
+                try {
+                    File path = new File(".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\testfile_generator.java");
+
+                    // Declaring the print writer with path
+                    PrintWriter pw = new PrintWriter(path);
+                    pw.write(sb2.toString());
+                    pw.flush();
+                    pw.close();
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
+        StringBuilder sb3 = new StringBuilder();
+        String strConfig3 = null;
+        try {
+            InputStream fis=null;
+            while (fis==null) {
+                fis = new FileInputStream(
+                        ".\\src\\main\\resources\\maven\\" + projectName + "\\pom.xml");
+            }
+            try (InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                 BufferedReader buf = new BufferedReader(reader);) {
+                while ((strConfig3 = buf.readLine()) != null) {
+                    strConfig3 = strConfig3.replaceAll("\\{Project_name\\}", projectName);
+                    sb3.append(strConfig3);
+                    sb3.append("\n");
+                }
+                try {
+                    File path = new File(".\\src\\main\\resources\\maven\\" + projectName + "\\pom.xml");
+
+                    // Declaring the print writer with path
+                    PrintWriter pw = new PrintWriter(path);
+                    pw.write(sb3.toString());
+                    pw.flush();
+                    pw.close();
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        System.out.println("copy successful");
+        return true;
+    }
     public GitlabProject getProject(String username, String proName) {
         GitlabProject gitlabProject = null;
         try {
@@ -432,16 +546,27 @@ public class GitlabService {
         return gitlabProject;
     }
 
-    public void pushProject(String cloneDirectoryPath) {
+    public void pushProject(String pushDirectoryPath,String proName) {
+        String url = getProjectUrl("root",proName);
         Linux linux = new Linux();
         String[] addCommand = {"git", "add", "."};
-        linux.execLinuxCommandInFile(addCommand, cloneDirectoryPath);
+        linux.execLinuxCommandInFile(addCommand, pushDirectoryPath);
 
         String[] commitCommand = {"git", "commit", "-m", "Instructor Commit"};
-        linux.execLinuxCommandInFile(commitCommand, cloneDirectoryPath);
+        linux.execLinuxCommandInFile(commitCommand, pushDirectoryPath);
 
-        String[] pushCommand = {"git", "push"};
-        linux.execLinuxCommandInFile(pushCommand, cloneDirectoryPath);
+        String[] pushCommand = {"git", "push" , url};
+        linux.execLinuxCommandInFile(pushCommand, pushDirectoryPath);
+
+        System.out.println("push successful");
+    }
+
+    public void DeleteProject(String projectName) throws IOException {
+        String url = getProjectUrl("root",projectName);
+        File deletePath = new File(".\\src\\main\\resources\\maven\\"+projectName);
+        FileUtils.deleteDirectory(deletePath);
+
+        System.out.println("delete successful");
     }
 
 }
