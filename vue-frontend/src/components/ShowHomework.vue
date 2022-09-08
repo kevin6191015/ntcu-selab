@@ -2,11 +2,46 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col style="width: 6%; float:right; background-color:brown; font-size: 20px; padding: 5px;">已發布</el-col>
+        <el-button class="button1" @click="change">已發布</el-button>
+        <el-button class="button1" @click="change">未發布</el-button>
+      </el-row>
+      <div style="margin:10px"></div>
+      <el-row>
+        <el-table
+          v-if="debuted"
+          :data="debuted_list"
+          stripe
+          highlight-current-row
+          @current-change="seleted_class"
+          style="width: 100%">
+          <el-table-column
+            prop="question_name"
+            label="題目名稱"
+            width="250">
+          </el-table-column>
+          <el-table-column
+            prop="answered"
+            label="作答人數/總人數"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="correct"
+            label="答對人數">
+          </el-table-column>
+          <el-table-column
+            prop="release_time"
+            label="出題日期">
+          </el-table-column>
+          <el-table-column
+            prop="deadline"
+            label="截止日期">
+          </el-table-column>
+        </el-table>
       </el-row>
       <el-row>
         <el-table
-          :data="tableData"
+          v-if="not_debuted"
+          :data="not_debuted_list"
           stripe
           highlight-current-row
           @current-change="seleted_class"
@@ -51,7 +86,11 @@ export default {
       tableData: [],
       answered: [],
       correct: [],
-      student: []
+      student: [],
+      debuted_list: [],
+      not_debuted_list: [],
+      debuted: true,
+      not_debuted: false
     }
   },
   created () {
@@ -77,8 +116,20 @@ export default {
           for (let i = 0; i < tmp.length; i++) {
             tmp[i].answered = this.answered[i].people_answered + '/' + this.student.length
             tmp[i].correct = this.correct[i].people_correct
+            tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
+            tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
+            let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 30 + parseInt(tmp[i].release_time.substring(8, 10))
+            var Today = new Date()
+            let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 30 + parseInt(Today.getDate())
+            console.log('now: ' + now)
+            console.log('time: ' + time)
+            if (now >= time) {
+              this.debuted_list.push(tmp[i])
+            } else {
+              this.not_debuted_list.push(tmp[i])
+            }
           }
-          this.tableData = tmp
+          console.log(this.debuted_list)
         })
       })
     })
@@ -88,6 +139,10 @@ export default {
       store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
         path: '/ShowCourseStudent'})
+    },
+    change () {
+      this.debuted = !this.debuted
+      this.not_debuted = !this.not_debuted
     }
   }
 }
@@ -106,29 +161,12 @@ export default {
   flex-wrap: wrap;
 }
 
-.el-col1 {
-  border-radius: 10px;
-  min-height: 36px;
-  margin-left: 13%;
+.button1 {
+  width: 6%;
+  float:right;
+  background-color:rgb(77, 42, 165);
+  font-size: 20px;
+  padding: 5px;
+  color: aliceblue;
 }
-
-.grid-content1 {
-  min-height: 36px;
-  font-size: 30px;
-  background-color: orange;
-  padding-left: 30%;
-}
-
-.grid-content2 {
-  min-height: 36px;
-  font-size: 30px;
-  margin-left: 28.4%;
-  width: 72.5%;
-}
-
-.grid-content3 {
-  font-size: 13px;
-  padding-left: 50%
-}
-
 </style>

@@ -48,7 +48,7 @@ export default {
       question_name: store.state.assignment.question_name,
       tableData: [],
       student: [],
-      project_name: store.state.assignment.question_id + '_' + store.state.class.substring(0, 5) + '_' + store.state.assignment.release_time
+      project_name: store.state.assignment.question_id + '_' + store.state.class.substring(0, 5) + '_' + store.state.assignment.release_time.substring(0, 4) + store.state.assignment.release_time.substring(5, 7) + store.state.assignment.release_time.substring(8, 10)
     }
   },
   created () {
