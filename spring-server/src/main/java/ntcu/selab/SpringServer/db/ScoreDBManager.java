@@ -81,4 +81,46 @@ public class ScoreDBManager {
 		}
         return scores;
     }
+
+    public List<Integer> getAnsweredBySemesterAndClassID(String semester, String class_id) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "score/getpeopleanswered/" + semester + "/" + class_id); 
+
+        List<Integer> answeredlist = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        System.out.println(jsonarray);
+        for (int i = 0; i < jsonarray.length(); i++) {
+    		jsonobject = jsonarray.getJSONArray(i).getJSONObject(0);
+            answeredlist.add(jsonobject.getInt("people_answered"));
+		}
+        return answeredlist;
+    }
+
+    public List<Integer> getCorrectBySemesterAndClassID(String semester, String class_id) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "score/getpeoplecorrect/" + semester + "/" + class_id); 
+
+        List<Integer> answeredlist = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        System.out.println(jsonarray);
+        for (int i = 0; i < jsonarray.length(); i++) {
+    		jsonobject = jsonarray.getJSONArray(i).getJSONObject(0);
+            answeredlist.add(jsonobject.getInt("people_correct"));
+		}
+        return answeredlist;
+    }
 }

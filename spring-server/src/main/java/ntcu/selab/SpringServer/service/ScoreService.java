@@ -39,11 +39,11 @@ public class ScoreService {
                 scorelist.add(object);
             }     
         }catch(Exception e){
-            return new Result(400, "Get Source Code Failed! " + e.getMessage(), "");
+            return new Result(400, "Get Score Failed! " + e.getMessage(), "");
         }   
         JSONObject root = new JSONObject();
         root.put("Students", scorelist);
-        return new Result(200, "Get Source Code Successfull!", root.toMap());
+        return new Result(200, "Get Score Successfull!", root.toMap());
     }
 
     @GetMapping("/getLatestScore")
@@ -60,10 +60,46 @@ public class ScoreService {
                 scorelist.add(object);
             }     
         }catch(Exception e){
-            return new Result(400, "Get Source Code Failed! " + e.getMessage(), "");
+            return new Result(400, "Get Latest Score Failed! " + e.getMessage(), "");
         }   
         JSONObject root = new JSONObject();
         root.put("Scores", scorelist);
-        return new Result(200, "Get Source Code Successfull!", root.toMap());
+        return new Result(200, "Get Latest Score Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getAnswered")
+    public Result getAnswered(@RequestParam String semester, @RequestParam String class_id) throws Exception{
+        List<JSONObject> answeredlist = new ArrayList<>();
+        List<Integer> answereds = scoreDBManager.getAnsweredBySemesterAndClassID(semester, class_id);
+        try{
+            for(Integer answered : answereds){
+                JSONObject object = new JSONObject();
+                object.put("people_answered", answered);
+                answeredlist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Answered numbers Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Answered", answeredlist);
+        return new Result(200, "Get Answered numbers Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getCorrect")
+    public Result getCorrect(@RequestParam String semester, @RequestParam String class_id) throws Exception{
+        List<JSONObject> answeredlist = new ArrayList<>();
+        List<Integer> answereds = scoreDBManager.getCorrectBySemesterAndClassID(semester, class_id);
+        try{
+            for(Integer answered : answereds){
+                JSONObject object = new JSONObject();
+                object.put("people_correct", answered);
+                answeredlist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Correct numbers Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Correct", answeredlist);
+        return new Result(200, "Get Correct numbers Successfull!", root.toMap());
     }
 }
