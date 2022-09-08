@@ -118,9 +118,9 @@ export default {
             tmp[i].correct = this.correct[i].people_correct
             tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
             tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-            let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 30 + parseInt(tmp[i].release_time.substring(8, 10))
+            let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
             var Today = new Date()
-            let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 30 + parseInt(Today.getDate())
+            let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
             console.log('now: ' + now)
             console.log('time: ' + time)
             if (now >= time) {
