@@ -11,7 +11,8 @@ export default new Vuex.Store({
     class: sessionStorage.getItem('class'),
     class_id: sessionStorage.getItem('class_id'),
     selectedQuestion: sessionStorage.getItem('selectedQuestion'),
-    Question_To_Show: sessionStorage.getItem('Question_To_Show')
+    Question_To_Show: sessionStorage.getItem('Question_To_Show'),
+    assignment: JSON.parse(sessionStorage.getItem('assignment'))
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -34,6 +35,10 @@ export default new Vuex.Store({
       state.class_id = Classid
       sessionStorage.setItem('class_id', Classid)
     },
+    SET_ASSIGNMENT: (state, assignment) => {
+      state.assignment = assignment
+      sessionStorage.setItem('assignment', JSON.stringify(assignment))
+    },
     REMOVE_INFO: (state) => {
       state.token = ''
       state.user = {
@@ -42,12 +47,15 @@ export default new Vuex.Store({
       state.selectedQuestion = ''
       state.class = ''
       state.class_id = ''
+      state.assignment = {
+      }
       sessionStorage.setItem('token', '')
       sessionStorage.setItem('user', JSON.stringify(''))
       sessionStorage.setItem('role', '')
       sessionStorage.setItem('class', '')
       sessionStorage.setItem('class_id', '')
       sessionStorage.setItem('selectedQuestion', '')
+      sessionStorage.setItem('assignment', JSON.stringify(''))
     },
     SET_SELECTEDQUESTION: (state, selectedQuestion) => {
       state.selectedQuestion = selectedQuestion

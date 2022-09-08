@@ -92,7 +92,6 @@ public class CourseDBManager {
         URL url = new URL(dbUrl + "class/semester");       
         List<String> semesters = new ArrayList<>();
 
-        Thread.sleep(500);
         conn = database.getConnection(url, "GET");
         response = new StringBuilder();  
         br = new BufferedReader(new InputStreamReader(conn.getInputStream()));

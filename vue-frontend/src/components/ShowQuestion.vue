@@ -41,7 +41,7 @@ export default {
   created () {
     let id = store.state.Question_To_Show
     if (id.charAt(0) === 'a') {
-      ShowSelectedQuestion1(id).then(res => {
+      ShowSelectedQuestion1(id.slice(0, 5)).then(res => {
         this.content = res.data.data
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
@@ -49,7 +49,7 @@ export default {
         })
       })
     } else {
-      ShowSelectedQuestion2(id).then(res => {
+      ShowSelectedQuestion2(id.slice(0, 5)).then(res => {
         this.content = res.data.data
       }).catch(error => {
         this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {

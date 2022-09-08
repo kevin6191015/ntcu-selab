@@ -21,7 +21,7 @@ public class MysqlDatabase {
     public synchronized HttpURLConnection getConnection(URL url, String httpmethod){
         HttpURLConnection conn = null;
         try{
-            Thread.sleep(200);
+            Thread.sleep(50);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(httpmethod);
             conn.setConnectTimeout(5000);

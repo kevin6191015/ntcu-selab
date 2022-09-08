@@ -11,6 +11,9 @@ import AddQuestion from '@/components/AddQuestion'
 import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
 import SystemAccount from '@/components/SystemAccount'
+import ShowSourcecode from '@/components/ShowSourcecode'
+import PublishAssignment from '@/components/PublishAssignment'
+import ShowCourseStudent from '@/components/ShowCourseStudent'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -88,6 +91,24 @@ export default new Router({
             requireAuth: true,
             Role: true
           }
+        },
+        {
+          path: '/PublishAssignment',
+          name: 'PublishAssignment',
+          component: PublishAssignment,
+          meta: {
+            requireAuth: true,
+            Role: true
+          }
+        },
+        {
+          path: '/ShowCourseStudent',
+          name: 'ShowCourseStudent',
+          component: ShowCourseStudent,
+          meta: {
+            requireAuth: true,
+            Role: true
+          }
         }
       ]
     },
@@ -108,6 +129,14 @@ export default new Router({
       path: '/ShowQuestion',
       name: 'ShowQuestion',
       component: ShowQuestion,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/ShowSourcecode',
+      name: 'ShowSourcecode',
+      component: ShowSourcecode,
       meta: {
         requireAuth: true
       }
