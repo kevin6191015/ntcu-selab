@@ -26,7 +26,7 @@ public class MysqlConfig {
         return object;
     }
 
-    public static String getDBUrl() throws Exception {
+    public String getDBUrl() throws Exception {
         String dbuser = System.getenv("DB_URL");
         if (dbuser != null && !dbuser.equals("")) {
             return dbuser;

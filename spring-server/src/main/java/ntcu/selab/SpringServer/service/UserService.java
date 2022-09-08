@@ -9,7 +9,7 @@ import ntcu.selab.SpringServer.db.CourseDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
-import org.gitlab.api.models.GitlabUser;
+// import org.gitlab.api.models.GitlabUser;
 
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.IOUtils;
