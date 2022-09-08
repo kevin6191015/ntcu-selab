@@ -13,6 +13,7 @@ import ShowQuestion from '@/components/ShowQuestion'
 import SystemAccount from '@/components/SystemAccount'
 import ShowSourcecode from '@/components/ShowSourcecode'
 import PublishAssignment from '@/components/PublishAssignment'
+import ShowCourseStudent from '@/components/ShowCourseStudent'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
@@ -95,6 +96,15 @@ export default new Router({
           path: '/PublishAssignment',
           name: 'PublishAssignment',
           component: PublishAssignment,
+          meta: {
+            requireAuth: true,
+            Role: true
+          }
+        },
+        {
+          path: '/ShowCourseStudent',
+          name: 'ShowCourseStudent',
+          component: ShowCourseStudent,
           meta: {
             requireAuth: true,
             Role: true

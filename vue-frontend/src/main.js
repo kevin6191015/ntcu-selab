@@ -16,7 +16,7 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 var axios = require('axios')
 Vue.prototype.$ajax = axios
-/*
+
 router.beforeEach((to, from, next) => {
   // 路由需要認證
   if (to.meta.requireAuth) {
@@ -33,7 +33,21 @@ router.beforeEach((to, from, next) => {
       var now = Math.floor(new Date().getTime() / 1000)
       // 判斷token是否已過期
       if (now < Expiretime) {
-        next()
+        if (to.meta.Role) {
+          if (store.state.role === 'student') {
+            alert('權限不足!')
+            next({
+              path: '/login',
+              query: {
+                redirect: to.fullPath
+              }
+            })
+          } else {
+            next()
+          }
+        } else {
+          next()
+        }
       } else {
         alert('憑證已過期，請重新登入')
         next({
@@ -54,24 +68,9 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-  if (to.meta.Role) {
-    if (store.state.role === 'student') {
-      alert('權限不足!')
-      next({
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        }
-      })
-    } else {
-      next()
-    }
-  } else {
-    next()
-  }
 }
 )
-*/
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
