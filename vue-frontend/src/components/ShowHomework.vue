@@ -2,8 +2,8 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-button class="button1" @click="change">已發布</el-button>
-        <el-button class="button1" @click="change">未發布</el-button>
+        <el-button class="button1" @click="change1">已發布</el-button>
+        <el-button class="button1" @click="change2">未發布</el-button>
       </el-row>
       <div style="margin:10px"></div>
       <el-row>
@@ -121,15 +121,12 @@ export default {
             let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
             var Today = new Date()
             let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
-            console.log('now: ' + now)
-            console.log('time: ' + time)
             if (now >= time) {
               this.debuted_list.push(tmp[i])
             } else {
               this.not_debuted_list.push(tmp[i])
             }
           }
-          console.log(this.debuted_list)
         })
       })
     })
@@ -140,9 +137,17 @@ export default {
       this.$router.replace({
         path: '/ShowCourseStudent'})
     },
-    change () {
-      this.debuted = !this.debuted
-      this.not_debuted = !this.not_debuted
+    change1 () {
+      if (!this.debuted) {
+        this.debuted = true
+        this.not_debuted = false
+      }
+    },
+    change2 () {
+      if (!this.not_debuted) {
+        this.not_debuted = true
+        this.debuted = false
+      }
     }
   }
 }
