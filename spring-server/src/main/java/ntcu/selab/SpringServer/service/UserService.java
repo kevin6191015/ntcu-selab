@@ -12,18 +12,16 @@ import ntcu.selab.SpringServer.db.UserDBManager;
 // import org.gitlab.api.models.GitlabUser;
 
 import net.minidev.json.JSONObject;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.csvreader.CsvReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PushbackInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,11 +82,21 @@ public class UserService {
 
     @PostMapping("/upload")
     public ResponseEntity<Object> createAccounts(@RequestParam("file") MultipartFile uploadedInputStream) throws Exception{
+        PushbackInputStream test = new PushbackInputStream(uploadedInputStream.getInputStream());
+        int ch = test.read();
+        if(ch != 0xEF){
+            test.unread(ch);
+        }else if((ch=test.read()) != 0xBB){
+            test.unread(ch);
+            test.unread(0xef);
+        }else if ((ch=test.read()) != 0xBF){
+            throw new IOException("Wrong UTF-8 format");
+        }
         HttpHeaders header = new HttpHeaders();
         List<User> users = new ArrayList<>();
         String error = "";
         try {
-            CsvReader csvReader = new CsvReader(new InputStreamReader(uploadedInputStream.getInputStream(), "BIG5"));
+            CsvReader csvReader = new CsvReader(new InputStreamReader(test, "UTF-8"));
             csvReader.readHeaders();
             while (csvReader.readRecord()) {
                 User user = new User();
@@ -105,6 +113,7 @@ public class UserService {
                 user.setName(name);
                 user.setEmail(email);
                 user.setRole(role);
+
                 error = getErrorMessage(users, user);
                 if (error.isEmpty()) {
                     users.add(user);
@@ -141,17 +150,6 @@ public class UserService {
         } else {
             return new Result(400, "Update Password Failed!", "");
         }
-    }
-
-    @GetMapping(value = "getUserCsvFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<Object> getUserCsvFile() throws Exception {
-        HttpHeaders header = new HttpHeaders();
-        header.add("Content-Disposition", "attachment;filename=" + "StudentTemplate.csv");
-        InputStream targetStream = this.getClass().getResourceAsStream("/StudentTemplate.csv");
-
-        byte[] file = IOUtils.toByteArray(targetStream);
-        return new ResponseEntity<Object>(file, header, HttpStatus.OK);
-
     }
 
     @PostMapping("updateUser")
@@ -237,7 +235,9 @@ public class UserService {
     }
 
     private String getErrorMessage(List<User> users, User user) throws Exception{
+        
         String errorMessage = getErrorMessage(user);
+
         if (errorMessage.isEmpty()) {
             if (isDuplicateUsername(users, user.getUserName())) {
                 errorMessage = "username : " + user.getUserName() + " is duplicated in student list.";

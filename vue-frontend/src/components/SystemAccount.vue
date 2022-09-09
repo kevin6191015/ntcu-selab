@@ -1,9 +1,8 @@
 <template>
     <el-container>
         <el-main class="container outer">
-            <div>
-                <el-row>
-                   <el-col :span="12">
+                <el-row >
+                   <el-col style="display: flex;justify-content: center; align-items: center;">
                          <el-select v-model="account_type" placeholder="請選擇帳號類型" class="box">
                             <el-option
                             v-for="item in auth"
@@ -14,74 +13,68 @@
                     </el-select>
                    </el-col>
                 </el-row>
-                <div style="margin: 20px 0;"></div>
                 <el-row>
-                    <el-col :span="12">
-                        <el-input v-model = "batch"
-                            type="textarea"
-                            :autosize="{ minRows: 26, maxRows: 40}"
-                            placeholder="批次創建帳號">
-                        </el-input>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-row>
-                            <el-col :span="21">
-                                <el-input
-                                v-model="id"
-                                placeholder="學號"
-                                style="margin: 20px;"></el-input>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="21">
-                                <el-input
-                                v-model="name"
-                                placeholder="名字"
-                                style="margin: 20px;"></el-input>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="21">
-                                <el-input
-                                v-model="userName"
-                                placeholder="帳號"
-                                style="margin: 20px;"></el-input>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="21">
-                                <el-input
-                                v-model="password"
-                                placeholder="密碼"
-                                style="margin: 20px;"></el-input>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="21">
-                                <el-input
-                                v-model="email"
-                                placeholder="e-mail"
-                                style="margin: 20px;"></el-input>
-                            </el-col>
-                        </el-row>
-                    </el-col>
-                    <div style="margin: 20px;"></div>
-                    <el-col :span="12">
-                        <el-button type="warning" style="margin: 20px; font-size: 20px" @click="add()">新增</el-button>
-                        <el-button type="warning" style="margin: 20px; font-size: 20px ;float:right">匯入</el-button>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-button type="warning" style="margin: 20px; font-size: 20px" @click="update()">修改</el-button>
-                        <el-button type="warning" style="margin: 20px; font-size: 20px ;float:right" @click="deleted()">刪除</el-button>
-                    </el-col>
+                  <el-col style="display: flex;justify-content: center; align-items: center;">
+                    <el-input
+                    v-model="id"
+                    placeholder="學號"
+                    style="margin: 20px;width:50%"></el-input>
+                  </el-col>
                 </el-row>
-            </div>
+                <el-row>
+                  <el-col style="display: flex;justify-content: center; align-items: center;">
+                    <el-input
+                    v-model="name"
+                    placeholder="名字"
+                    style="margin: 20px;width:50%"></el-input>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col style="display: flex;justify-content: center; align-items: center;">
+                    <el-input
+                    v-model="userName"
+                    placeholder="帳號"
+                    style="margin: 20px;width:50%"></el-input>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col style="display: flex;justify-content: center; align-items: center;">
+                    <el-input
+                    v-model="password"
+                    placeholder="密碼"
+                    style="margin: 20px;width:50%"></el-input>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col style="display: flex;justify-content: center; align-items: center;">
+                    <el-input
+                    v-model="email"
+                    placeholder="e-mail"
+                    style="margin: 20px;width:50%"></el-input>
+                  </el-col>
+                </el-row>
+            <div style="margin: 20px;"></div>
+            <el-col style="display: flex;justify-content: center; align-items: center;">
+                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="add()">新增</el-button>
+                <el-upload
+                :action="uploadActionUrl()"
+                :before-upload="onBeforeUpload"
+                :headers="uploadData"
+                :onError="uploadError"
+                :onSuccess="uploadSuccess"
+                show-file-list=false>
+                  <el-button type="warning" style="margin: 20px; font-size: 20px;">匯入</el-button>
+                </el-upload>
+                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="update()">修改</el-button>
+                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="deleted()">刪除</el-button>
+            </el-col>
         </el-main>
     </el-container>
 </template>
 
 <script>
 import { addUser, deleteUser, updateUser } from '@/api/user'
+import store from '../store'
 export default {
   name: 'SystemAccount',
   data () {
@@ -103,7 +96,11 @@ export default {
       role: '',
       email: '',
       name: '',
-      id: ''
+      id: '',
+      fileList: [],
+      uploadData: {
+        'Authorization': 'Bearer ' + store.state.token
+      }
     }
   },
   methods: {
@@ -172,6 +169,20 @@ export default {
           type: 'warning'
         })
       })
+    },
+    onBeforeUpload (file) {
+      if (file.type !== 'text/csv') {
+        this.$message.error('格式錯誤')
+      }
+    },
+    uploadActionUrl (file) {
+      return '/data/user/upload?file=' + file
+    },
+    uploadError () {
+      this.$message.error('上船失敗')
+    },
+    uploadSuccess () {
+      this.$message.success('上船成功')
     }
   }
 }
@@ -179,7 +190,7 @@ export default {
 
 <style>
 .container {
-  width: 800px;
+  width: 1250px;
   margin: 0 auto;
 }
 
@@ -190,11 +201,12 @@ export default {
 
 .outer {
   background-color: rgba(111, 122, 144, 0.555);
-  height: 700px;
+  height: 650px;
   padding: 15px;
 }
 
 .box {
-  width: 100%;
+  width: 50%;
+  margin: 35px;
 }
 </style>

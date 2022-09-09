@@ -2,7 +2,7 @@
   <el-container>
     <el-main class="container1 outer1">
       <el-row >
-        <div style="margin: 5%;"></div>
+        <div style="margin: 3%;"></div>
         <el-col :span="8" class="el-col1"><div class="grid-content1">未加入帳號</div></el-col>
         <el-col :span="8" class="el-col1"><div class="grid-content1">已加入帳號</div></el-col>
       </el-row>
@@ -198,7 +198,7 @@ export default {
 
 .outer1 {
   background-color: rgba(111, 122, 144, 0.555);
-  height: 700px;
+  height: 650px;
 }
 
 </style>
