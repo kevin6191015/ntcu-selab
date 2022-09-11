@@ -54,7 +54,7 @@ export default {
       navList: [
         {name: '/ShowHomework', title: '首頁', icon: 'el-icon-s-home'},
         {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-document'},
-        {name: '/SelectQuestion', title: '選擇題目', icon: 'el-icon-document'},
+        {name: '/PublishAssignment', title: '發布題目', icon: 'el-icon-document'},
         {name: '/SystemAccount', title: '系統帳號管理', icon: 'el-icon-s-custom'},
         {name: '/CourseAccount', title: '課程帳號管理', icon: 'el-icon-s-custom'}
       ]

@@ -20,23 +20,26 @@
       </div>
       <div>
         <div id="footer-left">
-          <el-button type="success" @click='publish'>自行出題</el-button>
+          <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
         <div id="footer-left">
-          <el-button type="success" @click='publish'>題庫選題</el-button>
+          <el-button type="success" @click='selectquestion'>題庫選題</el-button>
+        </div>
+        <div id="footer-right">
+          <el-button type="primary" @click='refresh'>重整頁面</el-button>
         </div>
       </div>
       <div id="footer-single">
         <span class="demonstration">發布時間:</span>
         <el-date-picker
-          v-model="value1"
+          v-model="publish_time"
           type="date"
           placeholder="發布時間"
           format="yyyy 年 MM 月 dd 日">
         </el-date-picker>
         <span class="demonstration">截止時間:</span>
         <el-date-picker
-          v-model="value2"
+          v-model="deadline"
           type="date"
           placeholder="截止時間"
           format="yyyy 年 MM 月 dd 日">
@@ -45,34 +48,36 @@
       <div id="footer">
         <el-button type="info" @click='publish'>發布</el-button>
       </div>
-      {{value1}}
+      {{publish_time}}
+      {{deadline}}
     </div>
   </div>
 </template>
 <script>
 import store from '../store'
 import {ShowQuestion1, ShowQuestion2} from '../api/question'
-import { id } from 'html-webpack-plugin/lib/chunksorter'
+import {addAssignment} from '../api/assignment'
 export default {
+  name: 'PublishAssginment',
+  inject: ['reload'],
   data () {
     return {
       temp: [],
       questions: [],
-      value1: '',
-      value2: '',
-      id,
+      question_id: [],
+      publish_time: '',
+      deadline: '',
+      id: '',
       run: true
     }
   },
   created () {
-    this.run = true
     this.id = store.state.selectedQuestion
     ShowQuestion1().then(res => {
-      this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
       for (let i = 0; i < (this.id.length + 1); i += 6) {
-        for (let j = 0; j <= res.data.data.Questions.length; j++) {
+        for (let j = 0; j < res.data.data.Questions.length; j++) {
           if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].question_id) {
-            var temp = {question_name: res.data.data.Questions[j].question_name}
+            var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].question_id}
             this.questions.push(temp)
             break
           }
@@ -80,11 +85,10 @@ export default {
       }
     })
     ShowQuestion2().then(res => {
-      this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
       for (let i = 0; i < (this.id.length + 1); i += 6) {
-        for (let j = 0; j <= res.data.data.Questions.length; j++) {
-          if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].question_id) {
-            var temp = {question_name: res.data.data.Questions[j].question_name}
+        for (let j = 0; j < res.data.data.Questions.length; j++) {
+          if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
+            var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
             this.questions.push(temp)
             break
           }
@@ -93,43 +97,35 @@ export default {
     })
   },
   methods: {
-    getfrombank1 () {
-      ShowQuestion1().then(res => {
-        this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
-      }).catch(error => {
-        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-          confirmButtonText: '確定'
-        })
-      })
-    },
-    getfrombank2 () {
-      ShowQuestion2().then(res => {
-        this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
-      }).catch(error => {
-        this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-          confirmButtonText: '確定'
-        })
-      })
-    },
-    selectd1 (i) {
-      for (let j = 0; j <= this.content1.length; j++) {
-        if (this.id.slice((i), (i + 5)) === this.content1[j].question_id) {
-          alert(this.id.slice((i), (i + 5)))
-          var temp = {question_name: this.content1[j].question_name}
-          this.questions.push(temp)
-        }
-      }
-    },
-    selectd2 (i) {
-      for (let j = 0; j <= this.content2.length; j++) {
-        if (this.id.slice((i), (i + 5)) === this.content2[j].question_id) {
-          var temp = {question_name: this.content2[j].question_name}
-          this.questions.push(temp)
-        }
-      }
-    },
     publish () {
-      window.close()
+      let temp1 = Date.parse(this.publish_time)
+      let date1 = new Date(temp1 + 28800000)
+      let publishtime = date1.toISOString().slice(0, 4) + date1.toISOString().slice(5, 7) + date1.toISOString().slice(8, 10)
+      let temp2 = Date.parse(this.deadline)
+      let date2 = new Date(temp2 + 28800000)
+      let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
+      let cid = store.state.class_id
+      for (let x in this.questions) {
+        addAssignment({
+          qid: this.questions[x].id,
+          cid: cid,
+          release_time: publishtime,
+          deadline: deadline
+        })
+      }
+    },
+    selectquestion () {
+      this.$router.replace({
+        path: '/Selectquestion'
+      })
+    },
+    addquestion () {
+      this.$router.replace({
+        path: '/AddQuestion'
+      })
+    },
+    refresh () {
+      location.reload()
     }
   }
 }
@@ -140,7 +136,6 @@ export default {
     margin:0 auto;
     font-size:20px;
     /* background-color: rgba(111, 122, 144, 0.555); */
-
   }
   #header{
     height:65px;
@@ -196,6 +191,17 @@ export default {
     border: 3px solid rgba(0, 0, 0, 0.397);
     border-radius: 12px;
     float: left
+  }
+  #footer-right{
+    margin-top: 10px;
+    margin-right: 5%;
+    width:fit-content;
+    padding: 1px;
+    text-align:left;
+    background-color: rgba(43, 83, 194, 0.514);
+    border: 3px solid rgba(0, 0, 0, 0.397);
+    border-radius: 12px;
+    float: right
   }
   #footer-single{
     margin-top: 20px;
