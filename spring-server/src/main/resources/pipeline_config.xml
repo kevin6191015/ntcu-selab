@@ -49,9 +49,13 @@
             String test_result=&quot;&quot;;
             }
             stage(&apos;Clone the Git&apos;) {
+            if (env.BUILD_NUMBER .equals(&quot;1&quot;)) {
+            currentBuild.result = 'UNSTABLE'
+            error('Stopping early…')
+            }
             //clone git project
             String url = &quot;{GitLab-url}/root/&quot;+ env.JOB_BASE_NAME +&quot;.git&quot;
-            git branch: &apos;main&apos;, credentialsId: &apos;	2559ce4a-61fa-4a9b-af93-23a90be8dd9b&apos;, url: url
+            git branch: &apos;main&apos;, credentialsId: &apos;	gitlab-cridential&apos;, url: url
             }
             stage(&apos;Prepare testfile&apos;){
 
@@ -161,6 +165,7 @@
             }
             stage(&apos;Post Process&apos;){
             String NAME =  env.JOB_BASE_NAME
+            cleanWs()
             dir(&apos;../&apos;){
             sh &quot;rmdir ${NAME}@tmp&quot;
             }
