@@ -47,28 +47,14 @@
             String input_or_not = &quot;[0]&quot;;
             String compile_result = &quot;&quot;;
             String test_result=&quot;&quot;;
-            String token = &quot;&quot;;
             }
             stage(&apos;Clone the Git&apos;) {
             //clone git project
             String url = &quot;{GitLab-url}/root/&quot;+ env.JOB_BASE_NAME +&quot;.git&quot;
-            git branch: &apos;main&apos;, credentialsId: &apos;gitlab-cridential&apos;, url: url
+            git branch: &apos;main&apos;, credentialsId: &apos;	2559ce4a-61fa-4a9b-af93-23a90be8dd9b&apos;, url: url
             }
             stage(&apos;Prepare testfile&apos;){
 
-            //get token to call api
-            String response1 =sh (script: &apos;&apos;&apos;curl --location --request POST \&apos;{Spring-url}/login\&apos; \\
-            --header \&apos;Content-Type: application/json\&apos; \\
-            --data-raw \&apos;{
-            &quot;username&quot; : {SPRING_ROOT_USERNAME},
-            &quot;password&quot; : {SPRING_ROOT_PASSWORD}
-            }\&apos;&apos;&apos;&apos;, returnStdout: true).trim()
-
-            echo &quot;response1 : ${response1}&quot;
-
-            def json1 = new groovy.json.JsonSlurperClassic().parseText(response1)
-            env.token = json1.data.token;
-            echo &quot;token : ${env.token}&quot;
 
             //get project name
             String NAME = env.JOB_BASE_NAME.substring(0, env.JOB_BASE_NAME.indexOf(&apos;_&apos;))
@@ -165,9 +151,12 @@
             echo test_result
             String NAME =  env.JOB_BASE_NAME
             String submit_times = env.BUILD_NUMBER
+            if(!submit_times .equals(&quot;1&quot;) ){
+            submit_times = String.valueOf ( Integer.parseInt(submit_times) - 1 );
             dir(&apos;./.validate/&apos;){
             sh &quot;javac -cp json-20220320.jar sonarqube_report_analyzer.java&quot;
             sh &quot;java -cp &apos;.:json-20220320.jar&apos; sonarqube_report_analyzer ${NAME} ${submit_times} ${env.test_result} ${env.compile_result}&quot;
+            }
             }
             }
             stage(&apos;Post Process&apos;){

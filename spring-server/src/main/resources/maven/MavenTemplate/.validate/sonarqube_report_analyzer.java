@@ -19,6 +19,8 @@ public class sonarqube_report_analyzer
      private String[] sonar_property=new String[14];
      private String[] sonar_value=new String[14];
      private String postparm="";
+
+     private String scoreparm="";
      
      
      public static void main(String[] args)throws Exception{
@@ -28,6 +30,7 @@ public class sonarqube_report_analyzer
           sq.GetSonarData(args[0]);
           sq.GetJenkinsData(args[0],args[1],args[2],args[3]);
           sq.GetPostparm();
+
           sq.WriteData();
      }
      public void  GetJenkinsData(String name,String submit_time,String unit_test_result,String compile_result){
@@ -54,6 +57,10 @@ public class sonarqube_report_analyzer
                }
           }
      }
+
+     public  void  GetScoreparm(){
+
+     }
      public  void  WriteData() throws Exception{
           String urls = "{Mysql-url}sqreport/add";
           System.out.println("\n"+postparm);
@@ -76,6 +83,11 @@ public class sonarqube_report_analyzer
           BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
           String result = reader.readLine();
 
+     }
+
+     public  void  WriteScore() throws Exception {
+          String urls = "{Mysql-url}score/add";
+          System.out.println("\n"+scoreparm);
      }
      public  void  GetStudentID(String name)throws Exception{
           sonar_property[8]="project_name";//sonar_value[9] in GetSonarData

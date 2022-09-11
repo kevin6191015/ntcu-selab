@@ -40,6 +40,11 @@ public class testfile_generator
         } catch (IOException e) {
             e.printStackTrace();
         }
+		for(int i=1; i<11;i++){
+			testinput[i]=testinput[i].replaceAll("\\\n"," ");
+			testoutput[i]=testoutput[i].replaceAll("\\\n"," ");
+		}
+
 		for(int i=1 ;i<11; i++){
 			input += "@Test\npublic  void  testMain"+i+"() {\nString ss =  \""+testoutput[i]+"\";\nassertEquals(ss,App.main("+"\""+testinput[i]+"\""+"));\n}\n";
 		}
