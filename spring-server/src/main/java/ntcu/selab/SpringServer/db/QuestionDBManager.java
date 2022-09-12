@@ -235,9 +235,6 @@ public class QuestionDBManager {
         question.setId(jsonobject.getString("id"));
         question.setName(jsonobject.getString("question_name"));
         question.setDescription(jsonobject.getString("question_description"));
-        question.setId(jsonobject.getString("id"));
-        question.setName(jsonobject.getString("question_name"));
-        question.setDescription(jsonobject.getString(("question_description")));
         question.setImage1(jsonobject.getString("image1"));
         question.setImage2(jsonobject.getString("image2"));
         String[] input = new String[11];

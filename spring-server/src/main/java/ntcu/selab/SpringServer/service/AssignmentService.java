@@ -66,10 +66,13 @@ public class AssignmentService {
             /*
              * 將題目加進class_question裡
              */
-            Question question = qDbManager.getQuestionFromBank1ById(qid);
-            if(question == null){
+            Question question = null;
+            if (qid.charAt(0) == 'a') {
+                question = qDbManager.getQuestionFromBank1ById(qid);
+            } else {
                 question = qDbManager.getQuestionFromBank2ById(qid);
             }
+
             Assignment assignment = new Assignment(qid, question.getName(), release_time, deadline);
             aDbManager.addAssignment(cid, assignment);
             /*

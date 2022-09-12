@@ -48,8 +48,6 @@
       <div id="footer">
         <el-button type="info" @click='publish'>發布</el-button>
       </div>
-      {{publish_time}}
-      {{deadline}}
     </div>
   </div>
 </template>
