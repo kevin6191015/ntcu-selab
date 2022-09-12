@@ -9,7 +9,7 @@ import ntcu.selab.SpringServer.db.CourseDBManager;
 import ntcu.selab.SpringServer.db.QuestionDBManager;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
-// import org.gitlab.api.models.GitlabUser;
+import org.gitlab.api.models.GitlabUser;
 
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -158,10 +158,10 @@ public class UserService {
 
             User user = dbManager.getUserInfo(newUser.getId());
             //將user的資料同步到gitlab
-            //gitlabService.updateEmail(user.getEmail(), user.getName());
-            // gitlabService.updateName(newUser.getName(), user.getName());
-            // gitlabService.updatePassword(newUser.getPassword(), user.getName());
-            // gitlabService.updateUserName(newUser.getUserName(), user.getUserName());
+            gitlabService.updateEmail(user.getEmail(), user.getName());
+            gitlabService.updateName(newUser.getName(), user.getName());
+            gitlabService.updatePassword(newUser.getPassword(), user.getName());
+            gitlabService.updateUserName(newUser.getUserName(), user.getUserName());
 
             //將user的資料同步到student(如果是學生)
             if(user.getRole().equals("student") && !user.getClasses().equals("")){
@@ -309,12 +309,12 @@ public class UserService {
     }
 
     private void register(User user) throws Exception {
-        // if(user.getRole().equals("student")){
-        //     GitlabUser gitlabUser = gitlabService.createUser(
-        //         user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
-        //     user.setGitlabToken(gitlabUser.getPrivateToken());
-        //     user.setGitlabId(String.valueOf(gitlabUser.getId()));
-        // }
+        if(user.getRole().equals("student")){
+            GitlabUser gitlabUser = gitlabService.createUser(
+                user.getEmail(), user.getPassword(), user.getUserName(), user.getName());
+            user.setGitlabToken(gitlabUser.getPrivateToken());
+            user.setGitlabId(String.valueOf(gitlabUser.getId()));
+        }
         dbManager.addUser(user);     
     }
 
