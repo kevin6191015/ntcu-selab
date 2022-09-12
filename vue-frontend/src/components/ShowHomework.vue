@@ -36,6 +36,14 @@
             prop="deadline"
             label="截止日期">
           </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="題目預覽"
+          >
+            <template slot-scope="scope">
+              <el-button @click="Seequestion(scope.row)" type="text" size="small">查看</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-row>
       <el-row>
@@ -67,6 +75,14 @@
           <el-table-column
             prop="deadline"
             label="截止日期">
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="題目預覽"
+          >
+            <template slot-scope="scope">
+              <el-button @click="Seequestion(scope.row)" type="text" size="small">查看</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-row>
@@ -133,6 +149,8 @@ export default {
   },
   methods: {
     seleted_class (seleted) {
+      seleted.release_time = seleted.release_time.substring(0, 4) + seleted.release_time.substring(5, 7) + seleted.release_time.substring(8, 10)
+      seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
       store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
         path: '/ShowCourseStudent'})
@@ -148,6 +166,14 @@ export default {
         this.not_debuted = true
         this.debuted = false
       }
+    },
+    Seequestion (row) {
+      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowQuestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      store.commit('REMOVE_QUESTION_TO_SHOW')
     }
   }
 }
@@ -173,5 +199,6 @@ export default {
   font-size: 20px;
   padding: 5px;
   color: aliceblue;
+  margin: 5px;
 }
 </style>

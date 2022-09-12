@@ -30,3 +30,33 @@ export function getCorrect (data) {
     }
   })
 }
+
+export function getPersonalScore (data) {
+  return request({
+    url: '/score/getPersonalScore?project_name=' + data.project_name,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function getPersonalReport (data) {
+  return request({
+    url: '/score/getPersonalReport?project_name=' + data.project_name,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function getGitUrl (data) {
+  return request({
+    url: '/score/getGitUrl?username=' + data.username + '&project_name=' + data.project_name,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

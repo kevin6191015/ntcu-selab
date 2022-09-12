@@ -14,7 +14,7 @@
           @current-change="seleted"
           style="width: 100%">
           <el-table-column
-            prop="student_id"
+            prop="student_name"
             label="學生姓名"
             width="180">
           </el-table-column>
@@ -48,7 +48,7 @@ export default {
       question_name: store.state.assignment.question_name,
       tableData: [],
       student: [],
-      project_name: store.state.assignment.question_id + '_' + store.state.class.substring(0, 5) + '_' + store.state.assignment.release_time.substring(0, 4) + store.state.assignment.release_time.substring(5, 7) + store.state.assignment.release_time.substring(8, 10)
+      project_name: store.state.assignment.question_id + '_' + store.state.class.substring(0, 5) + '_' + store.state.assignment.release_time
     }
   },
   created () {
@@ -64,7 +64,7 @@ export default {
       for (let i = 0; i < tmp.length; i++) {
         for (let j = 0; j < this.student.length; j++) {
           if (tmp[i].student_id === this.student[j].student_id) {
-            tmp[i].student_id = this.student[j].student_name
+            tmp[i].student_name = this.student[j].student_name
             break
           }
         }
@@ -74,7 +74,14 @@ export default {
   },
   methods: {
     seleted (val) {
-      console.log(val)
+      let student = {
+        student_id: val.student_id,
+        student_name: val.student_name
+      }
+      store.commit('SET_SELETED_STUDENT', student)
+      store.commit('SET_PROJECT_NAME', this.project_name)
+      this.$router.replace({
+        path: '/ShowStudentStatus'})
     }
   }
 }

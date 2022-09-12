@@ -160,7 +160,7 @@ export default {
         this.$message({
           showClose: true,
           message: res.data.message,
-          type: 'succes'
+          type: 'success'
         })
       }).catch(error => {
         this.$message({
