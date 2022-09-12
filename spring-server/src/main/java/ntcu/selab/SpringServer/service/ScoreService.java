@@ -102,4 +102,54 @@ public class ScoreService {
         root.put("Correct", answeredlist);
         return new Result(200, "Get Correct numbers Successfull!", root.toMap());
     }
+
+    @GetMapping("/getPersonalScore")
+    public Result getPersonalScore(@RequestParam String project_name) throws Exception{
+        List<JSONObject> scorelist = new ArrayList<>();
+        List<Score> scores = scoreDBManager.getPersonalScore(project_name);
+        try{
+            for(Score score : scores){
+                JSONObject object = new JSONObject();
+                object.put("code_quality", score.getCodeQuality());
+                object.put("analysis_date", score.getAnalysisDate());
+                object.put("unit_test_score", score.getUnitTestScore());
+                scorelist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Personal Score Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Personal Score", scorelist);
+        return new Result(200, "Get Personal Score Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getPersonalReport")
+    public Result getPersonalReport(@RequestParam String project_name) throws Exception{
+        List<JSONObject> scorelist = new ArrayList<>();
+        List<Score> scores = scoreDBManager.getPersonalReport(project_name);
+        try{
+            for(Score score : scores){
+                JSONObject object = new JSONObject();
+                object.put("compile_result", score.getCompileResult());
+                object.put("source_code", score.getSourceCode());
+                scorelist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Personal Report Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Personal Report", scorelist);
+        return new Result(200, "Get Personal Report Successfull!", root.toMap());
+    }
+
+    @GetMapping("/getGitUrl")
+    public Result getGitUrl(@RequestParam String username, @RequestParam String project_name) throws Exception{  
+        String url = null;
+        try{
+            url = GitlabService.getObject().getProjectUrl(username, project_name);
+        }catch(Exception e){
+            return new Result(400, "Get Git Url Failed! " + e.getMessage(), "");
+        }   
+        return new Result(200, "Get Git Url Successfull!", url);
+    }
 }

@@ -123,4 +123,51 @@ public class ScoreDBManager {
 		}
         return answeredlist;
     }
+
+    public List<Score> getPersonalScore(String project_name) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "score/getpersonscore/" + project_name); 
+
+        List<Score> scores = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Score score = new Score();
+            jsonobject = jsonarray.getJSONObject(i);
+            score.setCodeQuality(jsonobject.getInt("code_quality"));
+            score.setAnalysisDate(jsonobject.getString("analysis_date"));
+            score.setUnitTestScore(jsonobject.getInt("unit_test_score"));
+            scores.add(score);
+		}
+        return scores;
+    }
+
+    public List<Score> getPersonalReport(String project_name) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "sqreport/getpersonalreport/" + project_name); 
+
+        List<Score> scores = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Score score = new Score();
+    		jsonobject = jsonarray.getJSONObject(i);
+            score.setCompileResult(jsonobject.getString("compile_result"));
+            score.setSourceCode(jsonobject.getString("source_code"));
+            scores.add(score);
+		}
+        return scores;
+    }
 }

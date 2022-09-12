@@ -7,6 +7,8 @@ public class Score {
     private String analysis_date = null;
     private int unit_test_score = 0;
     private int code_quality = 0;
+    private String compile_result = null;
+    private String source_code = null;
 
     public Score(String student_id, String project_name, int submit_times, String analysis_date, int unit_test_score, int code_quality){
         this.student_id = student_id;
@@ -22,6 +24,11 @@ public class Score {
         this.submit_times = submit_times;
         this.analysis_date = analysis_date;
         this.unit_test_score = unit_test_score;
+    }
+
+    public Score(String compile_result, String source_code){
+        this.compile_result = compile_result;
+        this.source_code = source_code;
     }
 
     public Score(){
@@ -74,5 +81,21 @@ public class Score {
 
     public void setCodeQuality(int code_quality){
         this.code_quality = code_quality;
+    }
+
+    public String getCompileResult(){
+        return this.compile_result;
+    }
+
+    public void setCompileResult(String compile_result){
+        this.compile_result = compile_result;
+    }
+
+    public String getSourceCode(){
+        return this.source_code;
+    }
+
+    public void setSourceCode(String source_code){
+        this.source_code = source_code;
     }
 }
