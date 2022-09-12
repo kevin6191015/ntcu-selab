@@ -134,7 +134,7 @@ export default {
         num = i
       }
       for (let i = 0; i < this.multipleSelection2.length; i++) {
-        selectedQ[(i + num + 1)] = this.multipleSelection2[i].id
+        selectedQ[((num > 0) ? (i + num + 1) : (i))] = this.multipleSelection2[i].id
       }
       store.commit('SET_SELECTEDQUESTION', selectedQ)
       this.$router.replace({

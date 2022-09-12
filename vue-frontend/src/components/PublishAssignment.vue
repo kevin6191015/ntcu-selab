@@ -4,7 +4,7 @@
       <div id="header">
         <div id="space-top"></div>
         <div id="title-orange">
-          <h3>以選擇題目</h3>
+          <h3>已選擇題目</h3>
         </div>
       </div>
       <div id="content1">
