@@ -128,13 +128,13 @@ export default {
     select () {
       store.commit('REMOVE_SELECTEDQUESTION')
       let selectedQ = []
-      let num
+      let num = 0
       for (let i = 0; i < this.multipleSelection1.length; i++) {
         selectedQ[i] = this.multipleSelection1[i].question_id
-        num = i
+        num++
       }
       for (let i = 0; i < this.multipleSelection2.length; i++) {
-        selectedQ[((num > 0) ? (i + num + 1) : (i))] = this.multipleSelection2[i].id
+        selectedQ[(i + num)] = this.multipleSelection2[i].id
       }
       store.commit('SET_SELECTEDQUESTION', selectedQ)
       this.$router.replace({
