@@ -18,11 +18,15 @@ public class sonarqube_report_analyzer
 {
      private String[] sonar_property=new String[14];
      private String[] sonar_value=new String[14];
+
+     private String[] score_property=new String[6];
+     private String[] score_value=new String[6];
+     private Double[] index = new Double[4];
      private String postparm="";
 
      private String scoreparm="";
-     
-     
+
+
      public static void main(String[] args)throws Exception{
           sonarqube_report_analyzer sq = new sonarqube_report_analyzer();
           sq.GetStudentID(args[0]);
@@ -30,8 +34,9 @@ public class sonarqube_report_analyzer
           sq.GetSonarData(args[0]);
           sq.GetJenkinsData(args[0],args[1],args[2],args[3]);
           sq.GetPostparm();
-
+          sq.GetScoreparm(args[0],args[2]);
           sq.WriteData();
+          sq.WriteScore();
      }
      public void  GetJenkinsData(String name,String submit_time,String unit_test_result,String compile_result){
           sonar_property[11]="submit_times";
@@ -58,7 +63,51 @@ public class sonarqube_report_analyzer
           }
      }
 
-     public  void  GetScoreparm(){
+     public  void  GetScoreparm(String name,String unit_result){
+          score_property[0]="student_id";
+          score_property[1]="project_name";
+          score_property[2]="submit_times";
+          score_property[3]="analysis_date";
+          score_property[4]="unit_test_score";
+          score_property[5]="code_quality";
+          score_value[0]=sonar_value[9];
+          score_value[1]=sonar_value[8];
+          score_value[2]=sonar_value[11];
+          score_value[3]=sonar_value[10];
+          score_value[4]=String.valueOf(Integer.parseInt(unit_result.substring(unit_result.lastIndexOf(":")+1))*10);
+          score_value[5]=String.valueOf((30-index[0]*5)+(30-index[1]*5)+(30-index[2]*5)+(30-index[3]*5));
+          System.out.println(score_value[5]);
+          for(int i=0;i<score_property.length;i++){
+               if(i==(score_property.length-1)){
+                    String temp=score_property[i]+"="+score_value[i];
+                    scoreparm+=temp;
+               }else{
+                    String temp=score_property[i]+"="+score_value[i]+"&";
+                    scoreparm+=temp;
+               }
+          }
+     }
+     public  void  WriteScore() throws Exception {
+          String urls = "{Mysql-url}score/add";
+          System.out.println("\n"+scoreparm);
+          byte[] scoreData = scoreparm.getBytes( StandardCharsets.UTF_8 );
+          int scoreDataLength = scoreData.length;
+          URL url = new URL(urls);
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+          conn.setRequestProperty("Content-Length",String.valueOf(scoreDataLength));
+          conn.setRequestProperty("charset", "utf-8");
+          conn.setRequestMethod("POST");
+          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+          conn.setReadTimeout(5000);
+          conn.setDoOutput(true);
+          try(DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+               wr.write( scoreData );
+          }
+          InputStream stream = null;
+          stream = conn.getInputStream();
+          BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
+          String result = reader.readLine();
 
      }
      public  void  WriteData() throws Exception{
@@ -68,7 +117,7 @@ public class sonarqube_report_analyzer
           int postDataLength = postData.length;
           URL url = new URL(urls);
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-          conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); 
+          conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
           conn.setRequestProperty("Content-Length",String.valueOf(postDataLength));
           conn.setRequestProperty("charset", "utf-8");
           conn.setRequestMethod("POST");
@@ -83,11 +132,6 @@ public class sonarqube_report_analyzer
           BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
           String result = reader.readLine();
 
-     }
-
-     public  void  WriteScore() throws Exception {
-          String urls = "{Mysql-url}score/add";
-          System.out.println("\n"+scoreparm);
      }
      public  void  GetStudentID(String name)throws Exception{
           sonar_property[8]="project_name";//sonar_value[9] in GetSonarData
@@ -149,7 +193,7 @@ public class sonarqube_report_analyzer
 		System.out.println("response code: " + status);
           parseData(responseContent);
      }
-     
+
      public  void parseData(StringBuilder response) {
           JSONObject responseBody = new JSONObject( response.toString());
           sonar_value[8] = responseBody.getJSONObject("component").getString("name");
@@ -158,10 +202,19 @@ public class sonarqube_report_analyzer
           {
                sonar_property[i] = arr.getJSONObject(i).getString("metric");
                sonar_value[i] = arr.getJSONObject(i).getString("value");
+               if(sonar_property[i].equals("security_rating")){
+                    index[0]=Double.parseDouble(sonar_value[i]);
+               }else if(sonar_property[i].equals("reliability_rating")){
+                    index[1]=Double.parseDouble(sonar_value[i]);
+               }else if(sonar_property[i].equals("sqale_rating")){
+                    index[2]=Double.parseDouble(sonar_value[i]);
+               }else if(sonar_property[i].equals("security_review_rating")){
+                    index[3]=Double.parseDouble(sonar_value[i]);
+               }
           }
           for(int i =0; i<11;i++){
-			System.out.println(sonar_property[i]+": "+sonar_value[i] );
-		}
+               //System.out.println(sonar_property[i]+": "+sonar_value[i] );
+          }
      }
 }
 

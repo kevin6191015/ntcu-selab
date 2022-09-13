@@ -65,10 +65,17 @@
             echo &quot;Project name is ${NAME}&quot;
 
             //get question data to test whether need to prepare test file
+            if(NAME.substring(0,1).equals("a")){
             String response = sh(script: &quot;curl -s &apos;{Mysql-url}question1/${NAME}&apos;&quot;, returnStdout: true).trim()
             echo &quot;${response}&quot;
             def json = new groovy.json.JsonSlurperClassic().parseText(response)
             env.input_or_not = json.input_or_not;
+            }else{
+            String response = sh(script: "curl -s 'http://120.108.204.152:3000/api/question2/byid/${NAME}'", returnStdout: true).trim()
+            echo "${response}"
+            def json = new groovy.json.JsonSlurperClassic().parseText(response)
+            env.input_or_not = json.input_or_not;
+            }
 
             //print jenkins workspace
             env.WORKSPACE = pwd()
@@ -147,7 +154,7 @@
             }
             stage(&apos;Get Sonar report&apos;){
             //echo &apos;${env.WORKSPACE}/target/surefire-reports/TEST-*.xml&apos;
-            def summary = junit testResults: &apos;**/target/surefire-reports/TEST-*.xml&apos;
+            def summary = junit allowEmptyResults: true,testResults: &apos;**/target/surefire-reports/TEST-*.xml&apos;
             echo &quot;${summary.totalCount}&quot;
             echo &quot;${summary.failCount}&quot;
             echo &quot;${summary.passCount}&quot;

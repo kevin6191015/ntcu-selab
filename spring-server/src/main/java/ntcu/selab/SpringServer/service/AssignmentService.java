@@ -148,8 +148,10 @@ public class AssignmentService {
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
-                Question question = qDbManager.getQuestionFromBank1ById(qid);
-                if(question == null){
+                Question question = null;
+                if (qid.charAt(0) == 'a') {
+                    question = qDbManager.getQuestionFromBank1ById(qid);
+                } else {
                     question = qDbManager.getQuestionFromBank2ById(qid);
                 }
                 List<Course> courses = cDbManager.getAllCourses();
