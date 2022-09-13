@@ -97,7 +97,7 @@ public class ScoreDBManager {
         jsonarray = new JSONArray( response.toString());
         System.out.println(jsonarray);
         for (int i = 0; i < jsonarray.length(); i++) {
-    		jsonobject = jsonarray.getJSONArray(i).getJSONObject(0);
+    		jsonobject = jsonarray.getJSONObject(i);
             answeredlist.add(jsonobject.getInt("people_answered"));
 		}
         return answeredlist;
@@ -118,7 +118,7 @@ public class ScoreDBManager {
         jsonarray = new JSONArray( response.toString());
         System.out.println(jsonarray);
         for (int i = 0; i < jsonarray.length(); i++) {
-    		jsonobject = jsonarray.getJSONArray(i).getJSONObject(0);
+    		jsonobject = jsonarray.getJSONObject(i);
             answeredlist.add(jsonobject.getInt("people_correct"));
 		}
         return answeredlist;
