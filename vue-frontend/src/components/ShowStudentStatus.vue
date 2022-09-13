@@ -38,7 +38,7 @@
             label="觀看程式碼"
           >
             <template slot-scope="scope">
-              <el-button @click="Seequestion1(scope.row)" type="text" size="small">觀看程式碼</el-button>
+              <el-button @click="Seesourcecode(scope.row)" type="text" size="small">觀看程式碼</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -78,6 +78,7 @@ export default {
       }).then(res => {
         for (let i = 0; i < tmp1.length && i < res.data.data['Personal Report'].length; i++) {
           tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
+          tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
         }
         this.tabledata = tmp1
       })
@@ -93,7 +94,16 @@ export default {
     this.assignment_name = '題目名稱: ' + store.state.assignment.question_name
   },
   methods: {
-    Seequestion1 () {},
+    Seesourcecode (row) {
+      let temp = store.state.project_name
+      let code = row.source_code
+      store.commit('SET_PROJECT_NAME', code)
+      let { href } = this.$router.resolve({
+        name: 'ShowStudentSourcecode'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      store.commit('SET_PROJECT_NAME', temp)
+    },
     Seequestion2 () {}
   },
   computed: {

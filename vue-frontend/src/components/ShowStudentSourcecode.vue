@@ -7,8 +7,7 @@
       </div>
     </div>
     <div id="content">
-      <h5>{{content.data.code}}</h5>
-      <div v-show="(content.code == 400)">此題無程式碼</div>
+      <h5>{{sourcecode}}</h5>
     </div>
     <div id = "footer">
       <el-button  @click='goback'>關閉視窗</el-button>
@@ -16,24 +15,18 @@
   </div>
 </template>
 <script>
-import {getSourcecode} from '../api/question'
 import store from '../store'
 export default {
   data () {
     return {
       content: [],
-      questionname: ''
+      questionname: '',
+      sourcecode: ''
     }
   },
   created () {
-    this.questionname = store.state.Question_To_Show.slice(6)
-    getSourcecode(this.questionname).then(res => {
-      this.content = res.data
-    }).catch(error => {
-      this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-        confirmButtonText: '確定'
-      })
-    })
+    this.questionname = store.state.assignment.question_name
+    this.sourcecode = store.state.project_name
   },
   methods: {
     goback () {

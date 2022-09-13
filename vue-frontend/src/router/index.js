@@ -12,6 +12,7 @@ import SelectQuestion from '@/components/SelectQuestion'
 import ShowQuestion from '@/components/ShowQuestion'
 import SystemAccount from '@/components/SystemAccount'
 import ShowSourcecode from '@/components/ShowSourcecode'
+import ShowStudentSourcecode from '@/components/ShowStudentSourcecode'
 import PublishAssignment from '@/components/PublishAssignment'
 import ShowCourseStudent from '@/components/ShowCourseStudent'
 import ShowStudentStatus from '@/components/ShowStudentStatus'
@@ -147,6 +148,14 @@ export default new Router({
       path: '/ShowSourcecode',
       name: 'ShowSourcecode',
       component: ShowSourcecode,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/ShowStudentSourcecode',
+      name: 'ShowStudentSourcecode',
+      component: ShowStudentSourcecode,
       meta: {
         requireAuth: true
       }
