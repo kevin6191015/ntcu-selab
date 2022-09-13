@@ -96,20 +96,25 @@ export default {
   },
   methods: {
     publish () {
-      let temp1 = Date.parse(this.publish_time)
-      let date1 = new Date(temp1 + 28800000)
-      let publishtime = date1.toISOString().slice(0, 4) + date1.toISOString().slice(5, 7) + date1.toISOString().slice(8, 10)
-      let temp2 = Date.parse(this.deadline)
-      let date2 = new Date(temp2 + 28800000)
-      let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
-      let cid = store.state.class_id
-      for (let x in this.questions) {
-        addAssignment({
-          qid: this.questions[x].id,
-          cid: cid,
-          release_time: publishtime,
-          deadline: deadline
-        })
+      if (this.publish_time === '' || this.deadline === '') {
+        this.warning()
+      } else {
+        let temp1 = Date.parse(this.publish_time)
+        let date1 = new Date(temp1 + 28800000)
+        let publishtime = date1.toISOString().slice(0, 4) + date1.toISOString().slice(5, 7) + date1.toISOString().slice(8, 10)
+        let temp2 = Date.parse(this.deadline)
+        let date2 = new Date(temp2 + 28800000)
+        let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
+        let cid = store.state.class_id
+        for (let x in this.questions) {
+          addAssignment({
+            qid: this.questions[x].id,
+            cid: cid,
+            release_time: publishtime,
+            deadline: deadline
+          })
+        }
+        store.commit('REMOVE_SELECTEDQUESTION')
       }
     },
     selectquestion () {
@@ -124,6 +129,13 @@ export default {
     },
     refresh () {
       location.reload()
+    },
+    warning () {
+      this.$notify({
+        title: '警告',
+        message: '請選擇日期',
+        type: 'warning'
+      })
     }
   }
 }
