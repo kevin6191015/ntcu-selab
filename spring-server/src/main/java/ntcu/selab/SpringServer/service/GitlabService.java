@@ -412,10 +412,10 @@ public class GitlabService {
 
         String repositoryUrl = gitlabConfig.getGitlabHostUrl() + "/" + "root" + "/" + projectName + ".git";
         String cloneCommand = "git clone " + repositoryUrl + " " + targetPath;
-        System.out.println(cloneCommand);
+        //System.out.println(cloneCommand);
         Linux linux = new Linux();
         linux.execLinuxCommand(cloneCommand);
-        System.out.println("clone successful");
+        //System.out.println("clone successful");
 
         return true;
     }
@@ -432,7 +432,7 @@ public class GitlabService {
             FileUtils.copyDirectory(fromv, tov);
             FileUtils.copyDirectory(froms, tos);
             FileUtils.copyFile(fromp, top);
-            System.out.println("Directory moved successfully.");
+            //System.out.println("Directory moved successfully.");
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -533,7 +533,7 @@ public class GitlabService {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        System.out.println("copy successful");
+        //System.out.println("copy successful");
         return true;
     }
     public GitlabProject getProject(String username, String proName) {
@@ -558,7 +558,7 @@ public class GitlabService {
         String[] pushCommand = {"git", "push" , url};
         linux.execLinuxCommandInFile(pushCommand, pushDirectoryPath);
 
-        System.out.println("push successful");
+        //System.out.println("push successful");
     }
 
     public void DeleteProject(String projectName) throws IOException {
@@ -566,7 +566,7 @@ public class GitlabService {
         File deletePath = new File(".\\src\\main\\resources\\maven\\"+projectName);
         FileUtils.deleteDirectory(deletePath);
 
-        System.out.println("delete successful");
+        //System.out.println("delete successful");
     }
 
 }
