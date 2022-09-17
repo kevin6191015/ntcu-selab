@@ -2,7 +2,7 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col class="title1">{{this.question_name}}</el-col>
+        <el-col class="title1">{{this.$store.state.assignment.question_name}}</el-col>
         <el-col class="title2">曲線圖</el-col>
       </el-row>
       <div style="margin:10px"></div>
@@ -40,20 +40,18 @@
 <script>
 import { getLatestScore } from '@/api/score'
 import { getStudent } from '../api/student'
-import store from '../store'
 export default {
   name: 'ShowCourseStudent',
   data () {
     return {
-      question_name: store.state.assignment.question_name,
       tableData: [],
       student: [],
-      project_name: store.state.assignment.question_id + '_' + store.state.class.substring(0, 5) + '_' + store.state.assignment.release_time
+      project_name: this.$store.state.assignment.question_id + '_' + this.$store.state.class.substring(0, 5) + '_' + this.$store.state.assignment.release_time
     }
   },
   created () {
     getStudent({
-      class_id: store.state.class_id
+      class_id: this.$store.state.class_id
     }).then(res => {
       this.student = res.data.data.Students
     })
@@ -78,8 +76,7 @@ export default {
         student_id: val.student_id,
         student_name: val.student_name
       }
-      store.commit('SET_SELETED_STUDENT', student)
-      store.commit('SET_PROJECT_NAME', this.project_name)
+      this.$store.commit('SET_SELETED_STUDENT', student)
       this.$router.replace({
         path: '/ShowStudentStatus'})
     }

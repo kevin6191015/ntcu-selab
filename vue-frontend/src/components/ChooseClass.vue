@@ -57,7 +57,6 @@
 
 <script>
 import { getAllCourse, getCourseBySem, getSemester } from '../api/course'
-import store from '@/store'
 export default {
   name: 'chooseclass',
   data () {
@@ -78,9 +77,9 @@ export default {
     }
   },
   created () {
-    if (store.state.role === 'student') {
+    if (this.$store.state.role === 'student') {
       this.student = true
-    } else if (store.state.role === 'teacher' || store.state.role === 'TA') {
+    } else if (this.$store.state.role === 'teacher' || this.$store.state.role === 'TA') {
       this.teacher = true
     }
     getSemester().then(res => {
@@ -91,9 +90,9 @@ export default {
       this.content = res.data.data.Courses
       if (this.student) {
         this.student_Allclass = []
-        for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
+        for (let i = 0; i < this.$store.state.user.classes.split(',').length; i++) {
           for (let j = 0; j < this.all_class.length; j++) {
-            if (this.all_class[j].class_id === store.state.user.classes.split(',')[i]) {
+            if (this.all_class[j].class_id === this.$store.state.user.classes.split(',')[i]) {
               this.student_Allclass.push(this.all_class[j])
             }
           }
@@ -116,9 +115,9 @@ export default {
         this.teacher_back_up = this.content
         if (this.student) {
           this.student_class = []
-          for (let i = 0; i < store.state.user.classes.split(',').length; i++) {
+          for (let i = 0; i < this.$store.state.user.classes.split(',').length; i++) {
             for (let j = 0; j < this.class_by_sem.length; j++) {
-              if (this.class_by_sem[j].class_id === store.state.user.classes.split(',')[i]) {
+              if (this.class_by_sem[j].class_id === this.$store.state.user.classes.split(',')[i]) {
                 this.student_class.push(this.class_by_sem[j])
               }
             }
@@ -161,8 +160,8 @@ export default {
           confirmButtonText: '確定'
         })
       } else {
-        store.commit('SET_CLASS', this.sem + this.class_name)
-        store.commit('SET_CLASS_ID', this.class_id)
+        this.$store.commit('SET_CLASS', this.sem + this.class_name)
+        this.$store.commit('SET_CLASS_ID', this.class_id)
         if (this.teacher) {
           this.$router.replace({
             path: '/ShowHomework'})

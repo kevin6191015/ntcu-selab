@@ -67,7 +67,6 @@
 
 <script>
 import { getUser } from '@/api/user'
-import store from '../store'
 import { addStudent, deleteStudent } from '@/api/student'
 export default {
   name: 'CourseAccount',
@@ -85,7 +84,7 @@ export default {
       this.not_class_student = []
       for (let i = 0; i < res.data.data.Users.length; i++) {
         for (let j = 0; j < res.data.data.Users[i].CLASSES.split(',').length; j++) {
-          if (res.data.data.Users[i].CLASSES.split(',')[j] === store.state.class_id) {
+          if (res.data.data.Users[i].CLASSES.split(',')[j] === this.$store.state.class_id) {
             this.class_student.push(res.data.data.Users[i])
           }
         }
@@ -106,16 +105,14 @@ export default {
   methods: {
     not_in_Course (val) {
       this.seleted = val
-      console.log(this.seleted)
     },
     in_Course (val) {
       this.seleted = val
-      console.log(this.seleted)
     },
     addStudent () {
       for (let i = 0; i < this.seleted.length; i++) {
         addStudent({
-          class_id: store.state.class_id,
+          class_id: this.$store.state.class_id,
           user_id: this.seleted[i].id
         }).then(res => {
           this.reload()
@@ -137,7 +134,7 @@ export default {
     deleteStudent () {
       for (let i = 0; i < this.seleted.length; i++) {
         deleteStudent({
-          class_id: store.state.class_id,
+          class_id: this.$store.state.class_id,
           user_id: this.seleted[i].id
         }).then(res => {
           this.reload()

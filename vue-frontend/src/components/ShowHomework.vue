@@ -94,7 +94,6 @@
 import { getAllAssignments } from '@/api/assignment'
 import { getAnswered, getCorrect } from '@/api/score'
 import { getStudent } from '@/api/student'
-import store from '../store'
 export default {
   name: 'ShowHomework',
   data () {
@@ -111,22 +110,22 @@ export default {
   },
   created () {
     getStudent({
-      class_id: store.state.class_id
+      class_id: this.$store.state.class_id
     }).then(res => {
       this.student = res.data.data.Students
     })
     getAnswered({
-      semester: store.state.class.substring(0, 5),
-      class_id: store.state.class_id
+      semester: this.$store.state.class.substring(0, 5),
+      class_id: this.$store.state.class_id
     }).then(res => {
       this.answered = res.data.data.Answered
       getCorrect({
-        semester: store.state.class.substring(0, 5),
-        class_id: store.state.class_id
+        semester: this.$store.state.class.substring(0, 5),
+        class_id: this.$store.state.class_id
       }).then(res => {
         this.correct = res.data.data.Correct
         getAllAssignments({
-          cid: store.state.class_id
+          cid: this.$store.state.class_id
         }).then(res => {
           let tmp = res.data.data.Assignments
           for (let i = 0; i < tmp.length; i++) {
@@ -151,7 +150,7 @@ export default {
     seleted_class (seleted) {
       seleted.release_time = seleted.release_time.substring(0, 4) + seleted.release_time.substring(5, 7) + seleted.release_time.substring(8, 10)
       seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
-      store.commit('SET_ASSIGNMENT', seleted)
+      this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
         path: '/ShowCourseStudent'})
     },
@@ -168,12 +167,12 @@ export default {
       }
     },
     Seequestion (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     }
   }
 }

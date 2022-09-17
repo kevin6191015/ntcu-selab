@@ -18,7 +18,6 @@
 
 <script>
 import { userLogin } from '../api/user'
-import store from '../store'
 export default {
   name: 'Login',
   data () {
@@ -43,10 +42,9 @@ export default {
             let token = data.token
             let user = data.user
             let role = user.role
-            store.commit('SET_TOKENN', token)
-            store.commit('SET_USER', user)
-            store.commit('SET_ROLE', role)
-            // var path = this.$route.query.redirect
+            this.$store.commit('SET_TOKENN', token)
+            this.$store.commit('SET_USER', user)
+            this.$store.commit('SET_ROLE', role)
             this.$router.replace({
               path: '/chooseclass'
             })

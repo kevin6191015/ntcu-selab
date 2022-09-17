@@ -13,8 +13,7 @@ export default new Vuex.Store({
     selectedQuestion: sessionStorage.getItem('selectedQuestion'),
     Question_To_Show: sessionStorage.getItem('Question_To_Show'),
     assignment: JSON.parse(sessionStorage.getItem('assignment')),
-    seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent')),
-    project_name: sessionStorage.getItem('project_name')
+    seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent'))
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -42,12 +41,8 @@ export default new Vuex.Store({
       sessionStorage.setItem('assignment', JSON.stringify(assignment))
     },
     SET_SELETED_STUDENT: (state, seletedstudent) => {
-      state.assignment = seletedstudent
+      state.seletedstudent = seletedstudent
       sessionStorage.setItem('seletedstudent', JSON.stringify(seletedstudent))
-    },
-    SET_PROJECT_NAME: (state, projectname) => {
-      state.assignment = projectname
-      sessionStorage.setItem('project_name', projectname)
     },
     REMOVE_INFO: (state) => {
       state.token = ''
@@ -61,7 +56,6 @@ export default new Vuex.Store({
       }
       state.seletedstudent = {
       }
-      state.project_name = ''
       sessionStorage.setItem('token', '')
       sessionStorage.setItem('user', JSON.stringify(''))
       sessionStorage.setItem('role', '')
@@ -70,7 +64,6 @@ export default new Vuex.Store({
       sessionStorage.setItem('selectedQuestion', '')
       sessionStorage.setItem('assignment', JSON.stringify(''))
       sessionStorage.setItem('seletedstudent', JSON.stringify(''))
-      sessionStorage.setItem('project_name', '')
     },
     SET_SELECTEDQUESTION: (state, selectedQuestion) => {
       state.selectedQuestion = selectedQuestion

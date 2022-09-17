@@ -5,8 +5,8 @@
         <el-col class="a1">{{this.git}}</el-col>
       </el-row>
       <el-row>
-        <el-col class="a2">{{getStudentName}}</el-col>
-        <el-col class="a3">{{this.assignment_name}}</el-col>
+        <el-col class="a2">{{'學生姓名: ' + this.$store.state.seletedstudent.student_name}}</el-col>
+        <el-col class="a3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
       </el-row>
       <el-row>
         <el-table
@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import store from '../store'
 import { getPersonalScore, getPersonalReport, getGitUrl } from '@/api/score'
 export default {
   name: 'ShowStudentStatus',
@@ -64,11 +63,10 @@ export default {
     return {
       tabledata: [],
       git: 'Git Repository: ',
-      assignment_name: '',
-      project_name: store.state.project_name + '_' + store.state.seletedstudent.student_id
+      project_name: this.$store.state.assignment.question_id + '_' + this.$store.state.class.substring(0, 5) + '_' + this.$store.state.assignment.release_time + '_' + this.$store.state.seletedstudent.student_id
     }
   },
-  mounted () {
+  created () {
     getPersonalScore({
       project_name: this.project_name
     }).then(res => {
@@ -90,26 +88,18 @@ export default {
       this.git = this.git + res.data.data
     })
   },
-  created () {
-    this.assignment_name = '題目名稱: ' + store.state.assignment.question_name
-  },
   methods: {
     Seesourcecode (row) {
-      let temp = store.state.project_name
-      let code = row.source_code
-      store.commit('SET_PROJECT_NAME', code)
-      let { href } = this.$router.resolve({
-        name: 'ShowStudentSourcecode'
-      })
-      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('SET_PROJECT_NAME', temp)
+      // let temp = this.$store.state.project_name
+      // let code = row.source_code
+      // store.commit('SET_PROJECT_NAME', code)
+      // let { href } = this.$router.resolve({
+      //   name: 'ShowStudentSourcecode'
+      // })
+      // window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      // this.$store.commit('SET_PROJECT_NAME', temp)
     },
     Seequestion2 () {}
-  },
-  computed: {
-    getStudentName () {
-      return '學生姓名: ' + store.state.seletedstudent.student_name
-    }
   }
 }
 </script>

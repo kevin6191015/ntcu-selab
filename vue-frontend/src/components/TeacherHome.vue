@@ -3,10 +3,10 @@
     <el-header style="margin-right: 15px; width: 100%">
       <span class="nav-logo">😀</span>
       <span class="head-title">DashBoard</span>
-      <span class="head-center-title">當前課程: {{class_name}}</span>
+      <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
       <el-dropdown style="float:right">
         <el-button type="primary" plain>
-          {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
+          {{this.$store.state.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
@@ -44,13 +44,10 @@
 </template>
 
 <script>
-import store from '@/store'
 export default {
   name: 'TeacherHome',
   data () {
     return {
-      username: store.state.user.name,
-      class_name: store.state.class,
       navList: [
         {name: '/ShowHomework', title: '首頁', icon: 'el-icon-s-home'},
         {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-document'},
@@ -62,7 +59,7 @@ export default {
   },
   methods: {
     logout () {
-      store.commit('REMOVE_INFO', store.state)
+      this.$store.commit('REMOVE_INFO', this.$store.state)
       this.$message({
         showClose: true,
         message: '登出成功',
