@@ -55,6 +55,7 @@ public class UserService {
                 Object.put("id", user.getId());
                 Object.put("username", user.getUserName());
                 Object.put("CLASSES", user.getClasses());
+                Object.put("email", user.getEmail());
                 userlist.add(Object);
             }
         }catch(Exception e){
