@@ -1,82 +1,113 @@
 <template>
     <el-container>
-        <el-main class="container outer">
-                <el-row >
-                   <el-col style="display: flex;justify-content: center; align-items: center;">
-                         <el-select v-model="account_type" placeholder="請選擇帳號類型" class="box">
-                            <el-option
-                            v-for="item in auth"
-                            :key="item.value"
-                            :label="item.label"
-                            :value=item.value>
-                        </el-option>
-                    </el-select>
-                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col style="display: flex;justify-content: center; align-items: center;">
-                    <el-input
-                    v-model="id"
-                    placeholder="學號"
-                    style="margin: 20px;width:50%"></el-input>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col style="display: flex;justify-content: center; align-items: center;">
-                    <el-input
-                    v-model="name"
-                    placeholder="名字"
-                    style="margin: 20px;width:50%"></el-input>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col style="display: flex;justify-content: center; align-items: center;">
-                    <el-input
-                    v-model="userName"
-                    placeholder="帳號"
-                    style="margin: 20px;width:50%"></el-input>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col style="display: flex;justify-content: center; align-items: center;">
-                    <el-input
-                    v-model="password"
-                    placeholder="密碼"
-                    style="margin: 20px;width:50%"></el-input>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col style="display: flex;justify-content: center; align-items: center;">
-                    <el-input
-                    v-model="email"
-                    placeholder="e-mail"
-                    style="margin: 20px;width:50%"></el-input>
-                  </el-col>
-                </el-row>
-            <div style="margin: 20px;"></div>
-            <el-col style="display: flex;justify-content: center; align-items: center;">
-                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="add()">新增</el-button>
-                <el-upload
-                :action="uploadActionUrl()"
-                :before-upload="onBeforeUpload"
-                :headers="uploadData"
-                :onError="uploadError"
-                :onSuccess="uploadSuccess"
-                show-file-list=false>
-                  <el-button type="warning" style="margin: 20px; font-size: 20px;">匯入</el-button>
-                </el-upload>
-                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="update()">修改</el-button>
-                <el-button type="warning" style="margin: 20px; font-size: 20px;" @click="deleted()">刪除</el-button>
+        <el-main class="outer">
+          <div style="margin: 20px;"></div>
+          <el-row>
+            <el-col :span="12">
+              <el-table
+                :data="tableData"
+                stripe
+                style="width: 100%"
+                @selection-change="handlechange">
+                <el-table-column
+                  type="selection"
+                  width="45">
+                </el-table-column>
+                <el-table-column
+                  prop="id"
+                  label="學號"
+                  width="100">
+                </el-table-column>
+                <el-table-column
+                  prop="username"
+                  label="帳號"
+                  width="100">
+                </el-table-column>
+                <el-table-column
+                  prop="password"
+                  label="密碼">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="名字">
+                </el-table-column>
+                <el-table-column
+                  prop="role"
+                  label="帳號類型">
+                </el-table-column>
+                <el-table-column
+                  prop="email"
+                  label="e-mail">
+                </el-table-column>
+              </el-table>
             </el-col>
+            <el-col :span="12">
+              <el-row>
+                  <el-select v-model="account_type" placeholder="請選擇帳號類型" class="box">
+                    <el-option
+                      v-for="item in auth"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.label">
+                    </el-option>
+                  </el-select>
+              </el-row>
+              <el-row>
+                <el-input
+                v-model="id"
+                placeholder="學號"
+                style="margin: 20px; width: 90%;"></el-input>
+              </el-row>
+              <el-row>
+                <el-input
+                v-model="name"
+                placeholder="名字"
+                style="margin: 20px; width: 90%;"></el-input>
+              </el-row>
+              <el-row>
+                <el-input
+                v-model="userName"
+                placeholder="帳號"
+                style="margin: 20px; width: 90%;"></el-input>
+              </el-row>
+              <el-row>
+                <el-input
+                v-model="password"
+                placeholder="密碼"
+                style="margin: 20px; width: 90%;"></el-input>
+              </el-row>
+              <el-row>
+                <el-input
+                  v-model="email"
+                  placeholder="e-mail"
+                  style="margin: 20px; width: 90%;">
+                </el-input>
+              </el-row>
+              <el-row style="display: flex;">
+                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="add()">新增</el-button>
+                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="update()">修改</el-button>
+                  <el-upload
+                  action="/data/user/upload?file="
+                  :before-upload="onBeforeUpload"
+                  :headers="uploadData"
+                  :on-error="uploadError"
+                  :on-success="uploadSuccess"
+                  :show-file-list="false">
+                    <el-button type="warning" style="margin: 32px; font-size: 20px;">匯入</el-button>
+                  </el-upload>
+                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="deleted()">刪除</el-button>
+              </el-row>
+            </el-col>
+          </el-row>
         </el-main>
     </el-container>
 </template>
 
 <script>
-import { addUser, deleteUser, updateUser } from '@/api/user'
-import store from '../store'
+import { addUser, deleteUser, updateUser, getUser } from '@/api/user'
 export default {
   name: 'SystemAccount',
+  inject: ['reload'],
   data () {
     return {
       auth: [{
@@ -90,18 +121,23 @@ export default {
         label: 'TA'
       }],
       account_type: '',
-      batch: [],
       userName: '',
       password: '',
       role: '',
       email: '',
       name: '',
       id: '',
-      fileList: [],
+      tableData: [],
+      accountList: [],
       uploadData: {
-        'Authorization': 'Bearer ' + store.state.token
+        'Authorization': 'Bearer ' + this.$store.state.token
       }
     }
+  },
+  created () {
+    getUser().then(res => {
+      this.tableData = res.data.data.Users
+    })
   },
   methods: {
     add () {
@@ -133,21 +169,55 @@ export default {
       }
     },
     deleted () {
-      deleteUser({
-        id: this.id
-      }).then(res => {
-        this.$message({
-          showClose: true,
-          message: res.data.message,
-          type: 'success'
+      if (this.accountList.length) {
+        for (let i = 0; i < this.accountList.length; i++) {
+          if (this.accountList[i].role === 'student') {
+            deleteUser({
+              id: this.accountList[i].id
+            }).then(res => {
+              this.$message({
+                showClose: true,
+                message: res.data.message,
+                type: 'success'
+              })
+              this.reload()
+            }).catch(error => {
+              this.$message({
+                showClose: true,
+                message: error,
+                type: 'warning'
+              })
+              this.reload()
+            })
+          } else {
+            this.$message({
+              showClose: true,
+              message: 'You can not remove this account(It is tacher or TA)',
+              type: 'warning'
+            })
+            this.reload()
+          }
+        }
+      }
+      if (this.id !== '') {
+        deleteUser({
+          id: this.id
+        }).then(res => {
+          this.$message({
+            showClose: true,
+            message: res.data.message,
+            type: 'success'
+          })
+          this.reload()
+        }).catch(error => {
+          this.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          })
+          this.reload()
         })
-      }).catch(error => {
-        this.$message({
-          showClose: true,
-          message: error,
-          type: 'warning'
-        })
-      })
+      }
     },
     update () {
       updateUser({
@@ -175,25 +245,21 @@ export default {
         this.$message.error('格式錯誤')
       }
     },
-    uploadActionUrl (file) {
-      return '/data/user/upload?file=' + file
+    uploadError (res, file, filelist) {
+      this.$message.error('上傳失敗')
     },
-    uploadError () {
-      this.$message.error('上船失敗')
+    uploadSuccess (file) {
+      this.$message.success('上傳成功')
+      this.reload()
     },
-    uploadSuccess () {
-      this.$message.success('上船成功')
+    handlechange (selected) {
+      this.accountList = selected
     }
   }
 }
 </script>
 
 <style>
-.container {
-  width: 1250px;
-  margin: 0 auto;
-}
-
 .d-flex {
   display: flex;
   flex-wrap: wrap;
@@ -201,12 +267,11 @@ export default {
 
 .outer {
   background-color: rgba(111, 122, 144, 0.555);
-  height: 650px;
   padding: 15px;
 }
 
 .box {
-  width: 50%;
-  margin: 35px;
+  width: 90%;
+  margin: 20px;
 }
 </style>
