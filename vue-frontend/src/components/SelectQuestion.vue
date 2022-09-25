@@ -158,13 +158,12 @@ export default {
       store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode1 (row) {
-      alert(row.index)
-      /* store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowSourcecode'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW') */
+      store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode2 (row) {
       store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
