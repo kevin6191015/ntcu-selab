@@ -21,12 +21,12 @@ router.post('/delete/:class_id/:question_id',function(req, res) {
 });
 
 //update clas_question by class id
-router.post('/update/:class_id/:question_id',function(req,res) {
+router.post('/update/:class_id/:question_id/:release_time',function(req,res) {
     const CQReqData = new CQModel(req.body);
     if(req.body.constructor === Object && Object.keys(req.body).length === 0){
         res.send(400).send({success: false, message: 'Please all fields'});
     }else{
-        CQModel.updateCQ(req.params.class_id, req.params.question_id,CQReqData ,(err,CQ)=>{
+        CQModel.updateCQ(req.params.class_id, req.params.question_id, req.params.release_time, CQReqData ,(err,CQ)=>{
             if(err)
                 res.send(err);
             else

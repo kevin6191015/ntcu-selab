@@ -5,6 +5,7 @@ var Class_question = function(CQ){
     this.question_name = CQ.question_name
     this.release_time = CQ.release_time
     this.deadline = CQ.deadline
+    this.assignment_name = CQ.assignment_name
 }
 
 Class_question.getCQlist = (class_id, result)=>{
@@ -40,12 +41,12 @@ Class_question.deleteCQ = (class_id, question_id, result)=>{
     })
 }
 
-Class_question.updateCQ = (class_id, question_id, CQReqData, result) =>{
+Class_question.updateCQ = (class_id, question_id, release_time, CQReqData, result) =>{
     class_id = padLeft(class_id,3);
     //console.log(class_id);
     //console.log(question_id); 
-    var sql = 'UPDATE class_' + class_id + '_questions SET question_name=?,release_time=?,deadline=? WHERE question_id = ?';
-    dbConn.query(sql,[CQReqData.question_name,CQReqData.release_time,CQReqData.deadline, question_id], (err, res)=>{
+    var sql = 'UPDATE class_' + class_id + '_questions SET assignment_name=?,question_name=?,release_time=?,deadline=? WHERE question_id = ? AND release_time =?';
+    dbConn.query(sql,[CQReqData.assignment_name, CQReqData.question_name,CQReqData.release_time,CQReqData.deadline, question_id,release_time], (err, res)=>{
         if(err)
             result(err);
         else

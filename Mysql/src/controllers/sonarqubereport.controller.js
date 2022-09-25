@@ -30,4 +30,13 @@ exports.addNewSQreport = (req,res) =>{
 }
 
 
+//get personal report
+exports.getpersonalreport = (req,res) =>{
+    SQreportModel.getpersonalreport(req.params.project_name, (err,reports)=> {
+    if(err)
+        res.send(err);
+    else 
+        res.send(reports);        
+    })
+}
 

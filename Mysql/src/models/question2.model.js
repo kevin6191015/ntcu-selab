@@ -46,7 +46,7 @@ var Question = function(question){
 
 //get question by id
 Question.getQuestionByNum = (id,result) =>{
-    dbConn.query('SELECT * FROM question_bank2 WHERE id=?', id, (err,res)=>{
+    dbConn.query('SELECT * FROM question_bank2 WHERE id = ?', id, (err,res)=>{
         if(err){
             console.log('Error while fetching question by id',err);
             result(null,err);

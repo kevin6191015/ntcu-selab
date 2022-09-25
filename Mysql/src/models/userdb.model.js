@@ -15,7 +15,7 @@ var Userdb = function(userdb){
 //get all users
 Userdb.getalluser = (result)=>{
     dbConn.query('SELECT * FROM User', (err,res)=>{
-        if(err)
+        if(err) 
             result(err);
         else
             result(null,res);

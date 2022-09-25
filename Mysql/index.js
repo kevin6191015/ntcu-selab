@@ -33,6 +33,10 @@ const classRoutes = require('./src/routes/class.route');
 const CQRoutes = require('./src/routes/class_question.route');
 //import question2 routes
 const questionRoutes2 = require('./src/routes/question2.route');
+//import score routes
+const scoreRoutes = require('./src/routes/score.route');
+//import userdb routes
+const userdbRoutes = require('./src/routes/userdb.route')
 
 //creat question routes
 app.use('/api/question1',questionRoutes);
@@ -57,6 +61,13 @@ app.use('/api/classquestion',CQRoutes);
 
 //create question2 routes
 app.use('/api/question2',questionRoutes2);
+
+//create score routes
+app.use('/api/score',scoreRoutes);
+
+//create userdb routes
+app.use('/api/user',userdbRoutes);
+
 
 //listen to port
 app.listen(port, ()=>{

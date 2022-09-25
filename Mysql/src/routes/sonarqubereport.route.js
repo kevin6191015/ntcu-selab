@@ -7,8 +7,8 @@ const SQreportcontroller = require('../controllers/sonarqubereport.controller');
 //get SQreport by id and project_name
 //router.get('/:student_id/:project_name',SQreportcontroller.getSQreportByIdandName);
 
-router.get('/:student_id/:project_name', function(req, res) {
-    SQreportModel.getSQreportByIdandName(req.params.student_id, req.params.project_name, (err, sqreport)=>{
+router.get('/:project_name', function(req, res) {
+    SQreportModel.getSQreportByIdandName(req.params.project_name, (err, sqreport)=>{
         if(err)
         res.send(err);
         console.log('get sonarqubereport', sqreport);
@@ -44,5 +44,8 @@ router.post('/add/', function(req,res) {
 });
 
 //router.post('/',SQreportcontroller.aaddNewSQreport);
+
+//get person sqreport
+router.get('/getpersonalreport/:project_name',SQreportcontroller.getpersonalreport);
 
 module.exports = router;

@@ -12,6 +12,7 @@ exports.getStudentByclassId = (req, res)=>{
     })
 }
 
+
 //get all students by class id
 exports.getStudentByclassName = (req, res)=>{
     console.log('get students by class name');

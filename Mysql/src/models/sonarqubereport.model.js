@@ -15,11 +15,13 @@ var SQreport = function(sqreport){
     this.code_smells = sqreport.code_smells
     this.bugs = sqreport.bugs
     this.vulnerabilities = sqreport.vulnerabilities
+    this.code_smells_report = sqreport.code_smells_report
+    this.suggestion_code = sqreport.suggestion_code
 }
 
 //get by id and project_name
-SQreport.getSQreportByIdandName = (student_id, project_name, result)=>{
-    dbConn.query('SELECT * FROM Sonarqube_reports  WHERE student_id = ? AND project_name = ?', [student_id,project_name],(err,res)=>{
+SQreport.getSQreportByIdandName = ( project_name, result)=>{
+    dbConn.query('SELECT * FROM Sonarqube_reports  WHERE project_name = ?', project_name,(err,res)=>{
         if(err){
             console.log('Error while fetching SQreport by name',err);
             result(err);
@@ -52,6 +54,15 @@ SQreport.addSQreport = (sqreportReqData, result) =>{
             console.log('SQreport created successfully');
             result(null,res);
         }
+    })
+}
+
+SQreport.getpersonalreport = (project_name, result) =>{
+    dbConn.query('SELECT compile_result,source_code FROM Sonarqube_reports WHERE project_name = ? ORDER BY submit_times DESC', project_name, (err,res)=>{
+        if(err)
+            result(err);
+        else    
+            result(res);         
     })
 }
 
