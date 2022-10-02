@@ -80,9 +80,33 @@ export default {
         var Today = new Date()
         let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
         if (now >= time) {
-          this.debuted_list.push(tmp[i])
+          if (this.debuted_list.length > 0) {
+            let check = true
+            for (let j = 0; j < this.debuted_list.length; j++) {
+              if (this.debuted_list[j].assignment_name === tmp[i].assignment_name) {
+                check = false
+              }
+            }
+            if (check) {
+              this.debuted_list.push(tmp[i])
+            }
+          } else {
+            this.debuted_list.push(tmp[i])
+          }
         } else {
-          this.not_debuted_list.push(tmp[i])
+          if (this.not_debuted_list.length > 0) {
+            let check = true
+            for (let j = 0; j < this.not_debuted_list.length; j++) {
+              if (this.not_debuted_list[j].assignment_name !== tmp[i].assignment_name) {
+                check = false
+              }
+            }
+            if (check) {
+              this.not_debuted_list.push(tmp[i])
+            }
+          } else {
+            this.not_debuted_list.push(tmp[i])
+          }
         }
       }
     })
@@ -93,7 +117,7 @@ export default {
       seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
       this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
-        path: '/ShowCourseStudent'})
+        path: '/ShowHomeWork'})
     },
     change1 () {
       if (!this.debuted) {

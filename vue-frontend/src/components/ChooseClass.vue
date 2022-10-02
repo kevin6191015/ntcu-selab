@@ -164,7 +164,7 @@ export default {
         this.$store.commit('SET_CLASS_ID', this.class_id)
         if (this.teacher) {
           this.$router.replace({
-            path: '/ShowHomework'})
+            path: '/ShowAssignment'})
         } else if (this.student) {
           this.$router.replace({
             path: '/studenthome'})
