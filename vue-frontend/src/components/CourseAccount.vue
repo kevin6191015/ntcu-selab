@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main class="container1 outer1">
+    <el-main class="outer1">
       <el-row >
         <div style="margin: 3%;"></div>
         <el-col :span="8" class="el-col1"><div class="grid-content1">未加入帳號</div></el-col>
@@ -158,11 +158,6 @@ export default {
 </script>
 
 <style>
-.container1 {
-  width: 800px;
-  margin: 0 auto;
-}
-
 .d-flex1 {
   display: flex;
   flex-wrap: wrap;
@@ -195,7 +190,6 @@ export default {
 
 .outer1 {
   background-color: rgba(111, 122, 144, 0.555);
-  height: 650px;
 }
 
 </style>

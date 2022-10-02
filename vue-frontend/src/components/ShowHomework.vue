@@ -180,7 +180,6 @@ export default {
 
 <style>
 .container2 {
-  width: 1250px;
   margin: 0 auto;
   background-color: rgba(111, 122, 144, 0.555);
   height: 650px;
