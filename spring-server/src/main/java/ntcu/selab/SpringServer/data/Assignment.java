@@ -2,13 +2,15 @@ package ntcu.selab.SpringServer.data;
 
 public class Assignment {
     private String id = null;
+    private String assignment_name = null;
     private String name = null;
     private String deadline = null;
     private String releasetime = null;
     
-    public Assignment(String id, String name, String releasetime, String deadline){
+    public Assignment(String id, String name, String assignment_name, String releasetime, String deadline){
         this.id = id;
         this.name = name;
+        this.assignment_name = assignment_name;
         this.releasetime = releasetime;
         this.deadline = deadline;
     }
@@ -31,6 +33,14 @@ public class Assignment {
         this.id = id;
     }
 
+    public String getAssignmentName(){
+        return this.assignment_name;
+    }
+
+    public void setAssignmentName(String assignment_name){
+        this.assignment_name = assignment_name;
+    }
+    
     public String getName() {
         return name;
     }

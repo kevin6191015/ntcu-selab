@@ -46,6 +46,7 @@ public class AssignmentService {
             for(Assignment assignment : assignments){
                 JSONObject object = new JSONObject();
                 object.put("question_id", assignment.getId());
+                object.put("assignment_name", assignment.getAssignmentName());
                 object.put("question_name", assignment.getName());
                 object.put("release_time", assignment.getReleaseTime());
                 object.put("deadline", assignment.getDeadLine());
@@ -60,7 +61,7 @@ public class AssignmentService {
     }
     //mvn archetype:generate -DgroupId=ntcu.selab -DartifactId=a0001_110_2_20220527_a001 -DinteractiveMode=false
     @GetMapping("addAssignment")
-    public Result addAssignment(@RequestParam String cid, @RequestParam String qid
+    public Result addAssignment(@RequestParam String cid, @RequestParam String qid, @RequestParam String assignment_name
     , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
         try{
             /*
@@ -73,7 +74,7 @@ public class AssignmentService {
                 question = qDbManager.getQuestionFromBank2ById(qid);
             }
 
-            Assignment assignment = new Assignment(qid, question.getName(), release_time, deadline);
+            Assignment assignment = new Assignment(qid, question.getName(), assignment_name, release_time, deadline);
             aDbManager.addAssignment(cid, assignment);
             /*
              * 對該班的student

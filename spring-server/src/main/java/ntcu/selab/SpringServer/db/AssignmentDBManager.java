@@ -52,6 +52,7 @@ public class AssignmentDBManager {
             Assignment assignment = new Assignment();
     		jsonobject = jsonarray.getJSONObject(i);
             assignment.setId(jsonobject.getString("question_id"));
+            assignment.setAssignmentName(jsonobject.getString("assignment_name"));
             assignment.setName(jsonobject.getString("question_name"));
             assignment.setReleaseTime(jsonobject.getString("release_time"));
             assignment.setDeadLine(jsonobject.getString("deadline"));
@@ -68,8 +69,8 @@ public class AssignmentDBManager {
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            String info = "question_id=" + assignment.getId() + "&question_name=" + assignment.getName()
-            + "&release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
+            String info = "question_id=" + assignment.getId() + "&assignment_name=" + assignment.getAssignmentName()
+            + "&question_name=" + assignment.getName() + "&release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
