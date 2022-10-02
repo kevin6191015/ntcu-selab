@@ -6,7 +6,6 @@
             <el-col :span="12">
               <el-table
                 :data="tableData"
-                stripe
                 style="width: 100%"
                 @selection-change="handlechange">
                 <el-table-column
@@ -32,12 +31,21 @@
                   label="名字">
                 </el-table-column>
                 <el-table-column
-                  prop="role"
-                  label="帳號類型">
-                </el-table-column>
-                <el-table-column
                   prop="email"
                   label="e-mail">
+                </el-table-column>
+                <el-table-column
+                  prop="role"
+                  label="標籤"
+                  width="100"
+                  :filters="[{ text: '學生', value: 'student' }, { text: '老師', value: 'teacher' }, { text: 'TA', value: 'TA' }]"
+                  :filter-method="filterTag"
+                  filter-placement="bottom-end">
+                  <template slot-scope="scope">
+                    <el-tag
+                      :type="scope.row.role === 'student' ? 'primary' : 'success'"
+                      disable-transitions>{{scope.row.role}}</el-tag>
+                  </template>
                 </el-table-column>
               </el-table>
             </el-col>
@@ -254,6 +262,9 @@ export default {
     },
     handlechange (selected) {
       this.accountList = selected
+    },
+    filterTag (value, row) {
+      return row.role === value
     }
   }
 }
