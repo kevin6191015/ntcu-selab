@@ -1,55 +1,10 @@
 <template>
   <el-container class="container2">
     <el-main>
-      <el-row>
-        <el-button class="button1" @click="change1">已發布</el-button>
-        <el-button class="button1" @click="change2">未發布</el-button>
-      </el-row>
       <div style="margin:10px"></div>
       <el-row>
         <el-table
-          v-if="debuted"
-          :data="debuted_list"
-          stripe
-          highlight-current-row
-          @current-change="seleted_class"
-          style="width: 100%">
-          <el-table-column
-            prop="question_name"
-            label="題目名稱"
-            width="250">
-          </el-table-column>
-          <el-table-column
-            prop="answered"
-            label="作答人數/總人數"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="correct"
-            label="答對人數">
-          </el-table-column>
-          <el-table-column
-            prop="release_time"
-            label="出題日期">
-          </el-table-column>
-          <el-table-column
-            prop="deadline"
-            label="截止日期">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="題目預覽"
-          >
-            <template slot-scope="scope">
-              <el-button @click="Seequestion(scope.row)" type="text" size="small">查看</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-row>
-      <el-row>
-        <el-table
-          v-if="not_debuted"
-          :data="not_debuted_list"
+          :data="assignment"
           stripe
           highlight-current-row
           @current-change="seleted_class"
@@ -102,10 +57,7 @@ export default {
       answered: [],
       correct: [],
       student: [],
-      debuted_list: [],
-      not_debuted_list: [],
-      debuted: true,
-      not_debuted: false
+      assignment: []
     }
   },
   created () {
@@ -133,13 +85,9 @@ export default {
             tmp[i].correct = this.correct[i].people_correct
             tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
             tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-            let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
-            var Today = new Date()
-            let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
-            if (now >= time) {
-              this.debuted_list.push(tmp[i])
-            } else {
-              this.not_debuted_list.push(tmp[i])
+            console.log(tmp[i].assignment_name)
+            if (this.$store.state.assignment.assignment_name === tmp[i].assignment_name) {
+              this.assignment.push(tmp[i])
             }
           }
         })
@@ -150,6 +98,13 @@ export default {
     seleted_class (seleted) {
       seleted.release_time = seleted.release_time.substring(0, 4) + seleted.release_time.substring(5, 7) + seleted.release_time.substring(8, 10)
       seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
+      let classID = ''
+      for (let i = 0; i < 3 - this.$store.state.class_id.toString().length; i++) {
+        classID += '0'
+      }
+      classID += this.$store.state.class_id.toString()
+      let project = seleted.question_id + '_' + classID + '_' + this.$store.state.class.substring(0, 5) + '_' + seleted.release_time
+      this.$store.commit('SET_PROJECT_NAME', project)
       this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
         path: '/ShowCourseStudent'})

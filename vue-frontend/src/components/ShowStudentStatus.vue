@@ -11,10 +11,14 @@
       <el-row>
         <el-table
           :data="tabledata"
-          stripe
-          highlight-current-row
           style="width: 100%">
-          <el-table-column type="index" label="繳交次序" ></el-table-column>
+          <el-table-column
+            prop="color"
+            width="60">
+            <template slot-scope="scope">
+              <img :src="scope.row.color" width="30px" height="30px"/>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="analysis_date"
             label="繳交時間"
@@ -63,7 +67,7 @@ export default {
     return {
       tabledata: [],
       git: 'Git Repository: ',
-      project_name: this.$store.state.assignment.question_id + '_' + this.$store.state.class.substring(0, 5) + '_' + this.$store.state.assignment.release_time + '_' + this.$store.state.seletedstudent.student_id
+      project_name: this.$store.state.project_name + '_' + this.$store.state.seletedstudent.student_id
     }
   },
   created () {
@@ -77,6 +81,13 @@ export default {
         for (let i = 0; i < tmp1.length && i < res.data.data['Personal Report'].length; i++) {
           tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
+          if (tmp1[i].unit_test_score <= 60) {
+            tmp1[i].color = 'https://i.imgur.com/HJGBB1X.png'
+          } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {
+            tmp1[i].color = 'https://i.imgur.com/C9yij3Q.png'
+          } else if (tmp1[i].unit_test_score > 90) {
+            tmp1[i].color = 'https://i.imgur.com/fRUnBEW.png'
+          }
         }
         this.tabledata = tmp1
       })
@@ -132,5 +143,17 @@ export default {
   display: flex;
   justify-content: right;
   border: 4px solid rgba(0, 0, 0, 0.397);
+}
+
+.el-table .bad-row {
+  background: rgba(211, 27, 27, 0.423);
+}
+
+.el-table .normal-row {
+  background: rgba(214, 197, 15, 0.379);
+}
+
+.el-table .good-row {
+  background: #52da087d;
 }
 </style>

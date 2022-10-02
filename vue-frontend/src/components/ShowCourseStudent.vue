@@ -46,7 +46,7 @@ export default {
     return {
       tableData: [],
       student: [],
-      project_name: this.$store.state.assignment.question_id + '_' + this.$store.state.class.substring(0, 5) + '_' + this.$store.state.assignment.release_time
+      project_name: this.$store.state.project_name
     }
   },
   created () {
