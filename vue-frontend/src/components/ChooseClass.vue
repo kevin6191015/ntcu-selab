@@ -79,7 +79,7 @@ export default {
   created () {
     if (this.$store.state.role === 'student') {
       this.student = true
-    } else if (this.$store.state.role === 'teacher' || this.$store.state.role === 'TA') {
+    } else if (this.$store.state.role === 'teacher' || this.$store.state.role === 'TA' || this.$store.state.role === 'ROOT') {
       this.teacher = true
     }
     getSemester().then(res => {
