@@ -13,7 +13,9 @@ export default new Vuex.Store({
     selectedQuestion: sessionStorage.getItem('selectedQuestion'),
     Question_To_Show: sessionStorage.getItem('Question_To_Show'),
     assignment: JSON.parse(sessionStorage.getItem('assignment')),
-    seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent'))
+    seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent')),
+    imagelink: JSON.parse(sessionStorage.getItem('imagelink')),
+    sourcecode: JSON.parse(sessionStorage.getItem('sourcecode'))
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -43,6 +45,14 @@ export default new Vuex.Store({
     SET_SELETED_STUDENT: (state, seletedstudent) => {
       state.seletedstudent = seletedstudent
       sessionStorage.setItem('seletedstudent', JSON.stringify(seletedstudent))
+    },
+    SET_IMAGELINK: (state, imagelink) => {
+      state.imagelink = imagelink
+      sessionStorage.setItem('imagelink', JSON.stringify(imagelink))
+    },
+    SET_SOURCECODE: (state, sourcecode) => {
+      state.sourcecode = sourcecode
+      sessionStorage.setItem('sourcecode', JSON.stringify(sourcecode))
     },
     REMOVE_INFO: (state) => {
       state.token = ''

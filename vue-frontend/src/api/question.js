@@ -53,6 +53,17 @@ export function ShowQuestion2 () {
   })
 }
 
+export function ShowQuestion2byTeacher (teacher) {
+  return request({
+    url: '/question/getQuestionBank2/byteacher/',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    },
+    teacher
+  })
+}
+
 export function ShowSelectedQuestion1 (id) {
   return request({
     url: '/question/getQuestionFromBank1?id=' + id,

@@ -74,7 +74,7 @@
 </body>
 </template>
 <script>
-import {ShowQuestion1, ShowQuestion2} from '../api/question'
+import {ShowQuestion1, ShowQuestion2byTeacher} from '../api/question'
 import store from '../store'
 export default {
   data () {
@@ -116,7 +116,7 @@ export default {
     },
     handleClick (tab) {
       if (tab.name === 'second') {
-        ShowQuestion2().then(res => {
+        ShowQuestion2byTeacher(store.state.user.name).then(res => {
           this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
         }).catch(error => {
           this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
