@@ -26,7 +26,7 @@
           <el-button type="success" @click='selectquestion'>題庫選題</el-button>
         </div>
         <div id="footer-right">
-          <el-button type="primary" @click='refresh'>重整頁面</el-button>
+          <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
         </div>
       </div>
       <div id="footer-single">
@@ -49,6 +49,9 @@
         <el-button type="info" @click='publish'>發布</el-button>
       </div>
     </div>
+    <div v-show="notshow">
+      {{newdata}}
+    </div>
   </div>
 </template>
 <script>
@@ -66,33 +69,22 @@ export default {
       publish_time: '',
       deadline: '',
       id: '',
-      run: true
+      assignment_name: '',
+      notshow: false,
+      error_or_not: false
     }
   },
   created () {
-    this.id = store.state.selectedQuestion
-    ShowQuestion1().then(res => {
-      for (let i = 0; i < (this.id.length + 1); i += 6) {
-        for (let j = 0; j < res.data.data.Questions.length; j++) {
-          if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].question_id) {
-            var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].question_id}
-            this.questions.push(temp)
-            break
-          }
-        }
+    this.initialize()
+  },
+  computed: {
+    newdata () {
+      if (store.state.controlreload === '1') {
+        store.commit('SET_CONTROLRELOAD', '0')
+        this.refresh()
       }
-    })
-    ShowQuestion2().then(res => {
-      for (let i = 0; i < (this.id.length + 1); i += 6) {
-        for (let j = 0; j < res.data.data.Questions.length; j++) {
-          if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
-            var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
-            this.questions.push(temp)
-            break
-          }
-        }
-      }
-    })
+      return this.$store.state.selectedQuestion
+    }
   },
   methods: {
     publish () {
@@ -106,13 +98,56 @@ export default {
         let date2 = new Date(temp2 + 28800000)
         let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
         let cid = store.state.class_id
+        if (this.assignment_name === '') {
+          this.$message({
+            showClose: true,
+            message: '請輸入此次作業名稱',
+            type: 'warning'
+          })
+          return
+        } else if (this.questions.length === 0) {
+          this.$message({
+            showClose: true,
+            message: '請選擇題目',
+            type: 'warning'
+          })
+          return
+        }
         for (let x in this.questions) {
           addAssignment({
+            assignment_name: this.assignment_name,
             qid: this.questions[x].id,
             cid: cid,
             release_time: publishtime,
             deadline: deadline
           })
+            .then((resp) => {
+              let code = resp.data.code
+              if (code === 200) {
+                this.error_or_not = false
+              } else {
+                this.error_or_not = true
+              }
+            })
+        }
+        if (this.error_or_not) {
+          this.$message({
+            showClose: true,
+            message: '發布失敗',
+            type: 'warning'
+          })
+          return
+        } else {
+          this.$message({
+            showClose: true,
+            message: '發布成功',
+            type: 'success'
+          })
+          let tmp = this.questions.length
+          for (let x = 0; x < tmp; x++) {
+            this.questions.pop()
+          }
+          this.id = ''
         }
         store.commit('REMOVE_SELECTEDQUESTION')
       }
@@ -135,6 +170,31 @@ export default {
         title: '警告',
         message: '請選擇日期',
         type: 'warning'
+      })
+    },
+    initialize () {
+      this.id = store.state.selectedQuestion
+      ShowQuestion1().then(res => {
+        for (let i = 0; i < (this.id.length + 1); i += 6) {
+          for (let j = 0; j < res.data.data.Questions.length; j++) {
+            if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].question_id) {
+              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].question_id}
+              this.questions.push(temp)
+              break
+            }
+          }
+        }
+      })
+      ShowQuestion2().then(res => {
+        for (let i = 0; i < (this.id.length + 1); i += 6) {
+          for (let j = 0; j < res.data.data.Questions.length; j++) {
+            if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
+              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
+              this.questions.push(temp)
+              break
+            }
+          }
+        }
       })
     }
   }
@@ -204,13 +264,11 @@ export default {
   }
   #footer-right{
     margin-top: 10px;
-    margin-right: 5%;
+    margin-right: 8%;
     width:fit-content;
     padding: 1px;
     text-align:left;
     background-color: rgba(43, 83, 194, 0.514);
-    border: 3px solid rgba(0, 0, 0, 0.397);
-    border-radius: 12px;
     float: right
   }
   #footer-single{
@@ -226,6 +284,6 @@ export default {
     height:80px;
     text-align:right;
     line-height:80px;
-    margin-right:5%;
+    margin-right:8%;
   }
   </style>

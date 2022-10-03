@@ -34,7 +34,7 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="第二題庫" name="second">
+    <el-tab-pane label="私人題庫" name="second">
       <el-table
         ref="multipleTable2"
         :data="content2"
@@ -127,6 +127,7 @@ export default {
     },
     select () {
       store.commit('REMOVE_SELECTEDQUESTION')
+      store.commit('SET_CONTROLRELOAD', '1')
       let selectedQ = []
       let num = 0
       for (let i = 0; i < this.multipleSelection1.length; i++) {

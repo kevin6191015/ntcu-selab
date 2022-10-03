@@ -55,12 +55,11 @@ export function ShowQuestion2 () {
 
 export function ShowQuestion2byTeacher (teacher) {
   return request({
-    url: '/question/getQuestionBank2/byteacher/',
+    url: '/question/getQuestionsByTeacher?teacher=' + teacher,
     method: 'get',
     headers: {
       'Authorization': 'Bearer ' + store.state.token
-    },
-    teacher
+    }
   })
 }
 

@@ -45,7 +45,7 @@
         </el-table-column>
         </el-table>
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-plus" @click="add" type="primary">增加輸入、輸出</el-button>
-        <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-plus" @click="sub" type="primary">減少輸入、輸出</el-button>
+        <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-minus" @click="sub" type="primary">減少輸入、輸出</el-button>
       </div>
       <div id = "footer-left">
         <el-upload
@@ -60,7 +60,7 @@
           :file-list="imageList"
           list-type="picture"
         >
-        <el-button type="warning">圖片上傳</el-button>
+        <el-button type="warning" icon="el-icon-upload">圖片上傳</el-button>
         </el-upload>
       </div>
       <div id ="footer-right">
@@ -74,12 +74,12 @@
           :show-file-list="true"
           :file-list="fileList"
         >
-          <el-button type="warning">程式碼上傳</el-button>
+          <el-button type="warning" icon="el-icon-upload">程式碼上傳</el-button>
         </el-upload>
         <el-input clearble type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="sourcecode" placeholder="程式碼內容"></el-input>
       </div>
     <div id="footer">
-      <el-button type="success" @click='questionsumbit'>確認</el-button>
+      <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
     </div>
     <div v-show="notshow">
       code
@@ -356,6 +356,7 @@ export default {
 }
 #content{
   width: 80%;
+  margin-top: 20px;
   margin-left:10%;
   text-align:center;
 }
