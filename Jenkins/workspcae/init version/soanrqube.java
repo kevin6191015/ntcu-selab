@@ -16,12 +16,11 @@ import org.json.JSONObject;
 
 public class sonarqube_report_analyzer
 {
-     private String[] sonar_property=new String[16];
-     private String[] sonar_value=new String[16];
+     private String[] sonar_property=new String[14];
+     private String[] sonar_value=new String[14];
 
      private String[] score_property=new String[6];
      private String[] score_value=new String[6];
-     private String sonar_issues = "" ;
      private Double[] index = new Double[4];
      private String postparm="";
 
@@ -30,25 +29,21 @@ public class sonarqube_report_analyzer
 
      public static void main(String[] args)throws Exception{
           sonarqube_report_analyzer sq = new sonarqube_report_analyzer();
-          sq.GetSonarIssue(args[0]);
           sq.GetStudentID(args[0]);
           sq.GetSourceCode(args[0]);
           sq.GetSonarData(args[0]);
           sq.GetJenkinsData(args[0],args[1],args[2],args[3]);
           sq.GetPostparm();
           sq.GetScoreparm(args[0],args[2]);
-          sq.WriteData();
-          sq.WriteScore();
+          //sq.WriteData();
+          //sq.WriteScore();
      }
      public void  GetJenkinsData(String name,String submit_time,String unit_test_result,String compile_result){
           sonar_property[11]="submit_times";
           sonar_property[12]="unit_test_result";
           sonar_property[13]="compile_result";
-          sonar_property[14]="report_suggestion";
-          sonar_property[15]="suggestion_code";
           sonar_value[11]=submit_time;
           sonar_value[12]=unit_test_result;
-          sonar_value[15]="";
           if(compile_result.equals("0")){
                sonar_value[13]="compile error";
           }else{
@@ -65,9 +60,6 @@ public class sonarqube_report_analyzer
                     String temp=sonar_property[i]+"="+sonar_value[i]+"&";
                     postparm+=temp;
                }
-          }
-          for(int i =0; i<sonar_property.length;i++){
-               System.out.println(sonar_property[i]+": "+sonar_value[i] );
           }
      }
 
@@ -129,8 +121,8 @@ public class sonarqube_report_analyzer
           conn.setRequestProperty("Content-Length",String.valueOf(postDataLength));
           conn.setRequestProperty("charset", "utf-8");
           conn.setRequestMethod("POST");
-          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
-          conn.setReadTimeout(5000);
+		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+		conn.setReadTimeout(5000);
           conn.setDoOutput(true);
           try(DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
                wr.write( postData );
@@ -156,8 +148,8 @@ public class sonarqube_report_analyzer
 
      public void GetSourceCode(String name)throws Exception{
           BufferedReader reader;
-          int line;
-          StringBuilder responseContent = new StringBuilder();
+		int line;
+		StringBuilder responseContent = new StringBuilder();
           String urls = "{Sonar-url}/api/sources/raw?key=edu.selab:"+name+":src/main/java/edu/selab/App.java";
           String token = "{Sonar-token}"+":";
           String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
@@ -165,13 +157,13 @@ public class sonarqube_report_analyzer
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
           conn.setRequestProperty("Authorization", basicAuth);
           conn.setRequestMethod("GET");
-          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
-          conn.setReadTimeout(5000);
+		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+		conn.setReadTimeout(5000);
           reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-          while ((line = reader.read()) != -1) {
-               responseContent.append((char)line);
-          }
-          reader.close();
+		while ((line = reader.read()) != -1) {
+			responseContent.append((char)line);
+		}
+		reader.close();
           sonar_property[7] = "source_code";
           sonar_value[7]=responseContent.toString();
      }
@@ -192,27 +184,14 @@ public class sonarqube_report_analyzer
           while ((line = reader.read()) != -1) {
                responseContent.append((char)line);
           }
-          parseIssue(responseContent);
+          System.out.println(responseContent.toString());
           reader.close();
-     }
-
-     public  void parseIssue(StringBuilder response) {
-          JSONObject responseBody = new JSONObject( response.toString());
-          JSONArray arr = responseBody.getJSONArray("issues");
-          for (int i = 0; i < arr.length(); i++)
-          {
-               if( i != 0 )
-                    sonar_issues += "|" + arr.getJSONObject(i).getString("message");
-               else
-                    sonar_issues +=  arr.getJSONObject(i).getString("message");
-          }
-          sonar_value[14]=sonar_issues;
      }
 
      public  void GetSonarData(String name)throws Exception{
           BufferedReader reader;
-          String line;
-          StringBuilder responseContent = new StringBuilder();
+		String line;
+		StringBuilder responseContent = new StringBuilder();
 
           String urls = "{Sonar-url}/api/measures/component?component=edu.selab:"+name+"&metricKeys=sqale_rating,security_rating,security_review_rating,reliability_rating,code_smells,bugs,vulnerabilities";
           //System.out.println(urls);
@@ -223,15 +202,15 @@ public class sonarqube_report_analyzer
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
           conn.setRequestProperty("Authorization", basicAuth);
           conn.setRequestMethod("GET");
-          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
-          conn.setReadTimeout(5000);
+		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+		conn.setReadTimeout(5000);
           int status = conn.getResponseCode();
           reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-          while ((line = reader.readLine()) != null) {
-               responseContent.append(line);
-          }
-          reader.close();
-          System.out.println("response code: " + status);
+		while ((line = reader.readLine()) != null) {
+			responseContent.append(line);
+		}
+		reader.close();
+		System.out.println("response code: " + status);
           parseData(responseContent);
      }
 
@@ -252,6 +231,9 @@ public class sonarqube_report_analyzer
                }else if(sonar_property[i].equals("security_review_rating")){
                     index[3]=Double.parseDouble(sonar_value[i]);
                }
+          }
+          for(int i =0; i<11;i++){
+               //System.out.println(sonar_property[i]+": "+sonar_value[i] );
           }
      }
 }

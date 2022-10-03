@@ -16,13 +16,13 @@ import org.json.JSONObject;
 
 public class sonarqube_report_analyzer
 {
-     private String[] sonar_property=new String[14];
-     private String[] sonar_value=new String[14];
+     private String[] sonar_property=new String[16];
+     private String[] sonar_value=new String[16];
 
      private String[] score_property=new String[6];
      private String[] score_value=new String[6];
+     private String sonar_issues = "" ;
      private Double[] index = new Double[4];
-
      private String postparm="";
 
      private String scoreparm="";
@@ -30,6 +30,7 @@ public class sonarqube_report_analyzer
 
      public static void main(String[] args)throws Exception{
           sonarqube_report_analyzer sq = new sonarqube_report_analyzer();
+          sq.GetSonarIssue(args[0]);
           sq.GetStudentID(args[0]);
           sq.GetSourceCode(args[0]);
           sq.GetSonarData(args[0]);
@@ -43,8 +44,11 @@ public class sonarqube_report_analyzer
           sonar_property[11]="submit_times";
           sonar_property[12]="unit_test_result";
           sonar_property[13]="compile_result";
+          sonar_property[14]="report_suggestion";
+          sonar_property[15]="suggestion_code";
           sonar_value[11]=submit_time;
           sonar_value[12]=unit_test_result;
+          sonar_value[15]="";
           if(compile_result.equals("0")){
                sonar_value[13]="compile error";
           }else{
@@ -62,6 +66,9 @@ public class sonarqube_report_analyzer
                     postparm+=temp;
                }
           }
+          for(int i =0; i<sonar_property.length;i++){
+               System.out.println(sonar_property[i]+": "+sonar_value[i] );
+          }
      }
 
      public  void  GetScoreparm(String name,String unit_result){
@@ -75,7 +82,7 @@ public class sonarqube_report_analyzer
           score_value[1]=sonar_value[8];
           score_value[2]=sonar_value[11];
           score_value[3]=sonar_value[10];
-          score_value[4]=String.valueOf(Integer.parseInt(unit_result.substring(unit_result.lastIndexOf(":")+1))*10);
+          score_value[4]=String.valueOf(Integer.parseInt(unit_result.substring(unit_result.lastIndexOf(":")+1))*(100/Integer.parseInt(unit_result.substring(unit_result.indexOf(":")+1,unit_result.indexOf(",")))));
           score_value[5]=String.valueOf((30-index[0]*5)+(30-index[1]*5)+(30-index[2]*5)+(30-index[3]*5));
           System.out.println(score_value[5]);
           for(int i=0;i<score_property.length;i++){
@@ -90,7 +97,7 @@ public class sonarqube_report_analyzer
      }
      public  void  WriteScore() throws Exception {
           String urls = "http://120.108.204.152:3000/api/score/add";
-          //System.out.println("\n"+scoreparm);
+          System.out.println("\n"+scoreparm);
           byte[] scoreData = scoreparm.getBytes( StandardCharsets.UTF_8 );
           int scoreDataLength = scoreData.length;
           URL url = new URL(urls);
@@ -113,7 +120,7 @@ public class sonarqube_report_analyzer
      }
      public  void  WriteData() throws Exception{
           String urls = "http://120.108.204.152:3000/api/sqreport/add";
-          //System.out.println("\n"+postparm);
+          System.out.println("\n"+postparm);
           byte[] postData = postparm.getBytes( StandardCharsets.UTF_8 );
           int postDataLength = postData.length;
           URL url = new URL(urls);
@@ -168,6 +175,39 @@ public class sonarqube_report_analyzer
           sonar_property[7] = "source_code";
           sonar_value[7]=responseContent.toString();
      }
+     private void GetSonarIssue(String name)throws Exception{
+          BufferedReader reader;
+          int line;
+          StringBuilder responseContent = new StringBuilder();
+          String urls = "http://120.108.204.152:9000/api/issues/search?componentKeys=edu.selab:"+name+"&scope=MAIN&types=CODE_SMELL";
+          String token = "ef304f59cfec3c82accdd9ade9983d97dd81cf36"+":";
+          String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
+          URL url = new URL(urls);
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          conn.setRequestProperty("Authorization", basicAuth);
+          conn.setRequestMethod("GET");
+          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+          conn.setReadTimeout(5000);
+          reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+          while ((line = reader.read()) != -1) {
+               responseContent.append((char)line);
+          }
+          parseIssue(responseContent);
+          reader.close();
+     }
+
+     public  void parseIssue(StringBuilder response) {
+          JSONObject responseBody = new JSONObject( response.toString());
+          JSONArray arr = responseBody.getJSONArray("issues");
+          for (int i = 0; i < arr.length(); i++)
+          {
+               if( i != 0 )
+               sonar_issues += "|" + arr.getJSONObject(i).getString("message");
+               else
+               sonar_issues +=  arr.getJSONObject(i).getString("message");
+          }
+          sonar_value[14]=sonar_issues;
+     }
 
      public  void GetSonarData(String name)throws Exception{
           BufferedReader reader;
@@ -213,9 +253,6 @@ public class sonarqube_report_analyzer
                     index[3]=Double.parseDouble(sonar_value[i]);
                }
           }
-          for(int i =0; i<11;i++){
-			//System.out.println(sonar_property[i]+": "+sonar_value[i] );
-		}
      }
 }
 

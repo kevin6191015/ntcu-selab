@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 08 月 31 日 13:04
--- 伺服器版本： 8.0.29
--- PHP 版本： 8.0.15
+-- 產生時間： 2022 年 10 月 03 日 08:15
+-- 伺服器版本： 8.0.30
+-- PHP 版本： 8.0.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫: `system`
+-- 資料庫： `system`
 --
 
 -- --------------------------------------------------------
@@ -41,9 +41,9 @@ CREATE TABLE `classes_list` (
 
 INSERT INTO `classes_list` (`class_id`, `semester`, `class_name`, `teacher`, `TA`) VALUES
 (1, '108-1', '程式設計B班', 'Kevin', 'John'),
-(2, '101-1', '程式設計C班', 'Kevin', 'murloc'),
-(3, '109-2', '程式設計A班', 'ABC', 'murloc'),
-(4, '108-1', '程設A班', '魯夫', '凱多');
+(2, '109-1', '程式設計A班', 'James', 'Robert'),
+(3, '109-1', '程式設計B班', 'Michael', 'David'),
+(4, '109-1', '程式設計C班', 'Daniel', 'Mark');
 
 -- --------------------------------------------------------
 
@@ -53,18 +53,22 @@ INSERT INTO `classes_list` (`class_id`, `semester`, `class_name`, `teacher`, `TA
 
 CREATE TABLE `class_001_questions` (
   `question_id` text,
+  `assignment_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `question_name` text,
-  `release_time` date DEFAULT NULL,
-  `deadline` date DEFAULT NULL
+  `release_time` text,
+  `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `class_001_questions`
 --
 
-INSERT INTO `class_001_questions` (`question_id`, `question_name`, `release_time`, `deadline`) VALUES
-('a001', 'test4', '2002-10-30', '2022-12-31'),
-('a0001', 'Fibonacci_Number', '2022-07-26', '2022-07-31');
+INSERT INTO `class_001_questions` (`question_id`, `assignment_name`, `question_name`, `release_time`, `deadline`) VALUES
+('a0001', 'HW_1', 'Fibonacci_Number', '20221001', '20221101'),
+('a0002', 'HW_1', 'Matrix-chain_Multiplication', '20221001', '20221101'),
+('a0003', 'HW_1', 'Longest_Common_Subsequence', '20221001', '20221101'),
+('a0004', 'HW_2', 'Optimal_Binary_Search_Tree', '20220930', '20221201'),
+('a0005', 'HW_2', 'Graph', '20220930', '20221201');
 
 -- --------------------------------------------------------
 
@@ -82,6 +86,8 @@ CREATE TABLE `class_001_student` (
 --
 
 INSERT INTO `class_001_student` (`student_id`, `student_name`) VALUES
+('acs109102', '周二二'),
+('acs109101', '陳一一'),
 ('acs108122', '閃電鳥');
 
 -- --------------------------------------------------------
@@ -91,10 +97,11 @@ INSERT INTO `class_001_student` (`student_id`, `student_name`) VALUES
 --
 
 CREATE TABLE `class_002_questions` (
+  `assignment_name` text,
   `question_id` text,
   `question_name` text,
-  `release_time` datetime DEFAULT NULL,
-  `deadline` datetime DEFAULT NULL
+  `release_time` text,
+  `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -113,8 +120,8 @@ CREATE TABLE `class_002_student` (
 --
 
 INSERT INTO `class_002_student` (`student_id`, `student_name`) VALUES
-('acs108122', '閃電鳥'),
-('acs108101', '冰鳥2');
+('acs109101', '陳一一'),
+('acs108101', '冰鳥');
 
 -- --------------------------------------------------------
 
@@ -123,10 +130,11 @@ INSERT INTO `class_002_student` (`student_id`, `student_name`) VALUES
 --
 
 CREATE TABLE `class_003_questions` (
+  `assignment_name` text,
   `question_id` text,
   `question_name` text,
-  `release_time` datetime DEFAULT NULL,
-  `deadline` datetime DEFAULT NULL
+  `release_time` text,
+  `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -140,6 +148,14 @@ CREATE TABLE `class_003_student` (
   `student_name` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- 傾印資料表的資料 `class_003_student`
+--
+
+INSERT INTO `class_003_student` (`student_id`, `student_name`) VALUES
+('acs109102', '周二二'),
+('acs108122', '閃電鳥');
+
 -- --------------------------------------------------------
 
 --
@@ -147,11 +163,21 @@ CREATE TABLE `class_003_student` (
 --
 
 CREATE TABLE `class_004_questions` (
+  `assignment_name` text,
   `question_id` text,
   `question_name` text,
-  `release_time` datetime DEFAULT NULL,
-  `deadline` datetime DEFAULT NULL
+  `release_time` text,
+  `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `class_004_questions`
+--
+
+INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `release_time`, `deadline`) VALUES
+(NULL, 'a0002', 'Matrix-chain_Multiplication', '20221004', '20221012'),
+(NULL, 'a0001', 'Fibonacci_Number', '20221004', '20221012'),
+(NULL, 'b0001', 'The 3n   1 problem', '20221004', '20221012');
 
 -- --------------------------------------------------------
 
@@ -169,7 +195,7 @@ CREATE TABLE `class_004_student` (
 --
 
 INSERT INTO `class_004_student` (`student_id`, `student_name`) VALUES
-('acs108122', '閃電鳥');
+('acs109103', '李三三');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

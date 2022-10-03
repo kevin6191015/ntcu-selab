@@ -18,8 +18,11 @@ public class testfile_generator
 {
 	private String[] testinput=new String[11];
 	private String[] testoutput=new String[11];
+
+	private static int input_num = 0;
 	public static void main(String[] args)throws Exception{
 		testfile_generator tg = new testfile_generator();
+		input_num = Integer.valueOf(args[1].substring(1,args[1].length()-1));
 		tg.GetTestData(args[0]);
 		tg.Write_testdata(args[0]);
 	}
@@ -40,12 +43,12 @@ public class testfile_generator
         } catch (IOException e) {
             e.printStackTrace();
         }
-		for(int i=1; i<11;i++){
+		for(int i=1; i<=input_num;i++){
 			testinput[i]=testinput[i].replaceAll("\\\n"," ");
 			testoutput[i]=testoutput[i].replaceAll("\\\n"," ");
 		}
 
-		for(int i=1 ;i<11; i++){
+		for(int i=1 ;i<=input_num; i++){
 			input += "@Test\npublic  void  testMain"+i+"() {\nString ss =  \""+testoutput[i]+"\";\nassertEquals(ss,App.main("+"\""+testinput[i]+"\""+"));\n}\n";
 		}
 		input+="}";
@@ -65,7 +68,6 @@ public class testfile_generator
 		conn.setRequestMethod("GET");
 		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
 		conn.setReadTimeout(5000);
-			
 		// Test if the response from the server is successful
 		int status = conn.getResponseCode();
 		reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -81,16 +83,15 @@ public class testfile_generator
    public void parse(StringBuilder responseBody) {
 		JSONArray jsonarray = new JSONArray( responseBody.toString());
     	JSONObject jsonobject = jsonarray.getJSONObject(0);
-		for(int j=1;j<11;j++){
+		for(int j=1;j<=input_num;j++){
 			testinput[j] = jsonobject.getString("input"+j);
 			testoutput[j] = jsonobject.getString("output"+j);
 		}
-		for(int i =1; i<11;i++){
+		for(int i =1; i<=input_num;i++){
 			System.out.println("input"+i+": "+testinput[i]);
 		}
-		for(int i =1; i<11;i++){
+		for(int i =1; i<=input_num;i++){
 			System.out.println("output"+i+": "+testoutput[i]);
 		}
-		
 	}
 }
