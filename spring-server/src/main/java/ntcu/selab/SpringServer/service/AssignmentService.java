@@ -67,6 +67,11 @@ public class AssignmentService {
             /*
              * 將題目加進class_question裡
              */
+            String classID="";
+            for (int i = 0; i < 3 - cid.length(); i++) {
+                classID += '0';
+            }
+            classID+=cid;
             Question question = null;
             if (qid.charAt(0) == 'a') {
                 question = qDbManager.getQuestionFromBank1ById(qid);
@@ -91,7 +96,7 @@ public class AssignmentService {
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
-                String project_name = qid + "_" +  semester + "_" + release_time+"_" + student.getId();
+                String project_name = qid + "_" +classID+"_"+  semester + "_" + release_time+"_" + student.getId();
 
                 //創建gitlab project
                 GitlabProject gitlabProject = gitlabService.createRootProject(project_name);
@@ -171,7 +176,7 @@ public class AssignmentService {
                         break;
                     }
                 }
-                String project_name = qid + "_" +  semester + "_" + release + "_" + student.getId();
+                String project_name = qid + "_" + cid + "_" +  semester + "_" + release + student.getId();
                 System.out.println(project_name);
 
                 //刪除jenkins project
