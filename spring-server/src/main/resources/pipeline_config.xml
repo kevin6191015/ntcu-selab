@@ -108,7 +108,7 @@
 
             dir(&apos;./.validate/&apos;){
             sh &quot;javac -cp json-20220320.jar testfile_generator.java&quot;
-            sh &quot;java -cp &apos;.:json-20220320.jar&apos; testfile_generator ${NAME}&quot;
+            sh &quot;java -cp &apos;.:json-20220320.jar&apos; testfile_generator ${NAME}&quot; ${env.input_or_not}
             }
 
             String testfile = readFile &quot;${env.WORKSPACE}/../testfile/${NAME}/AppTest.java&quot;

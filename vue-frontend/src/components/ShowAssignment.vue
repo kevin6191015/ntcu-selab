@@ -97,7 +97,7 @@ export default {
           if (this.not_debuted_list.length > 0) {
             let check = true
             for (let j = 0; j < this.not_debuted_list.length; j++) {
-              if (this.not_debuted_list[j].assignment_name !== tmp[i].assignment_name) {
+              if (this.not_debuted_list[j].assignment_name === tmp[i].assignment_name) {
                 check = false
               }
             }

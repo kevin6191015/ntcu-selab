@@ -85,7 +85,6 @@ export default {
             tmp[i].correct = this.correct[i].people_correct
             tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
             tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-            console.log(tmp[i].assignment_name)
             if (this.$store.state.assignment.assignment_name === tmp[i].assignment_name) {
               this.assignment.push(tmp[i])
             }
