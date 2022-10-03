@@ -16,11 +16,8 @@ export default new Vuex.Store({
     seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent')),
     imagelink: JSON.parse(sessionStorage.getItem('imagelink')),
     sourcecode: JSON.parse(sessionStorage.getItem('sourcecode')),
-<<<<<<< HEAD
-    project_name: JSON.parse(sessionStorage.getItem('project_name'))
-=======
+    project_name: JSON.parse(sessionStorage.getItem('project_name')),
     controlreload: JSON.parse(sessionStorage.getItem('controlreload'))
->>>>>>> 2efdf1c (add assignment good)
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -59,15 +56,13 @@ export default new Vuex.Store({
       state.sourcecode = sourcecode
       sessionStorage.setItem('sourcecode', JSON.stringify(sourcecode))
     },
-<<<<<<< HEAD
     SET_PROJECT_NAME: (state, projectname) => {
       state.project_name = projectname
       sessionStorage.setItem('project_name', JSON.stringify(projectname))
-=======
+    },
     SET_CONTROLRELOAD: (state, controlreload) => {
       state.controlreload = controlreload
       sessionStorage.setItem('controlreload', JSON.stringify(controlreload))
->>>>>>> 2efdf1c (add assignment good)
     },
     REMOVE_INFO: (state) => {
       state.token = ''
@@ -78,6 +73,10 @@ export default new Vuex.Store({
       state.class = ''
       state.class_id = ''
       state.project_name = ''
+      state.Question_To_Show = ''
+      state.imagelink = ''
+      state.sourcecode = ''
+      state.controlreload = ''
       state.assignment = {
       }
       state.seletedstudent = {
@@ -89,6 +88,10 @@ export default new Vuex.Store({
       sessionStorage.setItem('class_id', '')
       sessionStorage.setItem('selectedQuestion', '')
       sessionStorage.setItem('project_name', '')
+      sessionStorage.setItem('Question_To_Show', '')
+      sessionStorage.setItem('imagelink', '')
+      sessionStorage.setItem('sourcecode', '')
+      sessionStorage.setItem('controlreload', '')
       sessionStorage.setItem('assignment', JSON.stringify(''))
       sessionStorage.setItem('seletedstudent', JSON.stringify(''))
     },
