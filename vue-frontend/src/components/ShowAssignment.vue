@@ -2,8 +2,8 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-button class="button1" @click="change1">已發布</el-button>
-        <el-button class="button1" @click="change2">未發布</el-button>
+        <el-button class="button1" @click="change1">已公布</el-button>
+        <el-button class="button1" @click="change2">未公布</el-button>
       </el-row>
       <div style="margin:10px"></div>
       <el-row>
