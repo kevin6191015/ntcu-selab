@@ -23,10 +23,6 @@
                   width="100">
                 </el-table-column>
                 <el-table-column
-                  prop="password"
-                  label="密碼">
-                </el-table-column>
-                <el-table-column
                   prop="name"
                   label="名字">
                 </el-table-column>
@@ -81,6 +77,7 @@
               <el-row>
                 <el-input
                 v-model="password"
+                show-password
                 placeholder="密碼"
                 style="margin: 20px; width: 90%;"></el-input>
               </el-row>
