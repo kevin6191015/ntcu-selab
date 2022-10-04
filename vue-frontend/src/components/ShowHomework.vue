@@ -1,6 +1,7 @@
 <template>
   <el-container class="container2">
     <el-main>
+      <el-row class="title">{{this.$store.state.assignment.assignment_name}}</el-row>
       <div style="margin:10px"></div>
       <el-row>
         <el-table
@@ -152,5 +153,10 @@ export default {
   padding: 5px;
   color: aliceblue;
   margin: 5px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
 }
 </style>
