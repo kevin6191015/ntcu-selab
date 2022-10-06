@@ -275,7 +275,7 @@ export default {
 
 .outer {
   background-color: rgba(111, 122, 144, 0.555);
-  padding: 15px;
+  height: 699px;
 }
 
 .box {

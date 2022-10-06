@@ -10,6 +10,7 @@
         <el-col :span="11">
           <div class="grid-content2">
             <el-table
+              :header-cell-style="{background:'#eef1f6'}"
               ref="multipleTable"
               :data="not_class_student"
               tooltip-effect="dark"
@@ -20,8 +21,8 @@
                 width="150">
               </el-table-column>
               <el-table-column
-                label="student_name"
-                width="240">
+                label="學生名字"
+                width="257">
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
@@ -30,6 +31,7 @@
         <el-col :span="11">
           <div>
             <el-table
+              :header-cell-style="{background:'#eef1f6'}"
               ref="multipleTable"
               :data="class_student"
               tooltip-effect="dark"
@@ -40,8 +42,8 @@
                 width="150">
               </el-table-column>
               <el-table-column
-                label="student_name"
-                width="240">
+                label="學生名字"
+                width="257">
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
@@ -190,6 +192,7 @@ export default {
 
 .outer1 {
   background-color: rgba(111, 122, 144, 0.555);
+  height: 699px;
 }
 
 </style>
