@@ -1,45 +1,52 @@
 <template>
   <el-container class="home-container">
-    <el-header style="margin-right: 15px; width: 100%">
-      <span class="nav-logo">😀</span>
-      <span class="head-title">DashBoard</span>
-      <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
-      <el-dropdown style="float:right">
-        <el-button type="primary" plain>
-          {{this.$store.state.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <el-button type="text" @click='logout'>登出</el-button>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <el-button type="text" @click='chooseCourse'>選擇課程</el-button>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-header>
-    <el-container>
-      <el-aside width="15%">
+    <el-header>
+      <el-row>
         <el-menu
           :default-active="$route.path"
           router
-          text-color='black'
-          active-text-color='red'
-        >
+          style="width:100%"
+          background-color="#545c64"
+          mode="horizontal"
+          text-color='#fff'
+          active-text-color='#ffd04b'>
+          <el-menu-item>
+            <span class="head-title">DashBoard</span>
+          </el-menu-item>
           <el-menu-item
             v-for="(item, i) in navList"
             :key="i"
-            :index="item.name"
-          >
+            :index="item.name">
             <i :class="item.icon"></i>
             {{item.title }}
           </el-menu-item>
+          <el-menu-item style="float:right">
+            <el-dropdown>
+              <el-button style="background-color:aquamarine" >
+                {{this.$store.state.user.name[0]}}
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item disabled style="color:#545c64">
+                  {{this.$store.state.user.name}}
+                </el-dropdown-item>
+                <el-dropdown-item divided>
+                  <el-button type="text" style="color:#545c64" @click='logout'>登出</el-button>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <el-button type="text" style="color:#545c64" @click='chooseCourse'>選擇課程</el-button>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-menu-item>
+          <el-menu-item style="float:right">
+            <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
+          </el-menu-item>
         </el-menu>
-      </el-aside>
-      <el-main>
+      </el-row>
+      <el-row>
         <router-view></router-view>
-      </el-main>
-    </el-container>
+      </el-row>
+    </el-header>
   </el-container>
 </template>
 
@@ -79,35 +86,15 @@ export default {
 </script>
 
 <style >
-.nav-logo {
-  position: absolute;
-  padding-top: -1%;
-  left: 5%;
-  font-size: 40px;
-}
-
 .head-title {
-  position: absolute;
-  padding-top: 20px;
-  left: 15%;
   font-size: 20px;
   font-weight: bold;
 }
 
 .head-center-title {
-  position: absolute;
-  padding-top: 20px;
   left: 50%;
   font-size: 20px;
   font-weight: bold;
 }
 
-.el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-}
-
-.el-icon-arrow-down {
-    font-size: 13px;
-}
 </style>
