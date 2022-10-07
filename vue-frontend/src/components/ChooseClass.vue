@@ -42,16 +42,38 @@
                 </el-option>
             </el-select>
         </el-header>
-        <el-header align="center" v-if="teacher">
-          <el-button v-for="item in content" :key="item.class_name" @click="changePage()">
-            {{item.semester}} {{item.class_name}}
-          </el-button>
-        </el-header>
-        <el-header align="center" v-if="student">
-          <el-button v-for="item in student_Allclass" :key="item.class_name" @click="changePage()">
-            {{item.semester}} {{item.class_name}}
-          </el-button>
-        </el-header>
+        <el-main v-if="teacher">
+          <el-table
+            :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+            :data="content"
+            stripe
+            border
+            highlight-current-row
+            @current-change="changePage"
+            style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
+            <el-table-column
+              align="center"
+              prop="semester"
+              label="班級名稱">
+            </el-table-column>
+          </el-table>
+        </el-main>
+        <el-main v-if="student">
+          <el-table
+            :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+            :data="student_Allclass"
+            stripe
+            border
+            highlight-current-row
+            @current-change="changePage"
+            style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
+            <el-table-column
+              align="center"
+              prop="semester"
+              label="班級名稱">
+            </el-table-column>
+          </el-table>
+        </el-main>
     </el-container>
 </template>
 
@@ -87,7 +109,11 @@ export default {
     })
     getAllCourse().then(res => {
       this.all_class = res.data.data.Courses
-      this.content = res.data.data.Courses
+      let tmp = res.data.data.Courses
+      for (let i = 0; i < tmp.length; i++) {
+        tmp[i].semester = tmp[i].semester + tmp[i].class_name
+      }
+      this.content = tmp
       if (this.student) {
         this.student_Allclass = []
         for (let i = 0; i < this.$store.state.user.classes.split(',').length; i++) {
@@ -111,7 +137,11 @@ export default {
       this.class_name = ''
       getCourseBySem({sem: this.sem}).then(res => {
         this.class_by_sem = res.data.data.Courses
-        this.content = res.data.data.Courses
+        let tmp = res.data.data.Courses
+        for (let i = 0; i < tmp.length; i++) {
+          tmp[i].semester = tmp[i].semester + tmp[i].class_name
+        }
+        this.content = tmp
         this.teacher_back_up = this.content
         if (this.student) {
           this.student_class = []
@@ -150,25 +180,15 @@ export default {
         }
       }
     },
-    changePage: function () {
-      if (this.sem === '') {
-        this.$alert('請先選擇學期', 'ERROR', {
-          confirmButtonText: '確定'
-        })
-      } else if (this.class_name === '') {
-        this.$alert('請先選擇課程', 'ERROR', {
-          confirmButtonText: '確定'
-        })
-      } else {
-        this.$store.commit('SET_CLASS', this.sem + this.class_name)
-        this.$store.commit('SET_CLASS_ID', this.class_id)
-        if (this.teacher) {
-          this.$router.replace({
-            path: '/ShowAssignment'})
-        } else if (this.student) {
-          this.$router.replace({
-            path: '/studenthome'})
-        }
+    changePage: function (selected) {
+      this.$store.commit('SET_CLASS', selected.semester)
+      this.$store.commit('SET_CLASS_ID', selected.class_id)
+      if (this.teacher) {
+        this.$router.replace({
+          path: '/ShowAssignment'})
+      } else if (this.student) {
+        this.$router.replace({
+          path: '/studenthome'})
       }
     }
   }
