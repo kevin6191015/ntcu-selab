@@ -175,9 +175,9 @@ public class QuestionService {
         try{
             qDbManager.deleteQuestionById(id);
         }catch(Exception e){
-            return new Result(400, "Delete Question From Bank1 Failed! " + e.getMessage(), "");
+            return new Result(400, "Delete Question From Bank2 Failed! " + e.getMessage(), "");
         }
-        return new Result(200, "Delete Question From Bank1 Successfull!", "");
+        return new Result(200, "Delete Question From Bank2 Successfull!", "");
     }
 
     @GetMapping("/addQuestionToBank1")
