@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 10 月 03 日 08:15
+-- 產生時間： 2022 年 10 月 04 日 13:50
 -- 伺服器版本： 8.0.30
 -- PHP 版本： 8.0.19
 
@@ -67,8 +67,7 @@ INSERT INTO `class_001_questions` (`question_id`, `assignment_name`, `question_n
 ('a0001', 'HW_1', 'Fibonacci_Number', '20221001', '20221101'),
 ('a0002', 'HW_1', 'Matrix-chain_Multiplication', '20221001', '20221101'),
 ('a0003', 'HW_1', 'Longest_Common_Subsequence', '20221001', '20221101'),
-('a0004', 'HW_2', 'Optimal_Binary_Search_Tree', '20220930', '20221201'),
-('a0005', 'HW_2', 'Graph', '20220930', '20221201');
+('a0004', 'HW_2', 'Optimal_Binary_Search_Tree', '20220930', '20221201');
 
 -- --------------------------------------------------------
 
@@ -169,15 +168,6 @@ CREATE TABLE `class_004_questions` (
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- 傾印資料表的資料 `class_004_questions`
---
-
-INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `release_time`, `deadline`) VALUES
-(NULL, 'a0002', 'Matrix-chain_Multiplication', '20221004', '20221012'),
-(NULL, 'a0001', 'Fibonacci_Number', '20221004', '20221012'),
-(NULL, 'b0001', 'The 3n   1 problem', '20221004', '20221012');
 
 -- --------------------------------------------------------
 

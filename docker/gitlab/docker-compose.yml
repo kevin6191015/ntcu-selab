@@ -1,0 +1,20 @@
+version: "3.5"
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    restart: always
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://120.108.204.152'
+        gitlab_rails['initial_root_password'] = "12345678"
+        gitlab_rails['gitlab_shell_ssh_port'] = 22022
+    hostname: 120.108.204.152
+    ports:
+      - '10085:80'
+      - '10443:443'
+      - '10022:22'
+    volumes:
+      - '/home/selab/server/gitlab/config:/etc/gitlab'
+      - '/home/selab/server/gitlab/logs:/var/log/gitlab'
+      - '/home/selab/server/gitlab/data:/var/opt/gitlab'
+    container_name: gitlab

@@ -1,0 +1,14 @@
+version: "2.2"
+services:
+  frontend:
+    image: front:latest
+    restart: always
+    ports:
+      - '8083:8083'
+    container_name: front
+  backend:
+    image: spring-server:latest
+    restart: always
+    ports:
+       - '8082:8082'
+    container_name: spring-server
