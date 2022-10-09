@@ -1,8 +1,13 @@
 <template>
-  <div >
+  <div id="container">
     <div id="sitebody">
       <div id="header">
-        <h3>新增題目</h3>
+        <div v-if="this.Revise_Quesition_Mode">
+          <h3>修改考古</h3>
+        </div>
+        <div v-else>
+          <h3>新增題目</h3>
+        </div>
         <el-input
           placeholder="題目名稱"
           v-model="question_name"
@@ -47,7 +52,14 @@
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-plus" @click="add" type="primary">增加輸入、輸出</el-button>
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-minus" @click="sub" type="primary">減少輸入、輸出</el-button>
       </div>
-      <div id = "footer-left">
+      <div v-if = "this.Revise_Quesition_Mode" id = "temp">
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="url"
+          :preview-src-list="srcList">
+        </el-image>
+      </div>
+      <div v-else id = "footer-left">
         <el-upload
           action
           accept="image/jpeg, image/png"
@@ -60,7 +72,7 @@
           :file-list="imageList"
           list-type="picture"
         >
-        <el-button type="warning" icon="el-icon-upload">圖片上傳</el-button>
+        <el-button icon="el-icon-upload" type="warning" plain>圖片上傳</el-button>
         </el-upload>
       </div>
       <div id ="footer-right">
@@ -74,23 +86,30 @@
           :show-file-list="true"
           :file-list="fileList"
         >
-          <el-button type="warning" icon="el-icon-upload">程式碼上傳</el-button>
+          <el-button icon="el-icon-upload" type="warning" plain>程式碼上傳</el-button>
         </el-upload>
         <el-input clearble type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="sourcecode" placeholder="程式碼內容"></el-input>
       </div>
-    <div id="footer">
+      <div id="footer">
+        <el-switch
+        style="display: block"
+        v-model="publicbank"
+        active-text="放入公共題庫"
+        inactive-text="不放入公共題庫">
+      </el-switch>
       <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
     </div>
     <div v-show="notshow">
       code
       {{newsourcecode}}
     </div>
+    {{imageList}}
   </div>
   </div>
 </template>
 
 <script scoped>
-import { AddQuestionbank2, AddSourceocde } from '../api/question'
+import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2 } from '../api/question'
 import store from '../store'
 export default {
   name: 'AddQuestion',
@@ -113,10 +132,89 @@ export default {
       input_num: 1,
       sourcecode: '',
       notshow: false,
-      hassouececode: false
+      hassouececode: false,
+      Revise_Quesition_Mode: false,
+      publicbank: false,
+      srcList: [],
+      url: ''
     }
   },
   created () {
+    if (this.$store.state.add_question_mode === '3') {
+      this.Revise_Quesition_Mode = true
+      let id = store.state.Question_To_Show
+      if (id.charAt(0) === 'a') {
+        ShowSelectedQuestion1(id.slice(0, 5)).then(res => {
+          let content = res.data.data
+          console.log(content)
+          this.question_name = content.question_name
+          this.description = content.question_description
+          this.input_num = content.inputornot
+          this.url = content.image1
+          let temp = content.image1
+          this.srcList.push(temp)
+          temp = content.image2
+          this.srcList.push(temp)
+          let templist = []
+          temp = {input: content.input1, output: content.output1}
+          templist.push(temp)
+          temp = {input: content.input2, output: content.output2}
+          templist.push(temp)
+          temp = {input: content.input3, output: content.output3}
+          templist.push(temp)
+          temp = {input: content.input4, output: content.output4}
+          templist.push(temp)
+          temp = {input: content.input5, output: content.output5}
+          templist.push(temp)
+          temp = {input: content.input6, output: content.output6}
+          templist.push(temp)
+          temp = {input: content.input7, output: content.output7}
+          templist.push(temp)
+          temp = {input: content.input8, output: content.output8}
+          templist.push(temp)
+          temp = {input: content.input9, output: content.output9}
+          templist.push(temp)
+          temp = {input: content.input10, output: content.output10}
+          templist.push(temp)
+          this.in_output_list = templist
+        })
+      } else {
+        ShowSelectedQuestion2(id.slice(0, 5)).then(res => {
+          let content = res.data.data
+          console.log(content)
+          this.question_name = content.question_name
+          this.description = content.question_description
+          this.input_num = content.inputornot
+          this.url = content.image1
+          let temp = content.image1
+          this.srcList.push(temp)
+          temp = content.image2
+          this.srcList.push(temp)
+          let templist = []
+          temp = {input: content.input1, output: content.output1}
+          templist.push(temp)
+          temp = {input: content.input2, output: content.output2}
+          templist.push(temp)
+          temp = {input: content.input3, output: content.output3}
+          templist.push(temp)
+          temp = {input: content.input4, output: content.output4}
+          templist.push(temp)
+          temp = {input: content.input5, output: content.output5}
+          templist.push(temp)
+          temp = {input: content.input6, output: content.output6}
+          templist.push(temp)
+          temp = {input: content.input7, output: content.output7}
+          templist.push(temp)
+          temp = {input: content.input8, output: content.output8}
+          templist.push(temp)
+          temp = {input: content.input9, output: content.output9}
+          templist.push(temp)
+          temp = {input: content.input10, output: content.output10}
+          templist.push(temp)
+          this.in_output_list = templist
+        })
+      }
+    }
     store.commit('SET_IMAGELINK', '')
     store.commit('SET_SOURCECODE', '')
   },
@@ -143,19 +241,25 @@ export default {
       }
       let image1 = ''
       let image2 = ''
-      if (store.state.imagelink.indexOf(',') >= 0) {
-        image1 = this.$store.state.imagelink.slice(store.state.imagelink.indexOf(',') + 1)
-        image2 = this.$store.state.imagelink.slice(0, store.state.imagelink.indexOf(','))
+      if (this.Revise_Quesition_Mode) {
+        image1 = this.srcList[1]
+        image2 = this.srcList[2]
       } else {
-        image1 = this.$store.state.imagelink
+        if (store.state.imagelink.indexOf(',') >= 0) {
+          image1 = this.$store.state.imagelink.slice(store.state.imagelink.indexOf(',') + 1)
+          image2 = this.$store.state.imagelink.slice(0, store.state.imagelink.indexOf(','))
+        } else {
+          image1 = this.$store.state.imagelink
+        }
       }
-
       let description = this.description ? this.description : ''
 
       if (!this.question_name) {
         this.$message.error('請輸入題目名稱')
         return
       }
+      console.log(image1)
+      console.log(image2)
       AddQuestionbank2({
         input: input,
         output: output,
@@ -322,9 +426,13 @@ export default {
 </script>
 
 <style scoped>
-#test {
-  margin: 0px;
-  width: 100%;
+#temp {
+  width: 40%;
+  margin-right: 0%;
+  margin-left: 10%;
+  text-align:center;
+  line-height:80px;
+  float:left;
 }
 #sitebody{
   width:100%;
@@ -363,7 +471,7 @@ export default {
 #footer{
   clear:both;
   margin-right: 10%;
-  text-align:center;
+  text-align:right;
   line-height:80px;
   float:right;
 }
@@ -383,4 +491,8 @@ export default {
   line-height:80px;
   float:right;
 }
+#container{
+    background-color: rgb(228, 228, 228);
+    height: 1500px;
+  }
 </style>

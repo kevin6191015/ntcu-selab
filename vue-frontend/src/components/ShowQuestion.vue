@@ -24,6 +24,7 @@
       <div id="footer">
         <el-button  @click='goback'>關閉視窗</el-button>
       </div>
+      {{content}}
     </div>
   </div>
 </template>

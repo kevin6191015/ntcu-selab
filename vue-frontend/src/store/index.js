@@ -17,7 +17,8 @@ export default new Vuex.Store({
     imagelink: JSON.parse(sessionStorage.getItem('imagelink')),
     sourcecode: JSON.parse(sessionStorage.getItem('sourcecode')),
     project_name: JSON.parse(sessionStorage.getItem('project_name')),
-    controlreload: JSON.parse(sessionStorage.getItem('controlreload'))
+    controlreload: JSON.parse(sessionStorage.getItem('controlreload')),
+    add_question_mode: JSON.parse(sessionStorage.getItem('add_question_mode'))
   },
   mutations: {
     SET_TOKENN: (state, token) => {
@@ -64,6 +65,10 @@ export default new Vuex.Store({
       state.controlreload = controlreload
       sessionStorage.setItem('controlreload', JSON.stringify(controlreload))
     },
+    SET_ADD_QUESTION_MODE: (state, addquestionmode) => {
+      state.add_question_mode = addquestionmode
+      sessionStorage.setItem('add_question_mode', JSON.stringify(addquestionmode))
+    },
     REMOVE_INFO: (state) => {
       state.token = ''
       state.user = {
@@ -77,6 +82,7 @@ export default new Vuex.Store({
       state.imagelink = ''
       state.sourcecode = ''
       state.controlreload = ''
+      state.add_question_mode = ''
       state.assignment = {
       }
       state.seletedstudent = {
@@ -94,6 +100,7 @@ export default new Vuex.Store({
       sessionStorage.setItem('controlreload', '')
       sessionStorage.setItem('assignment', JSON.stringify(''))
       sessionStorage.setItem('seletedstudent', JSON.stringify(''))
+      sessionStorage.setItem('add_question_mode', JSON.stringify(''))
     },
     SET_SELECTEDQUESTION: (state, selectedQuestion) => {
       state.selectedQuestion = selectedQuestion

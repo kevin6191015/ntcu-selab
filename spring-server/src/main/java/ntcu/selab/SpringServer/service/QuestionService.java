@@ -39,7 +39,7 @@ public class QuestionService {
                 object.put("image2", question.getImage2());
                 String[] input = question.getInput();
                 String[] output = question.getOutnput();
-                for(int i=0 ; i<10 ; i++){
+                for(int i=1 ; i<=10 ; i++){
                     object.put("input" + String.valueOf(i), input[i]);
                     object.put("output" + String.valueOf(i), output[i]);
                 }
@@ -72,7 +72,7 @@ public class QuestionService {
                 object.put("image2", question.getImage2());
                 String[] input = question.getInput();
                 String[] output = question.getOutnput();
-                for(int i=0 ; i<10 ; i++){
+                for(int i=1 ; i<=10 ; i++){
                     object.put("input" + String.valueOf(i), input[i]);
                     object.put("output" + String.valueOf(i), output[i]);
                 }
@@ -101,7 +101,7 @@ public class QuestionService {
             object.put("image2", question.getImage2());
             String[] input = question.getInput();
             String[] output = question.getOutnput();
-            for(int i=0 ; i<10 ; i++){
+            for(int i=1 ; i<=10 ; i++){
                 object.put("input" + String.valueOf(i), input[i]);
                 object.put("output" + String.valueOf(i), output[i]);
             }
@@ -125,7 +125,7 @@ public class QuestionService {
             object.put("image2", question.getImage2());
             String[] input = question.getInput();
             String[] output = question.getOutnput();
-            for(int i=0 ; i<10 ; i++){
+            for(int i=1 ; i<=10 ; i++){
                 object.put("input" + String.valueOf(i), input[i]);
                 object.put("output" + String.valueOf(i), output[i]);
             }
@@ -185,7 +185,7 @@ public class QuestionService {
                 object.put("image2", question.getImage2());
                 String[] input = question.getInput();
                 String[] output = question.getOutnput();
-                for(int i=0 ; i<10 ; i++){
+                for(int i=0 ; i<=10 ; i++){
                     object.put("input" + String.valueOf(i), input[i]);
                     object.put("output" + String.valueOf(i), output[i]);
                 }

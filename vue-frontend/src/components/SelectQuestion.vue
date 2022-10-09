@@ -21,15 +21,25 @@
           label="題目預覽"
         >
           <template slot-scope="scope">
-            <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看該題</el-button>
           </template>
         </el-table-column>
+        <div v-if="this.Revise_Quesition_Mode">
+          <el-table-column
+          fixed="right"
+          label="修改考古"
+        >
+          <template slot-scope="scope">
+            <el-button @click="revise1(scope.row)" type="text" size="small">選擇該題</el-button>
+          </template>
+        </el-table-column>
+        </div>
         <el-table-column
           fixed="right"
           label="題目程式碼"
         >
           <template slot-scope="scope">
-            <el-button @click="SeeCode1(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="SeeCode1(scope.row)" type="text" size="small">查看程式碼</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,15 +64,25 @@
           label="操作"
           >
           <template slot-scope="scope">
-            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
           </template>
         </el-table-column>
+        <div v-if="this.Revise_Quesition_Mode">
+          <el-table-column
+          fixed="right"
+          label="修改考古"
+        >
+          <template slot-scope="scope">
+            <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
+          </template>
+        </el-table-column>
+        </div>
         <el-table-column
           fixed="right"
           label="題目程式碼"
         >
           <template slot-scope="scope">
-            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -88,10 +108,14 @@ export default {
       activeName: 'first',
       temp: [],
       check1: true,
-      check2: true
+      check2: true,
+      Revise_Quesition_Mode: false
     }
   },
   created () {
+    if (this.$store.state.add_question_mode === '3') {
+      this.Revise_Quesition_Mode = true
+    }
     ShowQuestion1().then(res => {
       this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
     }).catch(error => {
@@ -173,6 +197,18 @@ export default {
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
       store.commit('REMOVE_QUESTION_TO_SHOW')
+    },
+    revise1 (row) {
+      store.commit('SET_QUESTION_TO_SHOW', row.question_id)
+      this.$router.replace({
+        path: '/AddQuestion'
+      })
+    },
+    revise2 (row) {
+      store.commit('SET_QUESTION_TO_SHOW', row.id)
+      this.$router.replace({
+        path: '/AddQuestion'
+      })
     },
     toggleSelection1 (selectedQ) {
       for (let i = 0; i < selectedQ.length; i = i + 6) {

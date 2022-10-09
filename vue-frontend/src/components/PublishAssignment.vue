@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div id="container">
     <div id="sitebody">
       <div id="header">
         <div id="space-top"></div>
         <div id="title-orange">
-          <h3>已選擇題目</h3>
+          已選擇題目
         </div>
       </div>
       <div id="content1">
@@ -19,14 +19,20 @@
       </el-table>
       </div>
       <div>
+        <div id="footer-right">
+        </div>
+        <div id="footer-right-no-margin">
+          <span class="demonstration">作業名稱:</span>
+          <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
+        </div>
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
-        <div id="footer-left">
-          <el-button type="success" @click='selectquestion'>題庫選題</el-button>
+        <div id="footer-left-no-margin">
+          <el-button type="success" @click='revisequestion'>修改考古</el-button>
         </div>
-        <div id="footer-right">
-          <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
+        <div id="footer-left-no-margin">
+          <el-button type="success" @click='selectquestion'>題庫選題</el-button>
         </div>
       </div>
       <div id="footer-single">
@@ -58,6 +64,7 @@
 import store from '../store'
 import {ShowQuestion1, ShowQuestion2} from '../api/question'
 import {addAssignment} from '../api/assignment'
+// add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
 export default {
   name: 'PublishAssginment',
   inject: ['reload'],
@@ -153,13 +160,21 @@ export default {
       }
     },
     selectquestion () {
+      store.commit('SET_ADD_QUESTION_MODE', '1')
       this.$router.replace({
         path: '/Selectquestion'
       })
     },
     addquestion () {
+      store.commit('SET_ADD_QUESTION_MODE', '4')
       this.$router.replace({
         path: '/AddQuestion'
+      })
+    },
+    revisequestion () {
+      store.commit('SET_ADD_QUESTION_MODE', '3')
+      this.$router.replace({
+        path: '/SelectQuestion'
       })
     },
     refresh () {
@@ -230,10 +245,8 @@ export default {
     width:90%;
     padding: 5px;
     text-align:center;
-    background-color: rgb(224, 132, 57);
-    border: 3px solid rgba(0, 0, 0, 0.397);
-    border-radius: 12px;
     margin-left: 5%;
+    font-size:45px;
   }
   #content1{
     margin-left: 5%;
@@ -253,27 +266,46 @@ export default {
   }
   #footer-left{
     margin-top: 10px;
-    margin-left: 5%;
+    margin-right: 8%;
     width:fit-content;
     padding: 1px;
     text-align:left;
     background-color: rgb(127, 185, 121);
     border: 3px solid rgba(0, 0, 0, 0.397);
     border-radius: 12px;
-    float: left
+    float: right;
+  }
+  #footer-left-no-margin{
+    margin-top: 10px;
+    margin-right: 2%;
+    width:fit-content;
+    padding: 1px;
+    text-align:left;
+    background-color: rgb(127, 185, 121);
+    border: 3px solid rgba(0, 0, 0, 0.397);
+    border-radius: 12px;
+    float: right;
   }
   #footer-right{
+    margin-top: 10px;
+    margin-left: 5%;
+    width:fit-content;
+    padding: 1px;
+    text-align:left;
+    float: left;
+  }
+  #footer-right-no-margin{
     margin-top: 10px;
     margin-right: 8%;
     width:fit-content;
     padding: 1px;
     text-align:left;
-    background-color: rgba(43, 83, 194, 0.514);
-    float: right
+    float: left;
   }
   #footer-single{
     margin-top: 20px;
     margin-left: 5%;
+    margin-right: 8%;
     width:90%;
     padding: 1px;
     text-align:left;
@@ -285,5 +317,9 @@ export default {
     text-align:right;
     line-height:80px;
     margin-right:8%;
+  }
+  #container{
+    background-color: rgb(228, 228, 228);
+    height: 1000px;
   }
   </style>
