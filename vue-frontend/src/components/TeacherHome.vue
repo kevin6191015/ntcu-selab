@@ -35,13 +35,13 @@
               <el-dropdown-item divided>
                 <el-button type="text" style="color:#545c64" @click='logout'>登出</el-button>
               </el-dropdown-item>
-              <el-dropdown-item>
+              <!-- <el-dropdown-item>
                 <el-button type="text" style="color:#545c64" @click='chooseCourse'>選擇課程</el-button>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>
-        <el-menu-item style="float:right">
+        <el-menu-item style="float:right" index="/ChooseClass">
           <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
         </el-menu-item>
       </el-menu>
@@ -113,7 +113,6 @@ export default {
 .bread {
   background-color: rgb(228, 228, 228);
   font-size: 23px;
-  padding-left: 20px;
-  padding-top: 20px;
+  padding: 20px
 }
 </style>

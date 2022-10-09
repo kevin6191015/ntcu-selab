@@ -22,7 +22,7 @@
               </el-table-column>
               <el-table-column
                 label="學生名字"
-                width="257">
+                width="342">
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
@@ -39,11 +39,11 @@
               @selection-change="in_Course">
               <el-table-column
                 type="selection"
-                width="150">
+                width="50">
               </el-table-column>
               <el-table-column
-                label="學生名字"
-                width="257">
+                align="center"
+                label="學生名字">
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
@@ -175,7 +175,7 @@ export default {
   min-height: 36px;
   font-size: 30px;
   background-color: orange;
-  padding-left: 30%;
+  padding-left: 40%;
 }
 
 .grid-content2 {

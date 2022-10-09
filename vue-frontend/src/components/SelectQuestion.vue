@@ -1,6 +1,6 @@
 <template>
 <body>
-  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+  <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
     <el-tab-pane label="系統題庫" name="first">
       <el-table
         ref="multipleTable1"

@@ -83,7 +83,7 @@
           :on-exceed="handlefileExceed"
           :limit="1"
           :auto-upload="false"
-          :show-file-list="true"
+          :show-file-list="false"
           :file-list="fileList"
         >
           <el-button icon="el-icon-upload" type="warning" plain>程式碼上傳</el-button>

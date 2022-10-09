@@ -199,17 +199,17 @@ export default {
             }
           }
         }
-      })
-      ShowQuestion2().then(res => {
-        for (let i = 0; i < (this.id.length + 1); i += 6) {
-          for (let j = 0; j < res.data.data.Questions.length; j++) {
-            if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
-              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
-              this.questions.push(temp)
-              break
+        ShowQuestion2().then(res => {
+          for (let i = 0; i < (this.id.length + 1); i += 6) {
+            for (let j = 0; j < res.data.data.Questions.length; j++) {
+              if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
+                var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
+                this.questions.push(temp)
+                break
+              }
             }
           }
-        }
+        })
       })
     }
   }
