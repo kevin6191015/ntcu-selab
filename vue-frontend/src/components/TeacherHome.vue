@@ -2,23 +2,27 @@
   <div>
     <el-row>
       <el-menu
-        :default-active="$route.path"
+        default-active="/ShowAssignment"
         router
         style="width:100%"
         background-color="#545c64"
         mode="horizontal"
         text-color='#fff'
+        :unique-opened="true"
         active-text-color='#ffd04b'>
-        <el-menu-item>
-          <span class="head-title">DashBoard</span>
+        <el-menu-item index="/ShowAssignment">
+          <span class="head-title">Dashboard</span>
         </el-menu-item>
-        <el-menu-item
-          v-for="(item, i) in navList"
-          :key="i"
-          :index="item.name">
-          <i :class="item.icon"></i>
-          {{item.title }}
-        </el-menu-item>
+        <el-submenu index="/AddQuestion">
+          <template slot="title">題目管理</template>
+          <el-menu-item index="/AddQuestion">新增題目</el-menu-item>
+          <el-menu-item index="/PublishAssignment">發布題目</el-menu-item>
+        </el-submenu>
+        <el-submenu index="/SystemAccount">
+          <template slot="title">帳號管理</template>
+          <el-menu-item index="/SystemAccount">系統帳號管理</el-menu-item>
+          <el-menu-item index="/CourseAccount">課程帳號管理</el-menu-item>
+        </el-submenu>
         <el-menu-item style="float:right">
           <el-dropdown>
             <el-button style="background-color:aquamarine" >
@@ -43,6 +47,16 @@
       </el-menu>
     </el-row>
     <el-row>
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="bread">
+        <el-breadcrumb-item
+        v-for="(item,index) in breadList"
+        :key="index"
+        :to="{path: item.path}">
+        {{item.name}}
+      </el-breadcrumb-item>
+      </el-breadcrumb>
+    </el-row>
+    <el-row>
       <router-view></router-view>
     </el-row>
   </div>
@@ -53,13 +67,13 @@ export default {
   name: 'TeacherHome',
   data () {
     return {
-      navList: [
-        {name: '/ShowAssignment', title: '首頁', icon: 'el-icon-s-home'},
-        {name: '/AddQuestion', title: '新增題目', icon: 'el-icon-document'},
-        {name: '/PublishAssignment', title: '發布題目', icon: 'el-icon-document'},
-        {name: '/SystemAccount', title: '系統帳號管理', icon: 'el-icon-s-custom'},
-        {name: '/CourseAccount', title: '課程帳號管理', icon: 'el-icon-s-custom'}
-      ]
+      breadList: [{
+        name: '首頁',
+        path: '/showAssignment'
+      }, {
+        name: '作業一覽',
+        path: '/showHomeWork'
+      }]
     }
   },
   methods: {
@@ -86,6 +100,7 @@ export default {
 <style >
 .head-title {
   font-size: 20px;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -95,4 +110,10 @@ export default {
   font-weight: bold;
 }
 
+.bread {
+  background-color: rgb(228, 228, 228);
+  font-size: 23px;
+  padding-left: 20px;
+  padding-top: 20px;
+}
 </style>

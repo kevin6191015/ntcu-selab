@@ -9,18 +9,15 @@
                 style="width: 100%"
                 @selection-change="handlechange">
                 <el-table-column
-                  type="selection"
-                  width="45">
+                  type="selection">
                 </el-table-column>
                 <el-table-column
                   prop="id"
-                  label="學號"
-                  width="100">
+                  label="學號">
                 </el-table-column>
                 <el-table-column
                   prop="username"
-                  label="帳號"
-                  width="100">
+                  label="帳號">
                 </el-table-column>
                 <el-table-column
                   prop="name"
@@ -33,7 +30,6 @@
                 <el-table-column
                   prop="role"
                   label="標籤"
-                  width="100"
                   :filters="[{ text: '學生', value: 'student' }, { text: '老師', value: 'teacher' }, { text: 'TA', value: 'TA' }]"
                   :filter-method="filterTag"
                   filter-placement="bottom-end">
@@ -274,8 +270,8 @@ export default {
 }
 
 .outer {
-  background-color: rgba(111, 122, 144, 0.555);
-  height: 699px;
+  background-color: rgb(228, 228, 228);
+  height: 655px;
 }
 
 .box {

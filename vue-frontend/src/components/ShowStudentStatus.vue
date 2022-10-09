@@ -117,8 +117,8 @@ export default {
 
 <style>
 .container2 {
-  background-color: rgba(111, 122, 144, 0.555);
-  height: 699px;
+  background-color: rgb(228, 228, 228);
+  height: 655px;
 }
 
 .a1 {
