@@ -59,7 +59,6 @@ public class QuestionService {
         List<Question> questions = qDbManager.getQuestionBank2();
         List<JSONObject> questionlist = new ArrayList<>();
         List<String> teachers = qDbManager.getTeachers();
-        List<String> classes = qDbManager.getClasses();
         try{
             for(Question question : questions){
                 JSONObject object = new JSONObject();
@@ -86,7 +85,6 @@ public class QuestionService {
         JSONObject root = new JSONObject();
         root.put("Questions", questionlist);
         root.put("Teachers", teachers);
-        root.put("Classes", classes);
         return new Result(200, "Get Questions From Bank2 Successfull!", root.toMap());
     }
 
