@@ -67,7 +67,7 @@ public class QuestionService {
                 object.put("question_name", question.getName());
                 object.put("question_description", question.getDescription());
                 object.put("teacher", question.getTeacher());
-                object.put("class_id", question.getClassId());
+                object.put("public_or_not", question.getPublicOrNot());
                 object.put("image1", question.getImage1());
                 object.put("image2", question.getImage2());
                 String[] input = question.getInput();
@@ -120,7 +120,7 @@ public class QuestionService {
             object.put("question_name", question.getName());
             object.put("question_description", question.getDescription());
             object.put("teacher", question.getTeacher());
-            object.put("class_id", question.getClassId());
+            object.put("public_or_not", question.getPublicOrNot());
             object.put("image1", question.getImage1());
             object.put("image2", question.getImage2());
             String[] input = question.getInput();
@@ -136,6 +136,38 @@ public class QuestionService {
         return new Result(200, "Get Question From Bank2 Successfull!", object.toMap());
     }
 
+    @GetMapping("/getPublicQuestion")
+    public Result getPublicQuestion() throws Exception{ 
+        List<Question> questions = qDbManager.getPublicQuestion();
+        List<JSONObject> questionlist = new ArrayList<>();
+        try{
+            for(Question question : questions){
+                JSONObject object = new JSONObject();
+                object.put("id", question.getId());
+                object.put("question_name", question.getName());
+                object.put("question_description", question.getDescription());
+                object.put("teacher", question.getTeacher());
+                object.put("public_or_not", question.getPublicOrNot());
+                object.put("image1", question.getImage1());
+                object.put("image2", question.getImage2());
+                String[] input = question.getInput();
+                String[] output = question.getOutnput();
+                for(int i=1 ; i<=10 ; i++){
+                    object.put("input" + String.valueOf(i), input[i]);
+                    object.put("output" + String.valueOf(i), output[i]);
+                }
+                object.put("inputornot", question.getInputornot());
+                
+                questionlist.add(object);
+            }
+        }catch(Exception e){
+            return new Result(400, "Get Public Questions Failed! " + e.getMessage(), "");
+        }
+        JSONObject root = new JSONObject();
+        root.put("Questions", questionlist);
+        return new Result(200, "Get Public Questions Successfull!", root.toMap());
+    }
+
     @GetMapping("/getQuestionsByTeacher")
     public Result getQuestionByTeacher(@RequestParam("teacher") String teacher) throws Exception{ 
         List<Question> questions = qDbManager.getQuestionsByTeacher(teacher);
@@ -148,7 +180,7 @@ public class QuestionService {
                 object.put("question_name", question.getName());
                 object.put("question_description", question.getDescription());
                 object.put("teacher", question.getTeacher());
-                object.put("class_id", question.getClassId());
+                object.put("public_or_not", question.getPublicOrNot());
                 object.put("image1", question.getImage1());
                 object.put("image2", question.getImage2());
                 String[] input = question.getInput();

@@ -89,7 +89,44 @@ public class QuestionDBManager {
             s.setName(jsonobject.getString("question_name"));
             s.setDescription(jsonobject.getString(("question_description")));
             s.setTeacher(jsonobject.getString("teacher"));
-            s.setClassId(jsonobject.getString("class_id"));
+            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
+            s.setImage1(jsonobject.getString("image1"));
+            s.setImage2(jsonobject.getString("image2"));
+            String[] input = new String[11];
+            String[] output = new String[11];
+            for(int j=1 ; j<11 ; j++){
+                input[j] = jsonobject.getString("input" + String.valueOf(j));
+                output[j] = jsonobject.getString("output" + String.valueOf(j));
+            }
+            s.setInput(input);
+            s.setOutput(output);
+            s.setInputornot(jsonobject.getInt("input_or_not"));
+            questions.add(s);
+		}          
+        return questions;
+    }
+
+    public List<Question> getPublicQuestion() throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/public/");       
+        
+        List<Question> questions = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Question s = new Question();
+    		jsonobject = jsonarray.getJSONObject(i);
+            s.setId(jsonobject.getString("id"));
+            s.setName(jsonobject.getString("question_name"));
+            s.setDescription(jsonobject.getString(("question_description")));
+            s.setTeacher(jsonobject.getString("teacher"));
+            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
             s.setImage1(jsonobject.getString("image1"));
             s.setImage2(jsonobject.getString("image2"));
             String[] input = new String[11];
@@ -126,7 +163,7 @@ public class QuestionDBManager {
             s.setName(jsonobject.getString("question_name"));
             s.setDescription(jsonobject.getString(("question_description")));
             s.setTeacher(jsonobject.getString("teacher"));
-            s.setClassId(jsonobject.getString("class_id"));
+            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
             s.setImage1(jsonobject.getString("image1"));
             s.setImage2(jsonobject.getString("image2"));
             String[] input = new String[11];
@@ -163,7 +200,7 @@ public class QuestionDBManager {
             s.setName(jsonobject.getString("question_name"));
             s.setDescription(jsonobject.getString(("question_description")));
             s.setTeacher(jsonobject.getString("teacher"));
-            s.setClassId(jsonobject.getString("class_id"));
+            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
             s.setImage1(jsonobject.getString("image1"));
             s.setImage2(jsonobject.getString("image2"));
             String[] input = new String[11];
@@ -267,7 +304,7 @@ public class QuestionDBManager {
         question.setName(jsonobject.getString("question_name"));
         question.setDescription(jsonobject.getString("question_description"));
         question.setTeacher(jsonobject.getString("teacher"));
-        question.setClassId(jsonobject.getString("class_id"));
+        question.setPublicOrNot(jsonobject.getInt("public_or_not"));
         question.setImage1(jsonobject.getString("image1"));
         question.setImage2(jsonobject.getString("image2"));
         String[] input = new String[11];
@@ -353,7 +390,7 @@ public class QuestionDBManager {
             String[] output = q.getOutnput();
             String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
             "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot())
-            + "&teacher=" + q.getTeacher() + "&class_id=" + q.getClassId();
+            + "&teacher=" + q.getTeacher() + "&public_or_not=" + q.getPublicOrNot();
             for(int i=1 ; i<11 ; i++){
                 info += "&input" + String.valueOf(i) + "=" + input[i];
                 info += "&output" + String.valueOf(i) + "=" + output[i];
@@ -392,7 +429,7 @@ public class QuestionDBManager {
             String[] output = q.getOutnput();
             String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
             "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot())
-            + "&teacher=" + q.getTeacher() + "&class_id=" + q.getClassId();
+            + "&teacher=" + q.getTeacher() + "&public_or_not=" + q.getPublicOrNot();
             for(int i=1 ; i<11 ; i++){
                 info += "&input" + String.valueOf(i) + "=" + input[i];
                 info += "&output" + String.valueOf(i) + "=" + output[i];

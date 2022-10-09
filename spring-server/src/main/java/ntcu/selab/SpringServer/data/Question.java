@@ -10,7 +10,7 @@ public class Question {
     private String[] output = new String[11];
     private int inputornot = 0;
     private String teacher = null;
-    private String classid = null;
+    private int publicornot = 0;
 
     public Question(String name, String description){
         this.name = name;
@@ -97,11 +97,11 @@ public class Question {
         this.teacher = teaher;
     }
 
-    public String getClassId(){
-        return classid;
+    public int getPublicOrNot(){
+        return this.publicornot;
     }
 
-    public void setClassId(String classid){
-        this.classid = classid;
+    public void setPublicOrNot(int publicornot){
+        this.publicornot = publicornot;
     }
 }
