@@ -22,7 +22,7 @@
         <div id="footer-right">
         </div>
         <div id="footer-right-no-margin">
-          <span class="demonstration">作業名稱:</span>
+          作業名稱:
           <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
         </div>
         <div id="footer-left">

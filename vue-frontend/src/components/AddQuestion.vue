@@ -54,7 +54,7 @@
       </div>
       <div v-if = "this.Revise_Quesition_Mode" id = "temp">
         <el-image
-          style="width: 100px; height: 100px"
+          style="width: 150px; height: 150px"
           :src="url"
           :preview-src-list="srcList">
         </el-image>
@@ -103,7 +103,6 @@
       code
       {{newsourcecode}}
     </div>
-    {{imageList}}
   </div>
   </div>
 </template>
