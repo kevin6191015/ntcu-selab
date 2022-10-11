@@ -32,9 +32,9 @@ public class sonarqube_report_analyzer
           sonarqube_report_analyzer sq = new sonarqube_report_analyzer();
           sq.GetSonarIssue(args[0]);
           sq.GetStudentID(args[0]);
-          sq.GetSourceCode(args[0]);
           sq.GetSonarData(args[0]);
           sq.GetJenkinsData(args[0],args[1],args[2],args[3]);
+          sq.GetSourceCode(args[0]);
           sq.GetPostparm();
           sq.GetScoreparm(args[0],args[2]);
           sq.WriteData();
@@ -82,8 +82,13 @@ public class sonarqube_report_analyzer
           score_value[1]=sonar_value[8];
           score_value[2]=sonar_value[11];
           score_value[3]=sonar_value[10];
-          score_value[4]=String.valueOf(Integer.parseInt(unit_result.substring(unit_result.lastIndexOf(":")+1))*(100/Integer.parseInt(unit_result.substring(unit_result.indexOf(":")+1,unit_result.indexOf(",")))));
-          score_value[5]=String.valueOf((30-index[0]*5)+(30-index[1]*5)+(30-index[2]*5)+(30-index[3]*5));
+          if(Integer.parseInt(unit_result.substring(unit_result.indexOf(":")+1,unit_result.indexOf(",")))!=0) {
+               score_value[4] = String.valueOf(Integer.parseInt(unit_result.substring(unit_result.lastIndexOf(":") + 1)) * (100 / Integer.parseInt(unit_result.substring(unit_result.indexOf(":") + 1, unit_result.indexOf(",")))));
+               score_value[5] = String.valueOf((30 - index[0] * 5) + (30 - index[1] * 5) + (30 - index[2] * 5) + (30 - index[3] * 5));
+          }else{
+               score_value[4]= "0";
+               score_value[5]= "0";
+          }
           System.out.println(score_value[5]);
           for(int i=0;i<score_property.length;i++){
                if(i==(score_property.length-1)){

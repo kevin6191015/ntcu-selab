@@ -58,7 +58,7 @@ SQreport.addSQreport = (sqreportReqData, result) =>{
 }
 
 SQreport.getpersonalreport = (project_name, result) =>{
-    dbConn.query('SELECT compile_result,source_code FROM Sonarqube_reports WHERE project_name = ? ORDER BY submit_times DESC', project_name, (err,res)=>{
+    dbConn.query('SELECT compile_result,source_code,report_suggestion FROM Sonarqube_reports WHERE project_name = ? ORDER BY submit_times DESC', project_name, (err,res)=>{
         if(err)
             result(err);
         else    

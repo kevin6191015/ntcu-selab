@@ -9,6 +9,7 @@ public class Score {
     private int code_quality = 0;
     private String compile_result = null;
     private String source_code = null;
+    private String report_suggestion = null;
 
     public Score(String student_id, String project_name, int submit_times, String analysis_date, int unit_test_score, int code_quality){
         this.student_id = student_id;
@@ -26,9 +27,10 @@ public class Score {
         this.unit_test_score = unit_test_score;
     }
 
-    public Score(String compile_result, String source_code){
+    public Score(String compile_result, String source_code, String report_suggestion){
         this.compile_result = compile_result;
         this.source_code = source_code;
+        this.report_suggestion = report_suggestion;
     }
 
     public Score(){
@@ -97,5 +99,12 @@ public class Score {
 
     public void setSourceCode(String source_code){
         this.source_code = source_code;
+    }
+    public String getSuggestion(){
+        return this.report_suggestion;
+    }
+
+    public void setSuggestion(String suggestion){
+        this.report_suggestion = suggestion;
     }
 }

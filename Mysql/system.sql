@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 10 月 04 日 13:50
+-- 產生時間： 2022 年 10 月 11 日 08:07
 -- 伺服器版本： 8.0.30
 -- PHP 版本： 8.0.19
 
@@ -168,6 +168,17 @@ CREATE TABLE `class_004_questions` (
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `class_004_questions`
+--
+
+INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `release_time`, `deadline`) VALUES
+('HW1', 'a0002', 'Matrix-chain_Multiplication', '20221011', '20221025'),
+('HW1', 'a0004', 'Optimal_Binary_Search_Tree', '20221011', '20221025'),
+('HW1', 'b0002', '123', '20221011', '20221025'),
+('HW1', 'a0003', 'Longest_Common_Subsequence', '20221011', '20221025'),
+('HW1', 'a0001', 'Fibonacci_Number', '20221011', '20221025');
 
 -- --------------------------------------------------------
 

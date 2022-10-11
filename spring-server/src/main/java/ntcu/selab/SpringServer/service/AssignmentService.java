@@ -176,7 +176,12 @@ public class AssignmentService {
                         break;
                     }
                 }
-                String project_name = qid + "_" + cid + "_" +  semester + "_" + release + student.getId();
+                String classID="";
+                for (int i = 0; i < 3 - cid.length(); i++) {
+                    classID += '0';
+                }
+                classID+=cid;
+                String project_name = qid + "_" + classID + "_" +  semester + "_" + release + "_" + student.getId();
                 System.out.println(project_name);
 
                 //刪除jenkins project

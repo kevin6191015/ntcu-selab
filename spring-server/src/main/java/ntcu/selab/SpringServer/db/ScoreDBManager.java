@@ -166,6 +166,7 @@ public class ScoreDBManager {
     		jsonobject = jsonarray.getJSONObject(i);
             score.setCompileResult(jsonobject.getString("compile_result"));
             score.setSourceCode(jsonobject.getString("source_code"));
+            score.setSuggestion(jsonobject.getString("report_suggestion"));
             scores.add(score);
 		}
         return scores;

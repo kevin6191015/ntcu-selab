@@ -81,12 +81,13 @@ export default {
         for (let i = 0; i < tmp1.length && i < res.data.data['Personal Report'].length; i++) {
           tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
+          tmp1[i].report_suggestion = res.data.data['Personal Report'][i].report_suggestion
           if (tmp1[i].unit_test_score <= 60) {
-            tmp1[i].color = 'https://i.imgur.com/HJGBB1X.png'
+            tmp1[i].color = 'https://i.imgur.com/HJGBB1X.jpg'
           } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {
-            tmp1[i].color = 'https://i.imgur.com/C9yij3Q.png'
+            tmp1[i].color = 'https://i.imgur.com/C9yij3Q.jpg'
           } else if (tmp1[i].unit_test_score > 90) {
-            tmp1[i].color = 'https://i.imgur.com/fRUnBEW.png'
+            tmp1[i].color = 'https://i.imgur.com/fRUnBEW.jpg'
           }
         }
         this.tabledata = tmp1
@@ -101,16 +102,25 @@ export default {
   },
   methods: {
     Seesourcecode (row) {
-      // let temp = this.$store.state.project_name
-      // let code = row.source_code
-      // store.commit('SET_PROJECT_NAME', code)
-      // let { href } = this.$router.resolve({
-      //   name: 'ShowStudentSourcecode'
-      // })
-      // window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      // this.$store.commit('SET_PROJECT_NAME', temp)
+      let temp = this.$store.state.project_name
+      let code = row.source_code
+      this.$store.commit('SET_PROJECT_NAME', code)
+      let { href } = this.$router.resolve({
+        name: 'ShowStudentSourcecode'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      this.$store.commit('SET_PROJECT_NAME', temp)
     },
-    Seequestion2 () {}
+    Seequestion2 (row) {
+      let temp = this.$store.state.project_name
+      let suggestion = row.report_suggestion
+      this.$store.commit('SET_PROJECT_NAME', suggestion)
+      let { href } = this.$router.resolve({
+        name: 'ShowSuggestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      this.$store.commit('SET_PROJECT_NAME', temp)
+    }
   }
 }
 </script>

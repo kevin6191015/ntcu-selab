@@ -132,6 +132,7 @@ public class ScoreService {
                 JSONObject object = new JSONObject();
                 object.put("compile_result", score.getCompileResult());
                 object.put("source_code", score.getSourceCode());
+                object.put("report_suggestion", score.getSuggestion());
                 scorelist.add(object);
             }     
         }catch(Exception e){
