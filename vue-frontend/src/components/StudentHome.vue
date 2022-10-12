@@ -1,61 +1,74 @@
 <template>
-  <el-container class="home-container">
-    <el-header style="margin-right: 15px; width: 100%">
-      <span class="nav-logo">😀</span>
-      <span class="head-title">DashBoard</span>
-      <span class="head-center-title">當前課程: {{class_name}}</span>
-      <el-dropdown style="float:right">
-        <el-button type="primary" plain>
-          {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <el-button type="text" @click='logout'>logout</el-button>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-header>
-    <el-container>
-      <el-aside width="13%">
-        <el-menu
-          :default-active="$route.path"
-          router
-          text-color='black'
-          active-text-color='red'
-        >
-          <el-menu-item
-            v-for="(item, i) in navList"
-            :key="i"
-            :index="item.name"
-          >
-            <i :class="item.icon"></i>
-            {{item.title }}
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
-    </el-container>
-  </el-container>
+  <div>
+    <el-row>
+      <el-menu
+        default-active="/ShowAssignment"
+        router
+        style="width:100%"
+        background-color="#545c64"
+        mode="horizontal"
+        text-color='#fff'
+        :unique-opened="true"
+        active-text-color='#ffd04b'>
+        <el-menu-item index="/ShowAssignment">
+          <span class="head-title">Dashboard</span>
+        </el-menu-item>
+        <el-menu-item style="float:right">
+          <el-dropdown>
+            <el-button style="background-color:aquamarine" >
+              {{this.$store.state.user.name[0]}}
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item disabled style="color:#545c64">
+                {{this.$store.state.user.name}}
+              </el-dropdown-item>
+              <el-dropdown-item divided>
+                <el-button type="text" style="color:#545c64" @click='logout'>登出</el-button>
+              </el-dropdown-item>
+              <!-- <el-dropdown-item>
+                <el-button type="text" style="color:#545c64" @click='chooseCourse'>選擇課程</el-button>
+              </el-dropdown-item> -->
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-menu-item>
+        <el-menu-item style="float:right" index="/ChooseClass">
+          <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
+        </el-menu-item>
+      </el-menu>
+    </el-row>
+    <el-row>
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="bread">
+        <el-breadcrumb-item
+        v-for="(item,index) in breadList"
+        :key="index"
+        :to="{path: item.path}">
+        {{item.name}}
+      </el-breadcrumb-item>
+      </el-breadcrumb>
+    </el-row>
+    <el-row>
+      <router-view></router-view>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import store from '@/store'
 export default {
-  name: 'StudentHome',
+  name: 'TeacherHome',
   data () {
     return {
-      username: store.state.user.name,
-      class_name: store.state.class,
-      navList: [
-        {name: '/studenthome', title: '首頁', icon: 'el-icon-s-home'}
-      ]
+      breadList: [{
+        name: '首頁',
+        path: '/showAssignment'
+      }, {
+        name: '作業一覽',
+        path: '/showHomeWork'
+      }]
     }
   },
   methods: {
     logout () {
-      store.commit('REMOVE_INFO', store.state)
+      this.$store.commit('REMOVE_INFO', this.$store.state)
       this.$message({
         showClose: true,
         message: '登出成功',
@@ -64,32 +77,32 @@ export default {
       var path = this.$route.query.redirect
       this.$router.replace({
         path: path === '/' || path === undefined ? '/login' : path})
+    },
+    chooseCourse () {
+      var path = this.$route.query.redirect
+      this.$router.replace({
+        path: path === '/' || path === undefined ? '/chooseclass' : path})
     }
   }
 }
 </script>
 
 <style >
-.nav-logo {
-  position: absolute;
-  padding-top: -1%;
-  left: 5%;
-  font-size: 40px;
-}
-
 .head-title {
-  position: absolute;
-  padding-top: 20px;
-  left: 15%;
   font-size: 20px;
+  color: #fff;
   font-weight: bold;
 }
 
 .head-center-title {
-  position: absolute;
-  padding-top: 20px;
   left: 50%;
   font-size: 20px;
   font-weight: bold;
+}
+
+.bread {
+  background-color: rgb(228, 228, 228);
+  font-size: 23px;
+  padding: 20px
 }
 </style>

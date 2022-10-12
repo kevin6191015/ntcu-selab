@@ -87,20 +87,20 @@ export default new Vuex.Store({
       }
       state.seletedstudent = {
       }
-      sessionStorage.setItem('token', '')
-      sessionStorage.setItem('user', JSON.stringify(''))
-      sessionStorage.setItem('role', '')
-      sessionStorage.setItem('class', '')
-      sessionStorage.setItem('class_id', '')
-      sessionStorage.setItem('selectedQuestion', '')
-      sessionStorage.setItem('project_name', '')
-      sessionStorage.setItem('Question_To_Show', '')
-      sessionStorage.setItem('imagelink', '')
-      sessionStorage.setItem('sourcecode', '')
-      sessionStorage.setItem('controlreload', '')
-      sessionStorage.setItem('assignment', JSON.stringify(''))
-      sessionStorage.setItem('seletedstudent', JSON.stringify(''))
-      sessionStorage.setItem('add_question_mode', JSON.stringify(''))
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('user')
+      sessionStorage.removeItem('role')
+      sessionStorage.removeItem('class')
+      sessionStorage.removeItem('class_id')
+      sessionStorage.removeItem('selectedQuestion')
+      sessionStorage.removeItem('project_name')
+      sessionStorage.removeItem('Question_To_Show')
+      sessionStorage.removeItem('imagelink')
+      sessionStorage.removeItem('sourcecode')
+      sessionStorage.removeItem('controlreload')
+      sessionStorage.removeItem('assignment')
+      sessionStorage.removeItem('seletedstudent')
+      sessionStorage.removeItem('add_question_mode')
     },
     SET_SELECTEDQUESTION: (state, selectedQuestion) => {
       state.selectedQuestion = selectedQuestion

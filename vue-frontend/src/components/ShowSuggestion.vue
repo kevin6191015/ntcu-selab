@@ -3,7 +3,7 @@
     <div id="header">
       <div id="space-top"></div>
       <div id="qname-green">
-        <h3>題目名稱:{{questionname}}</h3>
+        <h3>題目名稱：{{questionname}}</h3>
       </div>
     </div>
     <div id="content">
@@ -25,7 +25,7 @@ export default {
   },
   created () {
     this.questionname = this.$store.state.assignment.question_name
-    this.suggestion = this.$store.state.project_name
+    this.suggestion = this.$store.state.project_name.replaceAll('|', '\n\n')
   },
   methods: {
     goback () {

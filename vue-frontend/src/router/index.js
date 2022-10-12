@@ -35,12 +35,7 @@ export default new Router({
     {
       path: '/',
       name: 'Default',
-      redirect: '/teacherhome',
-      component: TeacherHome,
-      meta: {
-        requireAuth: true,
-        Role: true
-      }
+      component: Login
     },
     {
       path: '/teacherhome',
