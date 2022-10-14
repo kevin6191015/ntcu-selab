@@ -1,13 +1,12 @@
 <template>
-  <el-container>
-    <el-main class="outer1">
-      <el-row >
-        <div style="margin: 3%;"></div>
-        <el-col :span="8" class="el-col1"><div class="grid-content1">未加入帳號</div></el-col>
-        <el-col :span="8" class="el-col1"><div class="grid-content1">已加入帳號</div></el-col>
+  <el-container class="iner1">
+    <el-main style="margin: 40px;">
+      <el-row :gutter="30">
+        <el-col :span="8" class="el-col1"><div align="center" class="grid-content1">未加入帳號</div></el-col>
+        <el-col :offset="3" :span="8" class="el-col1"><div align="center" class="grid-content1">已加入帳號</div></el-col>
       </el-row>
-      <el-row>
-        <el-col :span="11">
+      <el-row :gutter="30">
+        <el-col align="center" :span="8">
           <div class="grid-content2">
             <el-table
               :header-cell-style="{background:'#eef1f6'}"
@@ -18,32 +17,32 @@
               @selection-change="not_in_Course">
               <el-table-column
                 type="selection"
-                width="150">
+                width="190%">
               </el-table-column>
               <el-table-column
                 label="學生名字"
-                width="342">
+                >
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
           </div>
         </el-col>
-        <el-col :span="11">
-          <div>
+        <el-col :offset="3" :span="8">
+          <div class="grid-content2">
             <el-table
               :header-cell-style="{background:'#eef1f6'}"
               ref="multipleTable"
               :data="class_student"
               tooltip-effect="dark"
-              style="min-height: 36px;margin-left: 29.5%;width: 72.5%; min-height: 400px;"
+              style="min-height: 400px;"
               @selection-change="in_Course">
               <el-table-column
                 type="selection"
-                width="50">
+                width="190%">
               </el-table-column>
               <el-table-column
-                align="center"
-                label="學生名字">
+                label="學生名字"
+                >
                 <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
             </el-table>
@@ -51,19 +50,25 @@
         </el-col>
       </el-row>
       <div style="margin: 20px;"></div>
-      <el-row :gutter="10">
-        <el-col :span="5">
-          <div>
-            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 65%; color: black;" @click="addStudent()">新增</el-button>
+      <el-row :gutter="30">
+        <el-col :span="8">
+          <div class="grid-content2">
+            <p align="center">
+              <el-button type="warning" @click="addStudent()" class="button1">新增</el-button>
+            </p>
           </div>
         </el-col>
-        <el-col :span="5">
-          <div>
-            <el-button type="warning" style="margin: 20px; font-size: 20px; margin-left: 322%; color: black;" @click="deleteStudent()">刪除</el-button>
+        <el-col :offset="3" :span="8">
+          <div class="grid-content2">
+            <p align="center">
+              <el-button type="warning"  @click="deleteStudent()" class="button1">刪除</el-button>
+            </p>
           </div>
         </el-col>
       </el-row>
     </el-main>
+    <el-footer class="iner1">
+      </el-footer>
   </el-container>
 </template>
 
@@ -160,39 +165,30 @@ export default {
 </script>
 
 <style>
-.d-flex1 {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .el-col1 {
-  border-radius: 10px;
-  min-height: 36px;
-  margin-left: 13%;
+  position: relative;
+  left: 150px;
 }
 
 .grid-content1 {
-  min-height: 36px;
   font-size: 30px;
   background-color: orange;
-  padding-left: 40%;
+  position: relative;
 }
 
 .grid-content2 {
-  min-height: 36px;
   font-size: 30px;
-  margin-left: 28.4%;
-  width: 72.5%;
+  position: relative;
+  left: 150px;
 }
 
-.grid-content3 {
-  font-size: 13px;
-  padding-left: 50%
+.iner1 {
+  background-color: #EDEDED;
 }
 
-.outer1 {
-  background-color: rgb(228, 228, 228);
-  height: 655px;
+.button1{
+  background-color: orange;
+  color: black;
+  font-size: 20px;
 }
-
 </style>
