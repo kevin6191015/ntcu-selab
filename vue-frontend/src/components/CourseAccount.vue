@@ -51,18 +51,14 @@
       </el-row>
       <div style="margin: 20px;"></div>
       <el-row :gutter="30">
-        <el-col :span="8">
+        <el-col :offset="3" :span="5">
           <div class="grid-content2">
-            <p align="center">
-              <el-button type="warning" @click="addStudent()" class="button1">新增</el-button>
-            </p>
+            <el-button type="warning" @click="addStudent()" class="button2">新增</el-button>
           </div>
         </el-col>
-        <el-col :offset="3" :span="8">
+        <el-col :offset="6" :span="5">
           <div class="grid-content2">
-            <p align="center">
-              <el-button type="warning"  @click="deleteStudent()" class="button1">刪除</el-button>
-            </p>
+            <el-button type="warning"  @click="deleteStudent()" class="button2">刪除</el-button>
           </div>
         </el-col>
       </el-row>
@@ -186,7 +182,7 @@ export default {
   background-color: #EDEDED;
 }
 
-.button1{
+.button2{
   background-color: orange;
   color: black;
   font-size: 20px;
