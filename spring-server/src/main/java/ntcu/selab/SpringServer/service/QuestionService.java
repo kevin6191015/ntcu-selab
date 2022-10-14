@@ -221,9 +221,11 @@ public class QuestionService {
     }
 
     @PostMapping("/addQuestionToBank2")
-    public Result addQuestionToBank2( @RequestBody Question question) throws Exception{
+    public Result addQuestionToBank2( @RequestBody Question question, @RequestParam int publicornot ) throws Exception{
         try{
+            question.setPublicOrNot(publicornot);
             qDbManager.addQuestionbank2(question);
+            System.out.println((question.getTeacher()));
         }catch(Exception e){
             return new Result(400, "Add Question to Bank2 Failed! " + e.getMessage(), "");
         }
