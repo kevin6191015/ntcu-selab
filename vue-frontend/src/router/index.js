@@ -43,7 +43,9 @@ export default new Router({
       component: TeacherHome,
       meta: {
         requireAuth: true,
-        Role: true
+        Role: true,
+        title: '首頁',
+        prevName: null
       },
       children: [
         {
@@ -88,7 +90,9 @@ export default new Router({
           component: ShowHomework,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '2',
+            prevName: 'ShowAssignemnt'
           }
         },
         {
@@ -106,7 +110,9 @@ export default new Router({
           component: ShowCourseStudent,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '3',
+            prevName: 'ShowHomework'
           }
         },
         {
@@ -115,7 +121,9 @@ export default new Router({
           component: ShowStudentStatus,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '4',
+            prevName: 'ShowCourseStudent'
           }
         },
         {
@@ -124,7 +132,9 @@ export default new Router({
           component: ShowAssignemnt,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '1',
+            prevName: null
           }
         }
       ]

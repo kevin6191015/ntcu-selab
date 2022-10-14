@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import store from '../store'
 export default {
   data () {
     return {
@@ -25,8 +24,8 @@ export default {
     }
   },
   created () {
-    this.questionname = store.state.assignment.question_name
-    this.sourcecode = store.state.project_name
+    this.questionname = this.$store.state.assignment.question_name
+    this.sourcecode = this.$store.state.project_name
   },
   methods: {
     goback () {

@@ -54,20 +54,20 @@ export default {
       class_id: this.$store.state.class_id
     }).then(res => {
       this.student = res.data.data.Students
-    })
-    getLatestScore({
-      project_name: this.project_name
-    }).then(res => {
-      let tmp = res.data.data.Scores
-      for (let i = 0; i < tmp.length; i++) {
-        for (let j = 0; j < this.student.length; j++) {
-          if (tmp[i].student_id === this.student[j].student_id) {
-            tmp[i].student_name = this.student[j].student_name
-            break
+      getLatestScore({
+        project_name: this.project_name
+      }).then(res => {
+        let tmp = res.data.data.Scores
+        for (let i = 0; i < tmp.length; i++) {
+          for (let j = 0; j < this.student.length; j++) {
+            if (tmp[i].student_id === this.student[j].student_id) {
+              tmp[i].student_name = this.student[j].student_name
+              break
+            }
           }
         }
-      }
-      this.tableData = tmp
+        this.tableData = tmp
+      })
     })
   },
   methods: {

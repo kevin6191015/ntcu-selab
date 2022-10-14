@@ -47,14 +47,25 @@
       </el-menu>
     </el-row>
     <el-row>
+      <!-- <el-breadcrumb class="bread" separator-class="el-icon-arrow-right">
+        <transition-group name="breadcrumb">
+          <el-breadcrumb-item v-for="(item,index) in breadList" :key="item.path">
+            <span v-if="item.redirect==='noRedirect'||index==breadList.length-1" class="no-redirect">{{ item.meta.title }}</span>
+            <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+          </el-breadcrumb-item>
+        </transition-group>
+      </el-breadcrumb> -->
       <el-breadcrumb separator-class="el-icon-arrow-right" class="bread">
         <el-breadcrumb-item
         v-for="(item,index) in breadList"
         :key="index"
         :to="{path: item.path}">
-        {{item.name}}
+        {{item.meta.title}}
       </el-breadcrumb-item>
       </el-breadcrumb>
+    </el-row>
+    <el-row class="but">
+      <el-button type="primary" onClick="history.back( );return true;">123</el-button>
     </el-row>
     <el-row>
       <router-view></router-view>
@@ -67,32 +78,53 @@ export default {
   name: 'TeacherHome',
   data () {
     return {
-      breadList: [{
-        name: '首頁',
-        path: '/showAssignment'
-      }, {
-        name: '作業一覽',
-        path: '/showHomeWork'
-      }]
+      breadList: []
+    }
+  },
+  watch: {
+    $route () {
+      this.getBreadcrumb()
     }
   },
   methods: {
+    getBreadcrumb () {
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title && item.name !== 'Home')
+      this.breadList = matched.filter(item => item.meta && item.meta.title && item.name !== 'Home')
+    },
+    isDashboard (route) {
+      const name = route && route.name
+      if (!name) {
+        return false
+      }
+      return name.trim().toLocaleLowerCase() === 'Home'.toLocaleLowerCase()
+    },
+    handleLink (item) {
+      const { redirect, path } = item
+      if (redirect) {
+        this.$router.push(redirect)
+        return
+      }
+      this.$router.push(this.pathCompile(path))
+    },
     logout () {
-      this.$store.commit('REMOVE_INFO', this.$store.state)
+      this.$store.commit('REMOVE_INFO')
       this.$message({
         showClose: true,
         message: '登出成功',
         type: 'success'
       })
-      var path = this.$route.query.redirect
       this.$router.replace({
-        path: path === '/' || path === undefined ? '/login' : path})
+        path: '/login'
+      })
     },
     chooseCourse () {
       var path = this.$route.query.redirect
       this.$router.replace({
         path: path === '/' || path === undefined ? '/chooseclass' : path})
     }
+  },
+  created () {
+    this.getBreadcrumb()
   }
 }
 </script>
@@ -114,5 +146,9 @@ export default {
   background-color: rgb(228, 228, 228);
   font-size: 12px;
   padding: 10px
+}
+
+.but {
+  background-color: rgb(228, 228, 228);
 }
 </style>

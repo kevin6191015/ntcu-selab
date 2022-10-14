@@ -69,24 +69,7 @@ export default new Vuex.Store({
       state.add_question_mode = addquestionmode
       sessionStorage.setItem('add_question_mode', JSON.stringify(addquestionmode))
     },
-    REMOVE_INFO: (state) => {
-      state.token = ''
-      state.user = {
-      }
-      state.role = ''
-      state.selectedQuestion = ''
-      state.class = ''
-      state.class_id = ''
-      state.project_name = ''
-      state.Question_To_Show = ''
-      state.imagelink = ''
-      state.sourcecode = ''
-      state.controlreload = ''
-      state.add_question_mode = ''
-      state.assignment = {
-      }
-      state.seletedstudent = {
-      }
+    REMOVE_INFO: () => {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('role')

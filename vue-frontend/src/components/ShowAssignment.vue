@@ -117,7 +117,8 @@ export default {
       seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
       this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
-        path: '/ShowHomeWork'})
+        path: '/ShowHomeWork'
+      })
     },
     change1 () {
       if (!this.debuted) {

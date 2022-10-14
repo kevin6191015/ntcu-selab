@@ -35,7 +35,7 @@ error => {
   if (error.response.data) {
     error.message = error.response.data.msg
   } else {
-    router.push('/login')
+    router.push('/')
   }
   return Promise.reject(error)
 }
