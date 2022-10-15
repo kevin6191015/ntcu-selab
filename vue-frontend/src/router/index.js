@@ -16,7 +16,7 @@ import ShowStudentSourcecode from '@/components/ShowStudentSourcecode'
 import PublishAssignment from '@/components/PublishAssignment'
 import ShowCourseStudent from '@/components/ShowCourseStudent'
 import ShowStudentStatus from '@/components/ShowStudentStatus'
-import ShowAssignemnt from '@/components/ShowAssignment'
+// import ShowAssignemnt from '@/components/ShowAssignment'
 import ShowSuggestion from '@/components/ShowSuggestion'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -72,7 +72,9 @@ export default new Router({
           component: SystemAccount,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '系統帳號管理',
+            prevName: 'teacherhome'
           }
         },
         {
@@ -81,7 +83,9 @@ export default new Router({
           component: CourseAccount,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '課程帳號管理',
+            prevName: 'teacherhome'
           }
         },
         {
@@ -91,8 +95,8 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '2',
-            prevName: 'ShowAssignemnt'
+            title: '題目一覽',
+            prevName: 'teacherhome'
           }
         },
         {
@@ -111,7 +115,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '3',
+            title: '學生一覽',
             prevName: 'ShowHomework'
           }
         },
@@ -122,21 +126,21 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '4',
+            title: '學生做題狀況一覽',
             prevName: 'ShowCourseStudent'
           }
-        },
-        {
-          path: '/ShowAssignment',
-          name: 'ShowAssignment',
-          component: ShowAssignemnt,
-          meta: {
-            requireAuth: true,
-            Role: true,
-            title: '1',
-            prevName: null
-          }
         }
+        // {
+        //   path: '/ShowAssignment',
+        //   name: 'ShowAssignment',
+        //   component: ShowAssignemnt,
+        //   meta: {
+        //     requireAuth: true,
+        //     Role: true,
+        //     title: '首頁',
+        //     prevName: null
+        //   }
+        // }
       ]
     },
     {
