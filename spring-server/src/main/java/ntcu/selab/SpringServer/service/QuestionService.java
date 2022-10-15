@@ -134,6 +134,18 @@ public class QuestionService {
         return new Result(200, "Get Question From Bank2 Successfull!", object.toMap());
     }
 
+    @GetMapping("/getLatestQuestionID")
+    public Result getLatestQuestionID() throws Exception{
+        JSONObject object = new JSONObject();
+        String qid = qDbManager.getLatestQuestionId();
+        try{
+            object.put("qid", qid);
+        }catch(Exception e){
+            return new Result(400, "Get Latest Question ID Failed! " + e.getMessage(), "");
+        }
+        return new Result(200, "Get Latest Question ID Successfull!", object.toMap());
+    }
+
     @GetMapping("/getPublicQuestion")
     public Result getPublicQuestion() throws Exception{ 
         List<Question> questions = qDbManager.getPublicQuestion();
@@ -225,7 +237,6 @@ public class QuestionService {
         try{
             question.setPublicOrNot(publicornot);
             qDbManager.addQuestionbank2(question);
-            System.out.println((question.getTeacher()));
         }catch(Exception e){
             return new Result(400, "Add Question to Bank2 Failed! " + e.getMessage(), "");
         }

@@ -319,6 +319,25 @@ public class QuestionDBManager {
         return question;
     }
 
+    public String getLatestQuestionId() throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "question2/qid");       
+
+        String qid = null;
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        jsonobject = jsonarray.getJSONObject(0);
+        qid = String.valueOf(jsonobject.getInt("qid"));
+        
+        return qid;
+    }
+
     public void deleteQuestionById(String qid) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "question2/delete/" + qid);
