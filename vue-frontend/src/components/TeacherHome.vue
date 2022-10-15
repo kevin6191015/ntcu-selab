@@ -10,7 +10,7 @@
         text-color='#fff'
         :unique-opened="true"
         active-text-color='#ffd04b'>
-        <el-menu-item index="/ShowAssignment">
+        <el-menu-item index="/teacherhome">
           <span class="head-title">Dashboard</span>
         </el-menu-item>
         <el-submenu index="/AddQuestion">
@@ -57,23 +57,27 @@
       </el-breadcrumb> -->
       <el-breadcrumb separator-class="el-icon-arrow-right" class="bread">
         <el-breadcrumb-item
-        v-for="(item,index) in breadList"
-        :key="index"
-        :to="{path: item.path}">
-        {{item.meta.title}}
-      </el-breadcrumb-item>
+          v-for="(item,index) in breadList"
+          :key="index"
+          :to="{path: item.path}">
+          {{item.meta.title}}
+        </el-breadcrumb-item>
       </el-breadcrumb>
-    </el-row>
-    <el-row class="but">
-      <el-button type="primary" onClick="history.back( );return true;">123</el-button>
     </el-row>
     <el-row>
       <router-view></router-view>
+    </el-row>
+    <el-row v-if="isDashboard(this.$router)">
+      <ShowAssignment></ShowAssignment>
+    </el-row>
+    <el-row class="but">
+      <el-button type="primary" @click="goBack()">上一頁</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
+import ShowAssignment from './ShowAssignment.vue'
 export default {
   name: 'TeacherHome',
   data () {
@@ -88,23 +92,17 @@ export default {
   },
   methods: {
     getBreadcrumb () {
-      let matched = this.$route.matched.filter(item => item.meta && item.meta.title && item.name !== 'Home')
-      this.breadList = matched.filter(item => item.meta && item.meta.title && item.name !== 'Home')
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
+      console.log(this.$router.currentRoute)
+      console.log(this.$route.matched)
+      this.breadList = matched.filter(item => item.meta && item.meta.title)
     },
     isDashboard (route) {
-      const name = route && route.name
-      if (!name) {
+      const name = route.currentRoute.name
+      if (name !== 'Home') {
         return false
       }
-      return name.trim().toLocaleLowerCase() === 'Home'.toLocaleLowerCase()
-    },
-    handleLink (item) {
-      const { redirect, path } = item
-      if (redirect) {
-        this.$router.push(redirect)
-        return
-      }
-      this.$router.push(this.pathCompile(path))
+      return true
     },
     logout () {
       this.$store.commit('REMOVE_INFO')
@@ -121,10 +119,23 @@ export default {
       var path = this.$route.query.redirect
       this.$router.replace({
         path: path === '/' || path === undefined ? '/chooseclass' : path})
+    },
+    goBack () {
+      let PrevPage = '/' + this.$router.currentRoute.meta.prevName
+      if (PrevPage === '/null') {
+        this.$alert('已經在首頁了!')
+      } else {
+        this.$router.replace({
+          path: PrevPage
+        })
+      }
     }
   },
   created () {
     this.getBreadcrumb()
+  },
+  components: {
+    ShowAssignment
   }
 }
 </script>
@@ -144,7 +155,7 @@ export default {
 
 .bread {
   background-color: rgb(228, 228, 228);
-  font-size: 12px;
+  font-size:23px;
   padding: 10px
 }
 
