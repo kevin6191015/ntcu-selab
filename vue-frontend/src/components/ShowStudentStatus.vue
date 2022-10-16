@@ -55,20 +55,125 @@
           </el-table-column>
         </el-table>
       </el-row>
+      <div class="flex">
+        <div class="item">
+            <canvas id="myChart" class="item" ></canvas>
+        </div>
+        <div class="item">
+            <canvas id="myChart1" class="item" ></canvas>
+        </div>
+        <div class="item">
+            <canvas id="myChart2" class="item" ></canvas>
+        </div>
+      </div>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import { getPersonalScore, getPersonalReport, getGitUrl } from '@/api/score'
+import Chart from 'chart.js'
 export default {
   name: 'ShowStudentStatus',
   data () {
     return {
       tabledata: [],
       git: 'Git Repository: ',
-      project_name: this.$store.state.project_name + '_' + this.$store.state.seletedstudent.student_id
+      project_name: this.$store.state.project_name + '_' + this.$store.state.seletedstudent.student_id,
+      labels1: [],
+      labels2: [],
+      labels3: [],
+      data1: [],
+      data2: [],
+      data3: []
     }
+  },
+  mounted () {
+    console.log(this.labels1)
+    const ctx = document.getElementById('myChart')
+    const ctx1 = document.getElementById('myChart1')
+    const ctx2 = document.getElementById('myChart2')
+    console.log(this.labels1)
+    console.log(this.data1)
+    const data1 = {
+      labels: [this.labels1],
+      datasets: [{
+        label: '# of bugs',
+        data: [this.data1],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0
+      }]
+    }
+    console.log(data1)
+    const data2 = {
+      labels: this.labels2,
+      datasets: [{
+        label: '# of vulnerabilities',
+        data: this.data2,
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0
+      }]
+    }
+    const data3 = {
+      labels: this.labels3,
+      datasets: [{
+        label: '# of code smells',
+        data: this.data3,
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0
+      }]
+    }
+    const myChart = new Chart(ctx, { //eslint-disable-line
+      type: 'line',
+      data: data1,
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+              suggestedMax: 10,
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }]
+        }
+      }
+    })
+    const myChart1 = new Chart(ctx1, { //eslint-disable-line
+      type: 'line',
+      data: data2,
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+              suggestedMax: 10,
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }]
+        }
+      }
+    })
+    const myChart2 = new Chart(ctx2, { //eslint-disable-line
+      type: 'line',
+      data: data3,
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+              suggestedMax: 10,
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }]
+        }
+      }
+    })
   },
   created () {
     getPersonalScore({
@@ -82,6 +187,13 @@ export default {
           tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
           tmp1[i].report_suggestion = res.data.data['Personal Report'][i].report_suggestion
+          console.log(res.data.data['Personal Report'][i].submit_times)
+          this.labels1.push(res.data.data['Personal Report'][i].submit_times)
+          this.labels2.push(res.data.data['Personal Report'][i].submit_times)
+          this.labels3.push(res.data.data['Personal Report'][i].submit_times)
+          this.data1.push(res.data.data['Personal Report'][i].bugs)
+          this.data2.push(res.data.data['Personal Report'][i].vulnerabilities)
+          this.data3.push(res.data.data['Personal Report'][i].code_smells)
           if (tmp1[i].unit_test_score <= 60) {
             tmp1[i].color = 'https://i.imgur.com/HJGBB1X.jpg'
           } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {
@@ -126,6 +238,25 @@ export default {
 </script>
 
 <style>
+.item {
+  background-color: #fff;
+  padding: 10px 10px;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+}
+canvas{
+  display: flex;
+  align-content: center;
+}
+.flex{
+  display: flex;
+  justify-content:space-between;
+  width: auto;
+  height: auto;
+  margin: 40px 0px 20px;
+}
+
 .container2 {
   background-color: rgb(228, 228, 228);
   height: 615px;

@@ -133,6 +133,10 @@ public class ScoreService {
                 object.put("compile_result", score.getCompileResult());
                 object.put("source_code", score.getSourceCode());
                 object.put("report_suggestion", score.getSuggestion());
+                object.put("bugs", score.getBugs());
+                object.put("vulnerabilities", score.getVulnerabilities());
+                object.put("code_smells", score.getCode_smells());
+                object.put("submit_times", score.getSubmitTimes());
                 scorelist.add(object);
             }     
         }catch(Exception e){

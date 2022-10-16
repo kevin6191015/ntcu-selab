@@ -167,6 +167,10 @@ public class ScoreDBManager {
             score.setCompileResult(jsonobject.getString("compile_result"));
             score.setSourceCode(jsonobject.getString("source_code"));
             score.setSuggestion(jsonobject.getString("report_suggestion"));
+            score.setBugs(jsonobject.getString("bugs"));
+            score.setVulnerabilities(jsonobject.getString("vulnerabilities"));
+            score.setCode_smells(jsonobject.getString("code_smells"));
+            score.setSubmitTimes(jsonobject.getInt("submit_times"));
             scores.add(score);
 		}
         return scores;

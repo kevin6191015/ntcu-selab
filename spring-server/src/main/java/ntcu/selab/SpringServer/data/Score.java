@@ -10,6 +10,9 @@ public class Score {
     private String compile_result = null;
     private String source_code = null;
     private String report_suggestion = null;
+    private String bugs = null;
+    private String vulnerabilities = null;
+    private String code_smells = null;
 
     public Score(String student_id, String project_name, int submit_times, String analysis_date, int unit_test_score, int code_quality){
         this.student_id = student_id;
@@ -106,5 +109,27 @@ public class Score {
 
     public void setSuggestion(String suggestion){
         this.report_suggestion = suggestion;
+    }
+
+    public String getBugs(){
+        return this.bugs;
+    }
+
+    public void setBugs(String bugs){
+        this.bugs = bugs;
+    }
+    public String getVulnerabilities(){
+        return this.vulnerabilities;
+    }
+
+    public void setVulnerabilities(String vulnerabilities){
+        this.vulnerabilities = vulnerabilities;
+    }
+    public String getCode_smells(){
+        return this.code_smells;
+    }
+
+    public void setCode_smells(String code_smells){
+        this.code_smells = code_smells;
     }
 }
