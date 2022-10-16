@@ -320,6 +320,6 @@ export default {
   }
   #container{
     background-color: rgb(228, 228, 228);
-    height: 1000px;
+    height: 615px;
   }
   </style>

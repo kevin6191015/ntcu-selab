@@ -39,7 +39,7 @@ export default new Router({
     },
     {
       path: '/teacherhome',
-      name: 'Home',
+      name: 'teacherhome',
       component: TeacherHome,
       meta: {
         requireAuth: true,
@@ -54,7 +54,9 @@ export default new Router({
           component: AddQuestion,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '新增題目',
+            prevName: 'teacherhome'
           }
         },
         {
@@ -63,7 +65,9 @@ export default new Router({
           component: SelectQuestion,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '系統帳號管理',
+            prevName: 'teacherhome'
           }
         },
         {
@@ -105,7 +109,9 @@ export default new Router({
           component: PublishAssignment,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '發布題目',
+            prevName: 'teacherhome'
           }
         },
         {

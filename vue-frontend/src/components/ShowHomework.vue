@@ -5,6 +5,10 @@
       <div style="margin:10px"></div>
       <el-row>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加載中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           :data="assignment"
           stripe
           highlight-current-row
@@ -58,7 +62,8 @@ export default {
       answered: [],
       correct: [],
       student: [],
-      assignment: []
+      assignment: [],
+      loading: true
     }
   },
   created () {
@@ -92,6 +97,7 @@ export default {
           }
         })
       })
+      this.loading = false
     })
   },
   methods: {

@@ -233,6 +233,7 @@ export default {
           message: res.data.message,
           type: 'success'
         })
+        this.reload()
       }).catch(error => {
         this.$message({
           showClose: true,

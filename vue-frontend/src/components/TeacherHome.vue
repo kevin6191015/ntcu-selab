@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-menu
-        default-active="/ShowAssignment"
+        default-active="/teacherhome"
         router
         style="width:100%"
         background-color="#545c64"
@@ -11,7 +11,7 @@
         :unique-opened="true"
         active-text-color='#ffd04b'>
         <el-menu-item index="/teacherhome">
-          <span class="head-title">Dashboard</span>
+          <span class="head-title">首頁</span>
         </el-menu-item>
         <el-submenu index="/AddQuestion">
           <template slot="title">題目管理</template>
@@ -92,14 +92,25 @@ export default {
   },
   methods: {
     getBreadcrumb () {
-      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-      console.log(this.$router.currentRoute)
-      console.log(this.$route.matched)
-      this.breadList = matched.filter(item => item.meta && item.meta.title)
+      this.breadList = []
+      let parent = this.$router.currentRoute.meta.prevName
+      let routeTable = this.$router.options.routes[2].children
+      routeTable.push(this.$router.options.routes[2])
+      this.breadList.push(this.$router.currentRoute)
+      while (parent !== null) {
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === parent) {
+            parent = routeTable[i].meta.prevName
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      }
+      this.breadList.reverse()
     },
     isDashboard (route) {
       const name = route.currentRoute.name
-      if (name !== 'Home') {
+      if (name !== 'teacherhome') {
         return false
       }
       return true
