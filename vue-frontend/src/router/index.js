@@ -130,7 +130,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '學生一覽',
+            title: '班級一覽',
             prevName: 'ShowHomework'
           }
         },
@@ -141,7 +141,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '學生做題狀況一覽',
+            title: '學生做題狀況',
             prevName: 'ShowCourseStudent'
           }
         }
