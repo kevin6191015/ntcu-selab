@@ -1,5 +1,6 @@
 package ntcu.selab.SpringServer.service;
 
+import ntcu.selab.SpringServer.config.PasswordConfig;
 import ntcu.selab.SpringServer.data.Course;
 import ntcu.selab.SpringServer.data.Question;
 import ntcu.selab.SpringServer.data.Result;
@@ -34,6 +35,7 @@ public class UserService {
     private GitlabService gitlabService = GitlabService.getObject();
     private CourseDBManager cDbManager = CourseDBManager.getObject();
     private QuestionDBManager qDbManager = QuestionDBManager.getObject();
+    private PasswordConfig passwordConfig = PasswordConfig.getObject();
 
     public static UserService getObject() {
         return object;
@@ -184,7 +186,7 @@ public class UserService {
                         }
     
                         //更新question裡老師相關資料(question bank2)
-                        List<Question> questions = qDbManager.getQuestionsByClass(course.getId());
+                        List<Question> questions = qDbManager.getQuestionsByTeacher(user.getName());
                         for(Question question : questions){                
                             question.setTeacher(newUser.getName());
                             qDbManager.updateQuestion(question.getId(), question);
@@ -203,7 +205,7 @@ public class UserService {
             
             //更新user資料(user database)
             user.setName(newUser.getName());
-            user.setPassword(newUser.getPassword());            
+            user.setPassword(passwordConfig.encrypt(newUser.getPassword()));            
             //user.setRole(role);
             user.setEmail(newUser.getEmail());
             dbManager.updateUser(user);
@@ -316,12 +318,14 @@ public class UserService {
             user.setGitlabToken(gitlabUser.getPrivateToken());
             user.setGitlabId(String.valueOf(gitlabUser.getId()));
         }
+
+        user.setPassword(passwordConfig.encrypt(user.getPassword()));
         dbManager.addUser(user);     
     }
 
     private void unregister(User user) throws Exception { 
-        // if(user.getRole().equals("student") )    
-        //     gitlabService.deleteUserByID(Integer.valueOf(user.getGitlabId()));
+        if(user.getRole().equals("student") )    
+            gitlabService.deleteUserByID(Integer.valueOf(user.getGitlabId()));
 
         dbManager.DeleteUserById(user.getId());
     }

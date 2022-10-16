@@ -1,6 +1,7 @@
 package ntcu.selab.SpringServer.db;
 
 import ntcu.selab.SpringServer.config.JwtConfig;
+import ntcu.selab.SpringServer.config.PasswordConfig;
 import ntcu.selab.SpringServer.data.Login;
 import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.User;
@@ -8,6 +9,7 @@ import ntcu.selab.SpringServer.data.User;
 public class LoginDBManager {
     private static UserDBManager uDbManager = UserDBManager.getObject();
     private static LoginDBManager lDbManager = null;
+    private static PasswordConfig passwordConfig = PasswordConfig.getObject();
     private static JwtConfig jwtConfig = JwtConfig.getObject();
 
     public static LoginDBManager getObject(){
@@ -33,7 +35,8 @@ public class LoginDBManager {
         }
         
         User user = uDbManager.getUserInfo(uid);
-        if(user == null || !user.getPassword().equals(login.getPassword())){
+        String password = user.getPassword();
+        if(user == null || !passwordConfig.decrypt(password).equals(login.getPassword())){
             return new Result(400, "密碼錯誤", "");
         }
 
