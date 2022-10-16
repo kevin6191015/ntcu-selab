@@ -3,7 +3,7 @@ import store from '../store'
 
 export function AddQuestionbank2 (data) {
   return request({
-    url: '/question/addQuestionToBank2',
+    url: '/question/addQuestionToBank2?publicornot= ' + data.publicornot,
     method: 'post',
     headers: {
       'Authorization': 'Bearer ' + store.state.token
@@ -76,6 +76,16 @@ export function ShowSelectedQuestion1 (id) {
 export function ShowSelectedQuestion2 (id) {
   return request({
     url: '/question/getQuestionFromBank2?id=' + id,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function ShowPublicQuestion () {
+  return request({
+    url: '/question/getPublicQuestion',
     method: 'get',
     headers: {
       'Authorization': 'Bearer ' + store.state.token

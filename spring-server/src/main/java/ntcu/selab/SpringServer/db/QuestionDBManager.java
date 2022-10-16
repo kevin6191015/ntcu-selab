@@ -407,6 +407,7 @@ public class QuestionDBManager {
             conn.setDoInput(true);
             String[] input = q.getInput();
             String[] output = q.getOutnput();
+            System.out.println(q.getPublicOrNot());
             String info = "question_name=" + q.getName() + "&question_description=" + q.getDescription() +
             "&image1=" + q.getImage1() + "&image2=" + q.getImage2() + "&input_or_not=" + String.valueOf(q.getInputornot())
             + "&teacher=" + q.getTeacher() + "&public_or_not=" + q.getPublicOrNot();

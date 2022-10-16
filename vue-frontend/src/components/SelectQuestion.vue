@@ -44,6 +44,49 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
+    <el-tab-pane label="公共題庫" name="third">
+      <el-table
+        ref="multipleTable1"
+        :data="content3"
+        stripe
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange1"
+      >
+        <el-table-column
+            type="selection"
+            width="55">
+        </el-table-column>
+        <el-table-column type="index" label="序號" ></el-table-column>
+        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="題目預覽"
+        >
+          <template slot-scope="scope">
+            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
+          </template>
+        </el-table-column>
+        <div v-if="this.Revise_Quesition_Mode">
+          <el-table-column
+          fixed="right"
+          label="修改考古"
+        >
+          <template slot-scope="scope">
+            <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
+          </template>
+        </el-table-column>
+        </div>
+        <el-table-column
+          fixed="right"
+          label="題目程式碼"
+        >
+          <template slot-scope="scope">
+            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
     <el-tab-pane label="私人題庫" name="second">
       <el-table
         ref="multipleTable2"
@@ -94,7 +137,7 @@
 </body>
 </template>
 <script>
-import {ShowQuestion1, ShowQuestion2byTeacher} from '../api/question'
+import {ShowQuestion1, ShowQuestion2byTeacher, ShowPublicQuestion} from '../api/question'
 import store from '../store'
 export default {
   data () {
@@ -103,6 +146,7 @@ export default {
       selected: {},
       content1: [],
       content2: [],
+      content3: [],
       multipleSelection1: [],
       multipleSelection2: [],
       activeName: 'first',
@@ -140,13 +184,25 @@ export default {
     },
     handleClick (tab) {
       if (tab.name === 'second') {
-        ShowQuestion2byTeacher(store.state.user.name).then(res => {
-          this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
-        }).catch(error => {
-          this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
-            confirmButtonText: '確定'
+        if (this.content2.length === 0) {
+          ShowQuestion2byTeacher(store.state.user.name).then(res => {
+            this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
+          }).catch(error => {
+            this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+              confirmButtonText: '確定'
+            })
           })
-        })
+        }
+      } else if (tab.name === 'third') {
+        if (this.content3.length === 0) {
+          ShowPublicQuestion().then(res => {
+            this.content3 = JSON.parse(JSON.stringify(res.data.data.Questions))
+          }).catch(error => {
+            this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
+              confirmButtonText: '確定'
+            })
+          })
+        }
       }
     },
     select () {

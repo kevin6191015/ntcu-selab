@@ -252,19 +252,18 @@ export default {
         }
       }
       let description = this.description ? this.description : ''
-
+      let publicornot1 = this.publicbank ? 1 : 0
+      console.log(publicornot1)
       if (!this.question_name) {
         this.$message.error('請輸入題目名稱')
         return
       }
-      console.log(image1)
-      console.log(image2)
       AddQuestionbank2({
         input: input,
         output: output,
         image1: image1,
         image2: image2,
-        classid: store.state.class_id,
+        publicornot: publicornot1,
         teacher: store.state.user.name,
         name: this.question_name,
         description: description,
