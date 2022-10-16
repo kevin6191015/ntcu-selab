@@ -16,7 +16,8 @@
         <el-submenu index="/AddQuestion">
           <template slot="title">題目管理</template>
           <el-menu-item index="/AddQuestion">新增題目</el-menu-item>
-          <el-menu-item index="/PublishAssignment">發布題目</el-menu-item>
+          <el-menu-item index="/PublishAssignment">發布作業</el-menu-item>
+          <el-menu-item index="/DeleteQuestion">刪除題目</el-menu-item>
         </el-submenu>
         <el-submenu index="/SystemAccount">
           <template slot="title">帳號管理</template>

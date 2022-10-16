@@ -16,10 +16,10 @@ import ShowStudentSourcecode from '@/components/ShowStudentSourcecode'
 import PublishAssignment from '@/components/PublishAssignment'
 import ShowCourseStudent from '@/components/ShowCourseStudent'
 import ShowStudentStatus from '@/components/ShowStudentStatus'
+import DeleteQuestion from '@/components/DeleteQuestion'
 // import ShowAssignemnt from '@/components/ShowAssignment'
 import ShowSuggestion from '@/components/ShowSuggestion'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
 Vue.use(Router)
 
 export default new Router({
@@ -112,6 +112,15 @@ export default new Router({
             Role: true,
             title: '發布題目',
             prevName: 'teacherhome'
+          }
+        },
+        {
+          path: '/DeleteQuestion',
+          name: 'DeleteQuestion',
+          component: DeleteQuestion,
+          meta: {
+            requireAuth: true,
+            Role: true
           }
         },
         {

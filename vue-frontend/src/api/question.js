@@ -92,3 +92,23 @@ export function ShowPublicQuestion () {
     }
   })
 }
+
+export function getLatestQuestionID () {
+  return request({
+    url: '/question/getLatestQuestionID',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}
+
+export function DeleteQuestion (id) {
+  return request({
+    url: '/question/deleteQuestion?id=' + id,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

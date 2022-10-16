@@ -43,7 +43,7 @@ Class.createNewClass = (classReqData, result) =>{
         changeclass.class_id = class_id;       
         class_id = padLeft(class_id,3);
         console.log(changeclass);
-        var sql1 = 'CREATE TABLE class_' + class_id + '_questions (question_id TEXT, question_name TEXT, release_time TEXT , deadline TEXT )';
+        var sql1 = 'CREATE TABLE class_' + class_id + '_questions (assignment_name TEXT, question_id TEXT, question_name TEXT, release_time TEXT , deadline TEXT )';
         var sql2 = 'CREATE TABLE class_' + class_id + '_student (student_id TEXT, student_name TEXT)';
         dbConn.query(sql1,(err,res)=>{
             //if(err)

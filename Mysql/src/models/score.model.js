@@ -36,7 +36,7 @@ Score.addScore = (ScoreReqData, result) => {
 
 //
 Score.geteveryonescore = (pn,result)=>{
-    dbConn.query('SELECT student_id,MAX(submit_times) AS submit_times ,MAX(unit_test_score) AS unit_test_score,MAX(analysis_date) AS analysis_date FROM score_list WHERE SUBSTR(project_name,1,20) =? GROUP BY student_id',pn, (err,res)=>{
+    dbConn.query('SELECT student_id,MAX(submit_times) AS submit_times ,MAX(unit_test_score) AS unit_test_score,MAX(analysis_date) AS analysis_date FROM score_list WHERE SUBSTR(project_name,1,24) =? GROUP BY student_id',pn, (err,res)=>{
         if(err)
             result(err);
         else    
@@ -46,7 +46,6 @@ Score.geteveryonescore = (pn,result)=>{
 
 Score.getpeopleanswered = (semester, class_id, result)=>{
     class_id1 = padLeft(class_id,3);
-    semester1 = semester.replace('-','_');
     var sql1 = 'SELECT  question_id,release_time FROM class_' + class_id1 + '_questions'
     dbConn2.query(sql1, (err,res)=>{
         let i
@@ -55,8 +54,9 @@ Score.getpeopleanswered = (semester, class_id, result)=>{
         for (i = 0 ; i < JSON.parse(JSON.stringify(res)).length; i++) {
             var question_id = JSON.parse(JSON.stringify(res))[i].question_id;
             var release_time = JSON.parse(JSON.stringify(res))[i].release_time;
-            half_project_name[i] = question_id + '_' + semester1 + '_' + release_time;
-            sql4 += "SELECT COUNT(DISTINCT student_id) AS people_answered FROM score_list WHERE SUBSTR(project_name,1,20) = '" + half_project_name[i] + "'; ";
+            half_project_name[i] = question_id + '_' + class_id1 + '_' + semester + '_' + release_time;
+            sql4 += "SELECT COUNT(DISTINCT student_id) AS people_answered FROM score_list WHERE SUBSTR(project_name,1,24) = '" + half_project_name[i] + "'; ";
+            console.log(half_project_name[i])
         }
         dbConn.query(sql4 ,(err,res)=>{
             if (err)
@@ -86,12 +86,11 @@ Score.getpeopleanswered = (semester, class_id, result)=>{
             }
             */
         })
-    })
+    }) 
 }
 
 Score.getpeoplecorrect = (semester, class_id, result)=>{
     class_id1 = padLeft(class_id,3);
-    semester1 = semester.replace('-','_');
     var sql1 = 'SELECT  question_id,release_time FROM class_' + class_id1 + '_questions'
     dbConn2.query(sql1, (err,res)=>{
         let i
@@ -100,8 +99,8 @@ Score.getpeoplecorrect = (semester, class_id, result)=>{
         for (i = 0 ; i < JSON.parse(JSON.stringify(res)).length; i++) {
             var question_id = JSON.parse(JSON.stringify(res))[i].question_id;
             var release_time = JSON.parse(JSON.stringify(res))[i].release_time;
-            half_project_name[i] = question_id + '_' + semester1 + '_' + release_time
-            sql2 += "SELECT COUNT(DISTINCT student_id) AS people_correct FROM score_list WHERE SUBSTR(project_name,1,20) = '"+ half_project_name[i] + "'AND unit_test_score = 100;"
+            half_project_name[i] = question_id + '_' + class_id1 + '_' +  semester + '_' + release_time
+            sql2 += "SELECT COUNT(DISTINCT student_id) AS people_correct FROM score_list WHERE SUBSTR(project_name,1,24) = '"+ half_project_name[i] + "'AND unit_test_score = 100;"
         }
         dbConn.query(sql2 ,(err,res)=>{
             if (err)

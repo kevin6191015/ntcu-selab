@@ -46,12 +46,12 @@
     </el-tab-pane>
     <el-tab-pane label="公共題庫" name="third">
       <el-table
-        ref="multipleTable1"
+        ref="multipleTable3"
         :data="content3"
         stripe
         tooltip-effect="dark"
         style="width: 100%"
-        @selection-change="handleSelectionChange1"
+        @selection-change="handleSelectionChange3"
       >
         <el-table-column
             type="selection"
@@ -149,6 +149,7 @@ export default {
       content3: [],
       multipleSelection1: [],
       multipleSelection2: [],
+      multipleSelection3: [],
       activeName: 'first',
       temp: [],
       check1: true,
@@ -173,6 +174,7 @@ export default {
     if (this.temp) {
       this.toggleSelection1(this.temp)
       this.toggleSelection2(this.temp)
+      this.toggleSelection3(this.temp)
     }
   },
   methods: {
@@ -181,6 +183,9 @@ export default {
     },
     handleSelectionChange2 (theval) {
       this.multipleSelection2 = theval
+    },
+    handleSelectionChange3 (theval) {
+      this.multipleSelection3 = theval
     },
     handleClick (tab) {
       if (tab.name === 'second') {
@@ -209,13 +214,22 @@ export default {
       store.commit('REMOVE_SELECTEDQUESTION')
       store.commit('SET_CONTROLRELOAD', '1')
       let selectedQ = []
-      let num = 0
+      let num1 = 0
+      let num2 = 0
       for (let i = 0; i < this.multipleSelection1.length; i++) {
         selectedQ[i] = this.multipleSelection1[i].question_id
-        num++
+        num1++
       }
-      for (let i = 0; i < this.multipleSelection2.length; i++) {
-        selectedQ[(i + num)] = this.multipleSelection2[i].id
+      if (this.multipleSelection2) {
+        for (let i = 0; i < this.multipleSelection2.length; i++) {
+          selectedQ[(i + num1)] = this.multipleSelection2[i].id
+          num2++
+        }
+      }
+      if (this.multipleSelection3) {
+        for (let i = 0; i < this.multipleSelection3.length; i++) {
+          selectedQ[(i + num2 + num1)] = this.multipleSelection3[i].id
+        }
       }
       store.commit('SET_SELECTEDQUESTION', selectedQ)
       this.$router.replace({
@@ -285,6 +299,18 @@ export default {
           for (let j = 0; j < this.content2.length; j++) {
             if (this.content2[j].id === selectedQ.slice(i, i + 5)) {
               this.$refs.multipleTable2.toggleRowSelection(this.content2[j])
+            }
+          }
+        } else {
+        }
+      }
+    },
+    toggleSelection3 (selectedQ) {
+      for (let i = 0; i < selectedQ.length; i = i + 6) {
+        if (selectedQ[i].charAt(0) === 'b') {
+          for (let j = 0; j < this.content3.length; j++) {
+            if (this.content3[j].id === selectedQ.slice(i, i + 5)) {
+              this.$refs.multipleTable3.toggleRowSelection(this.content3[j])
             }
           }
         } else {

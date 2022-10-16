@@ -4,7 +4,7 @@ var Question = function(question){
     this.question_name = question.question_name;
     this.question_description = question.question_description;
     this.teacher = question.teacher;
-    this.class_id = question.class_id;
+    this.public_or_not = question.public_or_not;
     this.image1 = question.image1;
     this.image2 = question.image2;
     this.input1 = question.input1;
@@ -118,8 +118,8 @@ Question.getQuestionByTeacher = (teacher, result)=>{
     })
 }
 
-Question.getQuestionByClass = (class_id, result)=>{
-    dbConn.query('SELECT * FROM question_bank2 WHERE class_id=?', class_id, (err,res)=>{
+Question.getQuestionPublic = (result)=>{
+    dbConn.query('SELECT * FROM question_bank2 WHERE public_or_not=1', (err,res)=>{
         if(err)
             result(err);
         else
@@ -140,6 +140,16 @@ Question.getteachers = (result)=>{
 //get class list
 Question.getclass = (result)=>{
     dbConn.query('SELECT DISTINCT class_id FROM question_bank2',(err,res)=>{
+        if(err)
+            result(err);
+        else
+            result(null,res);
+    })
+}
+
+//get latest qid
+Question.getLatesetQid = (result)=>{
+    dbConn.query('SELECT MAX(num) AS qid FROM question_bank2',(err,res)=>{
         if(err)
             result(err);
         else

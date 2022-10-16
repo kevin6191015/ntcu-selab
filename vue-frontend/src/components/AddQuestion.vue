@@ -53,8 +53,9 @@
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-minus" @click="sub" type="primary">減少輸入、輸出</el-button>
       </div>
       <div v-if = "this.Revise_Quesition_Mode" id = "temp">
+        <h4>圖片預覽:</h4>
         <el-image
-          style="width: 150px; height: 150px"
+          style="width: 450px; height: 300px"
           :src="url"
           :preview-src-list="srcList">
         </el-image>
@@ -108,7 +109,7 @@
 </template>
 
 <script scoped>
-import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2 } from '../api/question'
+import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID } from '../api/question'
 import store from '../store'
 export default {
   name: 'AddQuestion',
@@ -285,10 +286,29 @@ export default {
             })
           }
         })
+
       if (this.hassouececode) {
         AddSourceocde({
           question_name: this.question_name,
           code: this.sourcecode
+        })
+      }
+
+      // get latest qid
+      if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4') {
+        getLatestQuestionID()
+          .then((resp) => {
+            console.log(resp.data.data.qid)
+            let qid = resp.data.data.qid
+            qid = 'b' + this.padLeft(qid, 4)
+            if (store.state.selectedQuestion) {
+              qid = store.state.selectedQuestion + ',' + qid
+            }
+            store.commit('SET_SELECTEDQUESTION', qid)
+            store.commit('SET_CONTROLRELOAD', '1')
+          })
+        this.$router.replace({
+          path: '/PublishAssignment'
         })
       }
     },
@@ -417,6 +437,13 @@ export default {
     },
     changecode () {
       this.sourcecode = store.state.sourcecode
+    },
+    padLeft (str, lenght) {
+      if (str.length >= lenght) {
+        return str
+      } else {
+        return this.padLeft('0' + str, lenght)
+      }
     }
   }
 }
@@ -428,8 +455,8 @@ export default {
   width: 40%;
   margin-right: 0%;
   margin-left: 10%;
-  text-align:center;
   line-height:80px;
+  text-align:center;
   float:left;
 }
 #sitebody{
@@ -491,6 +518,6 @@ export default {
 }
 #container{
     background-color: rgb(228, 228, 228);
-    height: 1500px;
+    height: 1700px;
   }
 </style>

@@ -22,12 +22,15 @@ router.post('/delete/:id',QuestionController.deleteQuestion);
 router.get('/byteacher/:teacher',QuestionController.getQuestionByTeacher);
 
 //get by class
-router.get('/byclass/:class',QuestionController.getQuestionByClass);
+router.get('/public/',QuestionController.getQuestionPublic);
 
 //get teacher list
 router.get('/teachers/',QuestionController.getteachers);
 
 //get class list
 router.get('/class/',QuestionController.getclass);
+
+//get latest qid
+router.get('/qid/',QuestionController.getLatesetQid);
 
 module.exports = router;

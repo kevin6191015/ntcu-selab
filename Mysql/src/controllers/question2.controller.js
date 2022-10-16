@@ -76,8 +76,8 @@ exports.getQuestionByTeacher = (req,res)=>{
     })
 }
 
-exports.getQuestionByClass = (req,res)=>{
-    QuestionModel.getQuestionByClass(req.params.class, (err, question)=>{
+exports.getQuestionPublic = (req,res)=>{
+    QuestionModel.getQuestionPublic((err, question)=>{
         if(err)
             res.send(err);
         res.send(question);
@@ -103,5 +103,13 @@ exports.getclass = (req,res)=>{
             res.send(err);
         else
             res.send(classes);
+    })
+}
+
+exports.getLatesetQid = (req,res)=>{
+    QuestionModel.getLatesetQid((err, qid)=>{
+        if(err)
+            res.send(err);
+        res.send(qid);
     })
 }

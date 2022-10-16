@@ -15,10 +15,10 @@ var SQreport = function(sqreport){
     this.code_smells = sqreport.code_smells
     this.bugs = sqreport.bugs
     this.vulnerabilities = sqreport.vulnerabilities
-    this.code_smells_report = sqreport.code_smells_report
+    this.report_suggestion = sqreport.report_suggestion
     this.suggestion_code = sqreport.suggestion_code
 }
-
+ 
 //get by id and project_name
 SQreport.getSQreportByIdandName = ( project_name, result)=>{
     dbConn.query('SELECT * FROM Sonarqube_reports  WHERE project_name = ?', project_name,(err,res)=>{
