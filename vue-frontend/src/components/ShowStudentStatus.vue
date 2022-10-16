@@ -88,93 +88,6 @@ export default {
       data3: []
     }
   },
-  mounted () {
-    console.log(this.labels1)
-    const ctx = document.getElementById('myChart')
-    const ctx1 = document.getElementById('myChart1')
-    const ctx2 = document.getElementById('myChart2')
-    console.log(this.labels1)
-    console.log(this.data1)
-    const data1 = {
-      labels: [this.labels1],
-      datasets: [{
-        label: '# of bugs',
-        data: [this.data1],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0
-      }]
-    }
-    console.log(data1)
-    const data2 = {
-      labels: this.labels2,
-      datasets: [{
-        label: '# of vulnerabilities',
-        data: this.data2,
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0
-      }]
-    }
-    const data3 = {
-      labels: this.labels3,
-      datasets: [{
-        label: '# of code smells',
-        data: this.data3,
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0
-      }]
-    }
-    const myChart = new Chart(ctx, { //eslint-disable-line
-      type: 'line',
-      data: data1,
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              min: 0,
-              suggestedMax: 10,
-              beginAtZero: true,
-              stepSize: 1
-            }
-          }]
-        }
-      }
-    })
-    const myChart1 = new Chart(ctx1, { //eslint-disable-line
-      type: 'line',
-      data: data2,
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              min: 0,
-              suggestedMax: 10,
-              beginAtZero: true,
-              stepSize: 1
-            }
-          }]
-        }
-      }
-    })
-    const myChart2 = new Chart(ctx2, { //eslint-disable-line
-      type: 'line',
-      data: data3,
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              min: 0,
-              suggestedMax: 10,
-              beginAtZero: true,
-              stepSize: 1
-            }
-          }]
-        }
-      }
-    })
-  },
   created () {
     getPersonalScore({
       project_name: this.project_name
@@ -187,7 +100,6 @@ export default {
           tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
           tmp1[i].report_suggestion = res.data.data['Personal Report'][i].report_suggestion
-          console.log(res.data.data['Personal Report'][i].submit_times)
           this.labels1.push(res.data.data['Personal Report'][i].submit_times)
           this.labels2.push(res.data.data['Personal Report'][i].submit_times)
           this.labels3.push(res.data.data['Personal Report'][i].submit_times)
@@ -203,6 +115,87 @@ export default {
           }
         }
         this.tabledata = tmp1
+        const ctx = document.getElementById('myChart')
+        const ctx1 = document.getElementById('myChart1')
+        const ctx2 = document.getElementById('myChart2')
+        const data1 = {
+          labels: this.labels1.reverse(),
+          datasets: [{
+            label: '# of bugs',
+            data: this.data1.reverse(),
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0
+          }]
+        }
+        const data2 = {
+          labels: this.labels2.reverse(),
+          datasets: [{
+            label: '# of vulnerabilities',
+            data: this.data2.reverse(),
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0
+          }]
+        }
+        const data3 = {
+          labels: this.labels3.reverse(),
+          datasets: [{
+            label: '# of code smells',
+            data: this.data3.reverse(),
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0
+          }]
+        }
+    const myChart = new Chart(ctx, { //eslint-disable-line
+          type: 'line',
+          data: data1,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  suggestedMax: 10,
+                  beginAtZero: true,
+                  stepSize: 1
+                }
+              }]
+            }
+          }
+        })
+    const myChart1 = new Chart(ctx1, { //eslint-disable-line
+          type: 'line',
+          data: data2,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  suggestedMax: 10,
+                  beginAtZero: true,
+                  stepSize: 1
+                }
+              }]
+            }
+          }
+        })
+    const myChart2 = new Chart(ctx2, { //eslint-disable-line
+          type: 'line',
+          data: data3,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  suggestedMax: 10,
+                  beginAtZero: true,
+                  stepSize: 1
+                }
+              }]
+            }
+          }
+        })
       })
     })
     getGitUrl({
