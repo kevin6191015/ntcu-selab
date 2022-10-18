@@ -1,6 +1,7 @@
 <template>
   <el-container class="iner1">
-    <el-main style="margin: 40px;">
+    <!-- <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px"> -->
+      <el-main style="margin: 40px;">
       <el-row :gutter="30">
         <el-col :span="8" class="el-col1"><div align="center" class="grid-content1">未加入帳號</div></el-col>
         <el-col :offset="3" :span="8" class="el-col1"><div align="center" class="grid-content1">已加入帳號</div></el-col>
@@ -10,10 +11,11 @@
           <div class="grid-content2">
             <el-table
               :header-cell-style="{background:'#eef1f6'}"
+              :row-class-name="tableRowClassName"
               ref="multipleTable"
               :data="not_class_student"
               tooltip-effect="dark"
-              style="min-height: 400px;"
+              style="min-height: 400px;border: 3px solid rgba(0, 0, 0, 0.397);"
               @selection-change="not_in_Course">
               <el-table-column
                 type="selection"
@@ -65,6 +67,7 @@
     </el-main>
     <el-footer class="iner1">
       </el-footer>
+    <!-- </div> -->
   </el-container>
 </template>
 
@@ -155,6 +158,9 @@ export default {
           this.reload()
         })
       }
+    },
+    tableRowClassName ({row, rowIndex}) {
+      return 'row1'
     }
   }
 }
@@ -186,5 +192,13 @@ export default {
   background-color: orange;
   color: black;
   font-size: 20px;
+}
+
+.el-table{
+  background: white;
+}
+
+.el-table .row1 {
+  background: white;
 }
 </style>

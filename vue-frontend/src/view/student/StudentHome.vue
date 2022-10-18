@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-menu
-        default-active="/ShowAssignment"
+        default-active="/studenthome"
         router
         style="width:100%"
         background-color="#545c64"
@@ -10,8 +10,8 @@
         text-color='#fff'
         :unique-opened="true"
         active-text-color='#ffd04b'>
-        <el-menu-item index="/ShowAssignment">
-          <span class="head-title">Dashboard</span>
+        <el-menu-item index="/studenthome">
+          <span class="head-title">首頁</span>
         </el-menu-item>
         <el-menu-item style="float:right">
           <el-dropdown>
@@ -42,31 +42,59 @@
         v-for="(item,index) in breadList"
         :key="index"
         :to="{path: item.path}">
-        {{item.name}}
+        {{item.meta.title}}
       </el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
     <el-row>
       <router-view></router-view>
     </el-row>
+    <el-row v-if="isDashboard(this.$router)">
+      <ShowAssignment></ShowAssignment>
+    </el-row>
   </div>
 </template>
 
 <script>
+import ShowAssignment from './ShowStudentAssignment'
 export default {
-  name: 'TeacherHome',
+  name: 'studenthome',
   data () {
     return {
-      breadList: [{
-        name: '首頁',
-        path: '/showAssignment'
-      }, {
-        name: '作業一覽',
-        path: '/showHomeWork'
-      }]
+      breadList: []
+    }
+  },
+  watch: {
+    $route () {
+      this.getBreadcrumb()
     }
   },
   methods: {
+    getBreadcrumb () {
+      this.breadList = []
+      let parent = this.$router.currentRoute.meta.prevName
+      console.log(this.$router.options.routes[4].children)
+      let routeTable = this.$router.options.routes[4].children
+      routeTable.push(this.$router.options.routes[4])
+      this.breadList.push(this.$router.currentRoute)
+      while (parent !== null) {
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === parent) {
+            parent = routeTable[i].meta.prevName
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      }
+      this.breadList.reverse()
+    },
+    isDashboard (route) {
+      const name = route.currentRoute.name
+      if (name !== 'studenthome') {
+        return false
+      }
+      return true
+    },
     logout () {
       this.$store.commit('REMOVE_INFO', this.$store.state)
       this.$message({
@@ -83,6 +111,12 @@ export default {
       this.$router.replace({
         path: path === '/' || path === undefined ? '/chooseclass' : path})
     }
+  },
+  created () {
+    this.getBreadcrumb()
+  },
+  components: {
+    ShowAssignment
   }
 }
 </script>

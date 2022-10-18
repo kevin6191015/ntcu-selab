@@ -3,7 +3,11 @@
     <el-main>
       <el-row>
         <el-col class="title1">{{this.$store.state.assignment.question_name}}</el-col>
-        <el-col class="title2">曲線圖</el-col>
+        <el-col class="title2">
+          <el-button @click="Seequestion()">
+            觀看題目
+          </el-button>
+        </el-col>
       </el-row>
       <div style="margin:10px"></div>
       <el-row>
@@ -39,7 +43,7 @@
 
 <script>
 import { getLatestScore } from '@/api/score'
-import { getStudent } from '../api/student'
+import { getStudent } from '@/api/student'
 export default {
   name: 'ShowCourseStudent',
   data () {
@@ -79,6 +83,15 @@ export default {
       this.$store.commit('SET_SELETED_STUDENT', student)
       this.$router.replace({
         path: '/ShowStudentStatus'})
+    },
+    Seequestion () {
+      let assignment = this.$store.state.assignment
+      this.$store.commit('SET_QUESTION_TO_SHOW', assignment.question_id + ',' + assignment.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowQuestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     }
   }
 }
@@ -123,7 +136,6 @@ export default {
 .title1 {
   width: auto;
   float:left;
-  background-color:yellow;
   font-size: 20px;
   padding: 10px;
   border: 4px solid rgba(0, 0, 0, 0.397);
@@ -133,10 +145,7 @@ export default {
 .title2 {
   width: auto;
   float:right;
-  background-color:yellow;
   font-size: 20px;
   padding: 10px;
-  border: 4px solid rgba(0, 0, 0, 0.397);
-  border-radius: 12px
 }
 </style>

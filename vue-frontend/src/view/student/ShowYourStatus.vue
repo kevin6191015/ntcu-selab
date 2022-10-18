@@ -5,13 +5,12 @@
         <el-col class="a1">{{this.git}}</el-col>
       </el-row>
       <el-row>
-        <el-col class="a2">{{'學生姓名: ' + this.$store.state.seletedstudent.student_name}}</el-col>
         <el-col class="a3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
       </el-row>
       <el-row>
         <el-table
           :data="tabledata"
-          style="width: 100%">
+          style="width: 100%; margin-top: 10px;">
           <el-table-column
             prop="color"
             width="60">
@@ -74,12 +73,12 @@
 import { getPersonalScore, getPersonalReport, getGitUrl } from '@/api/score'
 import Chart from 'chart.js'
 export default {
-  name: 'ShowStudentStatus',
+  name: 'ShowYourStatus',
   data () {
     return {
       tabledata: [],
       git: 'Git Repository: ',
-      project_name: this.$store.state.project_name + '_' + this.$store.state.seletedstudent.student_id,
+      project_name: this.$store.state.project_name + '_' + this.$store.state.user.id,
       labels1: [],
       labels2: [],
       labels3: [],
@@ -256,27 +255,22 @@ canvas{
 }
 
 .a1 {
-  background-color: aliceblue;
   font-size: 23px;
   font-family: "Microsoft YaHei";
 }
 
 .a2 {
-  background-color: rgb(57, 146, 57);
   font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;
-  border: 4px solid rgba(0, 0, 0, 0.397);
 }
 
 .a3 {
-  background-color: rgb(57, 146, 57);
   font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;
   display: flex;
-  justify-content: right;
-  border: 4px solid rgba(0, 0, 0, 0.397);
+  justify-content: left;
 }
 
 .el-table .bad-row {

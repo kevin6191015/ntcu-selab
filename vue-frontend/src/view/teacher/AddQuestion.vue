@@ -109,8 +109,7 @@
 </template>
 
 <script scoped>
-import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID } from '../api/question'
-import store from '../store'
+import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID } from '@/api/question'
 export default {
   name: 'AddQuestion',
   data () {
@@ -142,11 +141,10 @@ export default {
   created () {
     if (this.$store.state.add_question_mode === '3') {
       this.Revise_Quesition_Mode = true
-      let id = store.state.Question_To_Show
+      let id = this.$store.state.Question_To_Show
       if (id.charAt(0) === 'a') {
         ShowSelectedQuestion1(id.slice(0, 5)).then(res => {
           let content = res.data.data
-          console.log(content)
           this.question_name = content.question_name
           this.description = content.question_description
           this.input_num = content.inputornot
@@ -215,8 +213,8 @@ export default {
         })
       }
     }
-    store.commit('SET_IMAGELINK', '')
-    store.commit('SET_SOURCECODE', '')
+    this.$store.commit('SET_IMAGELINK', '')
+    this.$store.commit('SET_SOURCECODE', '')
   },
   computed: {
     newsourcecode () {
@@ -245,9 +243,9 @@ export default {
         image1 = this.srcList[1]
         image2 = this.srcList[2]
       } else {
-        if (store.state.imagelink.indexOf(',') >= 0) {
-          image1 = this.$store.state.imagelink.slice(store.state.imagelink.indexOf(',') + 1)
-          image2 = this.$store.state.imagelink.slice(0, store.state.imagelink.indexOf(','))
+        if (this.$store.state.imagelink.indexOf(',') >= 0) {
+          image1 = this.$store.state.imagelink.slice(this.$store.state.imagelink.indexOf(',') + 1)
+          image2 = this.$store.state.imagelink.slice(0, this.$store.state.imagelink.indexOf(','))
         } else {
           image1 = this.$store.state.imagelink
         }
@@ -265,7 +263,7 @@ export default {
         image1: image1,
         image2: image2,
         publicornot: publicornot1,
-        teacher: store.state.user.name,
+        teacher: this.$store.state.user.name,
         name: this.question_name,
         description: description,
         inputornot: temp
@@ -301,11 +299,11 @@ export default {
             console.log(resp.data.data.qid)
             let qid = resp.data.data.qid
             qid = 'b' + this.padLeft(qid, 4)
-            if (store.state.selectedQuestion) {
-              qid = store.state.selectedQuestion + ',' + qid
+            if (this.$store.state.selectedQuestion) {
+              qid = this.$store.state.selectedQuestion + ',' + qid
             }
-            store.commit('SET_SELECTEDQUESTION', qid)
-            store.commit('SET_CONTROLRELOAD', '1')
+            this.$store.commit('SET_SELECTEDQUESTION', qid)
+            this.$store.commit('SET_CONTROLRELOAD', '1')
           })
         this.$router.replace({
           path: '/PublishAssignment'
@@ -362,7 +360,7 @@ export default {
       let reader = new FileReader()
       reader.onload = function () {
         if (reader.result) {
-          store.commit('SET_SOURCECODE', reader.result)
+          this.$store.commit('SET_SOURCECODE', reader.result)
         }
       }
       reader.readAsText(file.raw, 'gb2312')
@@ -371,10 +369,10 @@ export default {
     onUploadRemove (file) {
       if (this.imageList[0].url === file.url) {
         this.imageList.shift()
-        store.commit('SET_IMAGELINK', store.state.imagelink.slice(store.state.imagelink.indexOf(',') + 1))
+        this.$store.commit('SET_IMAGELINK', this.$store.state.imagelink.slice(this.$store.state.imagelink.indexOf(',') + 1))
       } else {
         this.imageList.pop()
-        store.commit('SET_IMAGELINK', store.state.imagelink.slice(0, store.state.imagelink.indexOf(',')))
+        this.$store.commit('SET_IMAGELINK', this.$store.state.imagelink.slice(0, this.$store.state.imagelink.indexOf(',')))
       }
     },
     onfileUploadRemove (file) {
@@ -409,10 +407,10 @@ export default {
         fetch('https://api.imgur.com/3/image', requestOptions)
           .then(response => response.text())
           .then(result => {
-            if (store.state.imagelink) {
-              store.commit('SET_IMAGELINK', store.state.imagelink + ',' + JSON.parse(result).data.link)
+            if (this.$store.state.imagelink) {
+              this.$store.commit('SET_IMAGELINK', this.$store.state.imagelink + ',' + JSON.parse(result).data.link)
             } else {
-              store.commit('SET_IMAGELINK', JSON.parse(result).data.link)
+              this.$store.commit('SET_IMAGELINK', JSON.parse(result).data.link)
             }
           })
           .catch(error => console.log('error', error))
@@ -436,7 +434,7 @@ export default {
       alert('test')
     },
     changecode () {
-      this.sourcecode = store.state.sourcecode
+      this.sourcecode = this.$store.state.sourcecode
     },
     padLeft (str, lenght) {
       if (str.length >= lenght) {

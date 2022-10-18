@@ -36,14 +36,14 @@
             prop="deadline"
             label="截止日期">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             fixed="right"
             label="題目預覽"
           >
             <template slot-scope="scope">
               <el-button @click="Seequestion(scope.row)" type="text" size="small">查看</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-row>
     </el-main>

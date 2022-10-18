@@ -1,24 +1,27 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import TeacherHome from '@/components/TeacherHome'
-import StudentHome from '@/components/StudentHome'
-import Login from '@/components/Login'
-import ChooseClass from '@/components/ChooseClass'
-import CourseAccount from '@/components/CourseAccount'
-import ShowHomework from '@/components/ShowHomework'
-import AddQuestion from '@/components/AddQuestion'
-import SelectQuestion from '@/components/SelectQuestion'
-import ShowQuestion from '@/components/ShowQuestion'
-import SystemAccount from '@/components/SystemAccount'
-import ShowSourcecode from '@/components/ShowSourcecode'
-import ShowStudentSourcecode from '@/components/ShowStudentSourcecode'
-import PublishAssignment from '@/components/PublishAssignment'
-import ShowCourseStudent from '@/components/ShowCourseStudent'
-import ShowStudentStatus from '@/components/ShowStudentStatus'
-import DeleteQuestion from '@/components/DeleteQuestion'
-// import ShowAssignemnt from '@/components/ShowAssignment'
-import ShowSuggestion from '@/components/ShowSuggestion'
+import Login from '@/view/Login'
+import ChooseClass from '@/view/ChooseClass'
+
+import TeacherHome from '@/view/teacher/TeacherHome'
+import CourseAccount from '@/view/teacher/CourseAccount'
+import ShowHomework from '@/view/teacher/ShowHomework'
+import AddQuestion from '@/view/teacher/AddQuestion'
+import SelectQuestion from '@/view/teacher/SelectQuestion'
+import ShowQuestion from '@/view/teacher/ShowQuestion'
+import SystemAccount from '@/view/teacher/SystemAccount'
+import ShowSourcecode from '@/view/teacher/ShowSourcecode'
+import ShowStudentSourcecode from '@/view/teacher/ShowStudentSourcecode'
+import PublishAssignment from '@/view/teacher/PublishAssignment'
+import ShowCourseStudent from '@/view/teacher/ShowCourseStudent'
+import ShowStudentStatus from '@/view/teacher/ShowStudentStatus'
+import DeleteQuestion from '@/view/teacher/DeleteQuestion'
+import ShowSuggestion from '@/view/teacher/ShowSuggestion'
+
+import StudentHome from '@/view/student/StudentHome'
+import ShowStudentHomework from '@/view/student/ShowStudentHomework'
+import ShowYourStatus from '@/view/student/ShowYourStatus'
 import 'bootstrap/dist/css/bootstrap.min.css'
 Vue.use(Router)
 
@@ -165,11 +168,35 @@ export default new Router({
     },
     {
       path: '/studenthome',
-      name: 'StudentHome',
+      name: 'studenthome',
       component: StudentHome,
       meta: {
-        requireAuth: true
-      }
+        requireAuth: true,
+        title: '首頁',
+        prevName: null
+      },
+      children: [
+        {
+          path: '/ShowStudentHomework',
+          name: 'ShowStudnetHomework',
+          component: ShowStudentHomework,
+          meta: {
+            requireAuth: true,
+            title: '題目一覽',
+            prevName: 'studenthome'
+          }
+        },
+        {
+          path: '/ShowYourStatus',
+          name: 'ShowYourStatus',
+          component: ShowYourStatus,
+          meta: {
+            requireAuth: true,
+            title: '做題狀況',
+            prevName: 'ShowStudnetHomework'
+          }
+        }
+      ]
     },
     {
       path: '/ShowQuestion',
