@@ -1,7 +1,7 @@
 <template>
   <el-container class="iner1">
     <!-- <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px"> -->
-      <el-main style="margin: 40px;">
+      <el-main style="margin: 20px;">
       <el-row :gutter="30">
         <el-col :span="8" class="el-col1"><div align="center" class="grid-content1">未加入帳號</div></el-col>
         <el-col :offset="3" :span="8" class="el-col1"><div align="center" class="grid-content1">已加入帳號</div></el-col>
@@ -186,6 +186,7 @@ export default {
 
 .iner1 {
   background-color: #EDEDED;
+  height: 655px
 }
 
 .button2{

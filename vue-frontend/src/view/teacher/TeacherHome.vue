@@ -166,7 +166,7 @@ export default {
 }
 
 .bread {
-  background-color: white;
+  background-color: rgb(228, 228, 228);
   font-size:23px;
   padding: 10px
 }
