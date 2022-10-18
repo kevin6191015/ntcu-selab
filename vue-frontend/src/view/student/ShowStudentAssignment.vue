@@ -77,7 +77,7 @@ export default {
 <style>
 .container2 {
   background-color: rgb(228, 228, 228);
-  height: 615px;
+  height: 635px;
 }
 .button1 {
   width: 6%;

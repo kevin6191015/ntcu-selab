@@ -6,6 +6,11 @@
       </el-row>
       <el-row>
         <el-col class="a3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
+        <el-col class="a2">
+          <el-button @click="Seequestion()">
+            觀看題目
+          </el-button>
+        </el-col>
       </el-row>
       <el-row>
         <el-table
@@ -224,6 +229,15 @@ export default {
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
       this.$store.commit('SET_PROJECT_NAME', temp)
+    },
+    Seequestion () {
+      let assignment = this.$store.state.assignment
+      this.$store.commit('SET_QUESTION_TO_SHOW', assignment.question_id + ',' + assignment.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowQuestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     }
   }
 }
@@ -251,7 +265,7 @@ canvas{
 
 .container2 {
   background-color: rgb(228, 228, 228);
-  height: 615px;
+  height: 635px;
 }
 
 .a1 {
@@ -260,9 +274,10 @@ canvas{
 }
 
 .a2 {
-  font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;
+  display: flex;
+  justify-content: right;
 }
 
 .a3 {

@@ -73,7 +73,6 @@ export default {
     getBreadcrumb () {
       this.breadList = []
       let parent = this.$router.currentRoute.meta.prevName
-      console.log(this.$router.options.routes[4].children)
       let routeTable = this.$router.options.routes[4].children
       routeTable.push(this.$router.options.routes[4])
       this.breadList.push(this.$router.currentRoute)
