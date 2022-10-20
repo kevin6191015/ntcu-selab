@@ -13,10 +13,12 @@ export function getAllAssignments (data) {
 
 export function addAssignment (data) {
   return request({
-    url: '/assignment/addAssignment?cid=' + data.cid + '&qid=' + data.qid + '&release_time=' + data.release_time + '&deadline=' + data.deadline + '&assignment_name=' + data.assignment_name,
-    method: 'get',
+    url: '/assignment/addAssignment?cid=' + data.cid,
+    method: 'post',
     headers: {
+      'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + store.state.token
-    }
+    },
+    data
   })
 }

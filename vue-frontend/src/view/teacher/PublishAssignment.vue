@@ -121,11 +121,13 @@ export default {
         }
         for (let x in this.questions) {
           addAssignment({
-            assignment_name: this.assignment_name,
-            qid: this.questions[x].id,
+            assignmentName: this.assignment_name,
+            name: this.questions[x].question_name,
+            id: this.questions[x].id,
             cid: cid,
-            release_time: publishtime,
-            deadline: deadline
+            releaseTime: publishtime,
+            createdTime: publishtime,
+            deadLine: deadline
           })
             .then((resp) => {
               let code = resp.data.code
