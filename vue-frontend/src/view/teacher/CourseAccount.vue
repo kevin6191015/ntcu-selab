@@ -1,7 +1,7 @@
 <template>
   <el-container class="iner1">
-    <!-- <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px"> -->
-      <el-main style="margin: 20px;">
+    <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px">
+      <el-main style="margin-top : 40px;">
       <el-row :gutter="30">
         <el-col :span="8" class="el-col1"><div align="center" class="grid-content1">未加入帳號</div></el-col>
         <el-col :offset="3" :span="8" class="el-col1"><div align="center" class="grid-content1">已加入帳號</div></el-col>
@@ -15,7 +15,7 @@
               ref="multipleTable"
               :data="not_class_student"
               tooltip-effect="dark"
-              style="min-height: 400px;border: 3px solid rgba(0, 0, 0, 0.397);"
+              style="min-height: 400px;"
               @selection-change="not_in_Course">
               <el-table-column
                 type="selection"
@@ -65,9 +65,7 @@
         </el-col>
       </el-row>
     </el-main>
-    <el-footer class="iner1">
-      </el-footer>
-    <!-- </div> -->
+    </div>
   </el-container>
 </template>
 
