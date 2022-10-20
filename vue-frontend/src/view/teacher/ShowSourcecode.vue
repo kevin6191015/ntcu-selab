@@ -16,8 +16,7 @@
   </div>
 </template>
 <script>
-import {getSourcecode} from '../api/question'
-import store from '../store'
+import {getSourcecode} from '@/api/question'
 export default {
   data () {
     return {
@@ -26,7 +25,7 @@ export default {
     }
   },
   created () {
-    this.questionname = store.state.Question_To_Show.slice(6)
+    this.questionname = this.$store.state.Question_To_Show.slice(6)
     getSourcecode(this.questionname).then(res => {
       this.content = res.data
     }).catch(error => {

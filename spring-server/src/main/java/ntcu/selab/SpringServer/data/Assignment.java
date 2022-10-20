@@ -1,67 +1,71 @@
 package ntcu.selab.SpringServer.data;
 
 public class Assignment {
-    private String id = null;
-    private String assignment_name = null;
-    private String name = null;
-    private String deadline = null;
-    private String releasetime = null;
+    private String ID = null;
+    private String AssignmentName = null;
+    private String Name = null;
+    private String CreatedTime = null;
+    private String DeadLine = null;
+    private String ReleaseTime = null;
     
-    public Assignment(String id, String name, String assignment_name, String releasetime, String deadline){
-        this.id = id;
-        this.name = name;
-        this.assignment_name = assignment_name;
-        this.releasetime = releasetime;
-        this.deadline = deadline;
+    public Assignment(String id, String name, String assignmentname, String releasetime, String deadline, String createtime){
+        this.ID = id;
+        this.Name = name;
+        this.AssignmentName = assignmentname;
+        this.ReleaseTime = releasetime;
+        this.DeadLine = deadline;
+        this.CreatedTime = createtime;
     }
 
-    public Assignment(String id, String releasetime, String deadline){
-        this.id = id;
-        this.releasetime = releasetime;
-        this.deadline = deadline;
-    }
-    
     public Assignment(){
-        
+
     }
 
     public String getId() {
-        return id;
+        return this.ID;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public String getAssignmentName(){
-        return this.assignment_name;
+        return this.AssignmentName;
     }
 
-    public void setAssignmentName(String assignment_name){
-        this.assignment_name = assignment_name;
+    public void setAssignmentName(String assignmentname){
+        this.AssignmentName = assignmentname;
     }
     
     public String getName() {
-        return name;
+        return this.Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getDeadLine() {
-        return deadline;
+        return this.DeadLine;
     }
 
     public void setDeadLine(String deadline) {
-        this.deadline = deadline;
+        this.DeadLine = deadline;
     }
 
     public String getReleaseTime() {
-        return releasetime;
+        return this.ReleaseTime;
     }
 
     public void setReleaseTime(String releasetime) {
-        this.releasetime = releasetime;
+        this.ReleaseTime = releasetime;
+    }
+
+    public String getCreatedTime(){
+        return this.CreatedTime;
+    }
+
+    public void setCreatedTime(String createtime){
+        this.CreatedTime = createtime;
     }
 }

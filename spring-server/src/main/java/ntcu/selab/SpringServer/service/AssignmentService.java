@@ -7,18 +7,18 @@ import org.gitlab.api.models.GitlabProject;
 import org.gitlab.api.models.GitlabUser;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ntcu.selab.SpringServer.data.Assignment;
 import ntcu.selab.SpringServer.data.Course;
-import ntcu.selab.SpringServer.data.Question;
 import ntcu.selab.SpringServer.data.Result;
 import ntcu.selab.SpringServer.data.Student;
 import ntcu.selab.SpringServer.db.AssignmentDBManager;
 import ntcu.selab.SpringServer.db.CourseDBManager;
-import ntcu.selab.SpringServer.db.QuestionDBManager;
 import ntcu.selab.SpringServer.db.StudentDBManager;
 import ntcu.selab.SpringServer.db.UserDBManager;
 
@@ -29,7 +29,6 @@ public class AssignmentService {
     private static AssignmentDBManager aDbManager = AssignmentDBManager.getObject();
     private static GitlabService gitlabService = GitlabService.getObject();
     private static JenkinsService jenkinsService = JenkinsService.getObject();
-    private static QuestionDBManager qDbManager = QuestionDBManager.getObject();
     private static StudentDBManager sDbManager = StudentDBManager.getObject();
     private static UserDBManager uDbManager = UserDBManager.getObject();
     private static CourseDBManager cDbManager = CourseDBManager.getObject();
@@ -49,6 +48,7 @@ public class AssignmentService {
                 object.put("assignment_name", assignment.getAssignmentName());
                 object.put("question_name", assignment.getName());
                 object.put("release_time", assignment.getReleaseTime());
+                object.put("created_time", assignment.getCreatedTime());
                 object.put("deadline", assignment.getDeadLine());
                 assignmeList.add(object);
             }
@@ -60,27 +60,22 @@ public class AssignmentService {
         return new Result(200, "Get Assignments Successfull!", root.toMap());
     }
     //mvn archetype:generate -DgroupId=ntcu.selab -DartifactId=a0001_110_2_20220527_a001 -DinteractiveMode=false
-    @GetMapping("addAssignment")
-    public Result addAssignment(@RequestParam String cid, @RequestParam String qid, @RequestParam String assignment_name
-    , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
+    @PostMapping("addAssignment")
+    public Result addAssignment(@RequestParam String cid, @RequestBody Assignment assignment)throws Exception{
         try{
+            
             /*
              * 將題目加進class_question裡
              */
+            aDbManager.addAssignment(cid, assignment);
+
+            //得到完整cid
             String classID="";
             for (int i = 0; i < 3 - cid.length(); i++) {
                 classID += '0';
             }
             classID+=cid;
-            Question question = null;
-            if (qid.charAt(0) == 'a') {
-                question = qDbManager.getQuestionFromBank1ById(qid);
-            } else {
-                question = qDbManager.getQuestionFromBank2ById(qid);
-            }
-
-            Assignment assignment = new Assignment(qid, question.getName(), assignment_name, release_time, deadline);
-            aDbManager.addAssignment(cid, assignment);
+      
             /*
              * 對該班的student
              */
@@ -96,7 +91,7 @@ public class AssignmentService {
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
-                String project_name = qid + "_" +classID+"_"+  semester + "_" + release_time+"_" + student.getId();
+                String project_name = assignment.getId() + "_" +classID +"_" +  semester + "_" + assignment.getCreatedTime() +"_" + student.getId();
 
                 //創建gitlab project
                 GitlabProject gitlabProject = gitlabService.createRootProject(project_name);
@@ -132,11 +127,9 @@ public class AssignmentService {
         return new Result(200, "Add Assignment Successfull!", "");
     }
 
-    @GetMapping("updateAssignment")
-    public Result updateAssignment(@RequestParam String cid, @RequestParam String qid
-    , @RequestParam String release_time, @RequestParam String deadline)throws Exception{
+    @PostMapping("updateAssignment")
+    public Result updateAssignment(@RequestParam String cid, @RequestBody Assignment assignment)throws Exception{
         try{
-            Assignment assignment = new Assignment(qid, release_time, deadline);
             aDbManager.updateAssignment(cid, assignment);
         }catch(Exception e){
             return new Result(400, "Update Assignment Failed! " + e.getMessage(), "");
@@ -146,43 +139,34 @@ public class AssignmentService {
 
     @GetMapping("deleteAssignment")
     public Result deleteAssignment(@RequestParam String cid
-    , @RequestParam String qid)throws Exception{
+    , @RequestParam String qid, @RequestParam String created_time)throws Exception{
         try{
             /*
              * 對該班的student
              */
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
-                //得到project_name
-                Question question = null;
-                if (qid.charAt(0) == 'a') {
-                    question = qDbManager.getQuestionFromBank1ById(qid);
-                } else {
-                    question = qDbManager.getQuestionFromBank2ById(qid);
-                }
+                
                 List<Course> courses = cDbManager.getAllCourses();
                 String semester = null;
-                String release = null;
+
+                //得到semester
                 for(Course course : courses){
                     if(course.getId().equals(cid)){
                         semester = course.getSemester();
                         break;
                     }
                 }
-                List<Assignment> assignments = aDbManager.getAllAssignment(cid);
-                for(Assignment assignment : assignments){
-                    if(assignment.getId().equals(qid)){
-                        release = assignment.getReleaseTime();
-                        break;
-                    }
-                }
-                String classID="";
+
+                //得到CID
+                String classID = "";
                 for (int i = 0; i < 3 - cid.length(); i++) {
                     classID += '0';
                 }
-                classID+=cid;
-                String project_name = qid + "_" + classID + "_" +  semester + "_" + release + "_" + student.getId();
-                System.out.println(project_name);
+                classID += cid;
+
+                //得到project_name
+                String project_name = qid + "_" + classID + "_" +  semester + "_" + created_time + "_" + student.getId();
 
                 //刪除jenkins project
                 jenkinsService.deleteJob(project_name);
@@ -192,7 +176,7 @@ public class AssignmentService {
             }
 
             //將class_question裡的題目刪除
-            aDbManager.deleteAssignment(cid, qid);
+            aDbManager.deleteAssignment(cid, qid, created_time);
         }catch(Exception e){
             return new Result(400, "Delete Assignment Failed! " + e.getMessage(), "");
         }

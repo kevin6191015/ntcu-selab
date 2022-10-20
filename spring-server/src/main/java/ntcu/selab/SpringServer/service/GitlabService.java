@@ -225,7 +225,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -265,7 +265,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -290,7 +290,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -316,7 +316,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -348,7 +348,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("PUT");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -371,7 +371,7 @@ public class GitlabService {
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.connect();
-            InputStream stream = conn.getInputStream();
+            conn.getInputStream();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -477,8 +477,7 @@ public class GitlabService {
         try {
             InputStream fis=null;
             while (fis==null) {
-                fis = fis = new FileInputStream(
-                        ".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\testfile_generator.java");
+                fis = new FileInputStream(".\\src\\main\\resources\\maven\\" + projectName + "\\.validate\\testfile_generator.java");
             }
             try (InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
                  BufferedReader buf = new BufferedReader(reader);) {
@@ -562,7 +561,6 @@ public class GitlabService {
     }
 
     public void DeleteProject(String projectName) throws IOException {
-        String url = getProjectUrl("root",projectName);
         File deletePath = new File(".\\src\\main\\resources\\maven\\"+projectName);
         FileUtils.deleteDirectory(deletePath);
 

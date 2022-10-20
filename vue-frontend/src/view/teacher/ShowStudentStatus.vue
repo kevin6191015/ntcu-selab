@@ -11,7 +11,7 @@
       <el-row>
         <el-table
           :data="tabledata"
-          style="width: 100%">
+          style="width: 100%; margin-top: 10px;">
           <el-table-column
             prop="color"
             width="60">
@@ -252,31 +252,26 @@ canvas{
 
 .container2 {
   background-color: rgb(228, 228, 228);
-  height: 615px;
+  height: 655px;
 }
 
 .a1 {
-  background-color: aliceblue;
   font-size: 23px;
   font-family: "Microsoft YaHei";
 }
 
 .a2 {
-  background-color: rgb(57, 146, 57);
   font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;
-  border: 4px solid rgba(0, 0, 0, 0.397);
 }
 
 .a3 {
-  background-color: rgb(57, 146, 57);
   font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;
   display: flex;
   justify-content: right;
-  border: 4px solid rgba(0, 0, 0, 0.397);
 }
 
 .el-table .bad-row {

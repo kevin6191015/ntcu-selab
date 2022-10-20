@@ -41,8 +41,7 @@
   </body>
   </template>
 <script>
-import {ShowQuestion2byTeacher, DeleteQuestion} from '../api/question'
-import store from '../store'
+import {ShowQuestion2byTeacher, DeleteQuestion} from '@/api/question'
 export default {
   data () {
     return {
@@ -59,7 +58,7 @@ export default {
     }
   },
   created () {
-    ShowQuestion2byTeacher(store.state.user.name).then(res => {
+    ShowQuestion2byTeacher(this.$store.state.user.name).then(res => {
       this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
     }).catch(error => {
       this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
@@ -74,7 +73,7 @@ export default {
     handleClick (tab) {
       if (tab.name === 'first') {
         if (this.content2.length === 0) {
-          ShowQuestion2byTeacher(store.state.user.name).then(res => {
+          ShowQuestion2byTeacher(this.$store.state.user.name).then(res => {
             this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
           }).catch(error => {
             this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
@@ -93,20 +92,20 @@ export default {
       location.reload()
     },
     Seequestion2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowSourcecode'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     }
   }
 }

@@ -65,12 +65,14 @@ public class AssignmentDBManager {
         String dbUrl = MysqlConfig.getObject().getDBUrl();
         URL url = new URL(dbUrl + "classquestion/add/" + cid);
         try{
+            // System.out.println(assignment.getCreatedTime());
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
             conn.setDoOutput(true);
             conn.setDoInput(true);
             String info = "question_id=" + assignment.getId() + "&assignment_name=" + assignment.getAssignmentName()
-            + "&question_name=" + assignment.getName() + "&release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
+            + "&question_name=" + assignment.getName() + "&release_time=" + assignment.getReleaseTime()
+            + "&deadline=" + assignment.getDeadLine() + "&created_time=" + assignment.getCreatedTime();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
@@ -95,13 +97,14 @@ public class AssignmentDBManager {
 
     public void updateAssignment(String cid, Assignment assignment)throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "classquestion/update/" + cid + "/" + assignment.getId());
+        URL url = new URL(dbUrl + "classquestion/update/" + cid + "/" + assignment.getId() + "/" + assignment.getCreatedTime());
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            String info = "release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine();
+            String info = "release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine()
+            + "&question_name=" + assignment.getAssignmentName();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();
@@ -125,9 +128,9 @@ public class AssignmentDBManager {
 
     }
 
-    public void deleteAssignment(String cid, String qid) throws Exception{
+    public void deleteAssignment(String cid, String qid, String created_time) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "classquestion/delete/" + cid + "/" + qid);
+        URL url = new URL(dbUrl + "classquestion/delete/" + cid + "/" + qid + "/" + created_time);
         try{
             conn = database.getConnection(url, "POST");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

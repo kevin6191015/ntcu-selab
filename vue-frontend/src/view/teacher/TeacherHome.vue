@@ -71,9 +71,9 @@
     <el-row v-if="isDashboard(this.$router)">
       <ShowAssignment></ShowAssignment>
     </el-row>
-    <el-row class="but">
+    <!-- <el-row class="but">
       <el-button type="primary" @click="goBack()">上一頁</el-button>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
@@ -177,17 +177,17 @@ export default {
       var path = this.$route.query.redirect
       this.$router.replace({
         path: path === '/' || path === undefined ? '/chooseclass' : path})
-    },
-    goBack () {
-      let PrevPage = '/' + this.$router.currentRoute.meta.prevName
-      if (PrevPage === '/null') {
-        this.$alert('已經在首頁了!')
-      } else {
-        this.$router.replace({
-          path: PrevPage
-        })
-      }
     }
+    // goBack () {
+    //   let PrevPage = '/' + this.$router.currentRoute.meta.prevName
+    //   if (PrevPage === '/null') {
+    //     this.$alert('已經在首頁了!')
+    //   } else {
+    //     this.$router.replace({
+    //       path: PrevPage
+    //     })
+    //   }
+    // }
   },
   created () {
     this.getBreadcrumb()

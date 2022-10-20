@@ -36,14 +36,14 @@
             prop="deadline"
             label="截止日期">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             fixed="right"
             label="題目預覽"
           >
             <template slot-scope="scope">
               <el-button @click="Seequestion(scope.row)" type="text" size="small">查看</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-row>
     </el-main>
@@ -55,7 +55,7 @@ import { getAllAssignments } from '@/api/assignment'
 import { getAnswered, getCorrect } from '@/api/score'
 import { getStudent } from '@/api/student'
 export default {
-  name: 'ShowHomework',
+  name: 'ShowStudentHomework',
   data () {
     return {
       tableData: [],
@@ -113,7 +113,7 @@ export default {
       this.$store.commit('SET_PROJECT_NAME', project)
       this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({
-        path: '/ShowCourseStudent'})
+        path: '/ShowYourStatus'})
     },
     change1 () {
       if (!this.debuted) {
@@ -142,7 +142,7 @@ export default {
 <style>
 .container2 {
   background-color: rgb(228, 228, 228);
-  height: 615px;
+  height: 635px;
 }
 
 .d-flex1 {

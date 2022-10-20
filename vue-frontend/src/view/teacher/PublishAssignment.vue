@@ -22,7 +22,7 @@
         <div id="footer-right">
         </div>
         <div id="footer-right-no-margin">
-          作業名稱:
+          <span class="demonstration">作業名稱:</span>
           <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
         </div>
         <div id="footer-left">
@@ -62,9 +62,8 @@
   </div>
 </template>
 <script>
-import store from '../store'
-import {ShowQuestion1, ShowQuestion2} from '../api/question'
-import {addAssignment} from '../api/assignment'
+import {ShowQuestion1, ShowQuestion2} from '@/api/question'
+import {addAssignment} from '@/api/assignment'
 // add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
 export default {
   name: 'PublishAssginment',
@@ -87,8 +86,8 @@ export default {
   },
   computed: {
     newdata () {
-      if (store.state.controlreload === '1') {
-        store.commit('SET_CONTROLRELOAD', '0')
+      if (this.$store.state.controlreload === '1') {
+        this.$store.commit('SET_CONTROLRELOAD', '0')
         this.$store.commit('SET_ADD_QUESTION_MODE', '0')
         this.refresh()
       }
@@ -123,7 +122,7 @@ export default {
         let temp2 = Date.parse(this.deadline)
         let date2 = new Date(temp2 + 28800000)
         let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
-        let cid = store.state.class_id
+        let cid = this.$store.state.class_id
         if (this.assignment_name === '') {
           this.$message({
             showClose: true,
@@ -175,25 +174,25 @@ export default {
           }
           this.id = ''
         }
-        store.commit('REMOVE_SELECTEDQUESTION')
-        store.commit('SET_ADD_QUESTION_MODE', '0')
-        store.commit('SET_CONTROLRELOAD', '1')
+        this.$store.commit('REMOVE_SELECTEDQUESTION')
+        this.$store.commit('SET_ADD_QUESTION_MODE', '0')
+        this.$store.commit('SET_CONTROLRELOAD', '1')
       }
     },
     selectquestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '1')
+      this.$store.commit('SET_ADD_QUESTION_MODE', '1')
       this.$router.replace({
         path: '/Selectquestion'
       })
     },
     addquestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '4')
+      this.$store.commit('SET_ADD_QUESTION_MODE', '4')
       this.$router.replace({
         path: '/AddQuestion'
       })
     },
     revisequestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '3')
+      this.$store.commit('SET_ADD_QUESTION_MODE', '3')
       this.$router.replace({
         path: '/SelectQuestion'
       })
@@ -209,7 +208,7 @@ export default {
       })
     },
     initialize () {
-      this.id = store.state.selectedQuestion
+      this.id = this.$store.state.selectedQuestion
       ShowQuestion1().then(res => {
         for (let i = 0; i < (this.id.length + 1); i += 6) {
           for (let j = 0; j < res.data.data.Questions.length; j++) {
@@ -220,17 +219,17 @@ export default {
             }
           }
         }
-      })
-      ShowQuestion2().then(res => {
-        for (let i = 0; i < (this.id.length + 1); i += 6) {
-          for (let j = 0; j < res.data.data.Questions.length; j++) {
-            if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
-              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
-              this.questions.push(temp)
-              break
+        ShowQuestion2().then(res => {
+          for (let i = 0; i < (this.id.length + 1); i += 6) {
+            for (let j = 0; j < res.data.data.Questions.length; j++) {
+              if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
+                var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
+                this.questions.push(temp)
+                break
+              }
             }
           }
-        }
+        })
       })
     }
   }
@@ -340,6 +339,6 @@ export default {
   }
   #container{
     background-color: rgb(228, 228, 228);
-    height: 615px;
+    height: 655px;
   }
   </style>

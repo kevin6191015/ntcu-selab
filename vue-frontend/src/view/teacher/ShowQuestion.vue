@@ -28,8 +28,7 @@
   </div>
 </template>
 <script>
-import {ShowSelectedQuestion1, ShowSelectedQuestion2} from '../api/question'
-import store from '../store'
+import {ShowSelectedQuestion1, ShowSelectedQuestion2} from '@/api/question'
 export default {
   data () {
     return {
@@ -39,7 +38,7 @@ export default {
     }
   },
   created () {
-    let id = store.state.Question_To_Show
+    let id = this.$store.state.Question_To_Show
     if (id.charAt(0) === 'a') {
       ShowSelectedQuestion1(id.slice(0, 5)).then(res => {
         this.content = res.data.data

@@ -143,8 +143,7 @@
 </body>
 </template>
 <script>
-import {ShowQuestion1, ShowQuestion2byTeacher, ShowPublicQuestion} from '../api/question'
-import store from '../store'
+import {ShowQuestion1, ShowQuestion2byTeacher, ShowPublicQuestion} from '@/api/question'
 export default {
   data () {
     return {
@@ -178,7 +177,7 @@ export default {
     })
   },
   updated () {
-    this.temp = store.state.selectedQuestion
+    this.temp = this.$store.state.selectedQuestion
     if (this.temp) {
       this.toggleSelection1(this.temp)
       this.toggleSelection2(this.temp)
@@ -198,7 +197,7 @@ export default {
     handleClick (tab) {
       if (tab.name === 'second') {
         if (this.content2.length === 0) {
-          ShowQuestion2byTeacher(store.state.user.name).then(res => {
+          ShowQuestion2byTeacher(this.$store.state.user.name).then(res => {
             this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
           }).catch(error => {
             this.$alert(JSON.parse(JSON.stringify(error)).message, JSON.parse(JSON.stringify(error)).name, {
@@ -219,8 +218,8 @@ export default {
       }
     },
     select () {
-      store.commit('REMOVE_SELECTEDQUESTION')
-      store.commit('SET_CONTROLRELOAD', '1')
+      this.$store.commit('REMOVE_SELECTEDQUESTION')
+      this.$store.commit('SET_CONTROLRELOAD', '1')
       let selectedQ = []
       let num1 = 0
       let num2 = 0
@@ -239,51 +238,51 @@ export default {
           selectedQ[(i + num2 + num1)] = this.multipleSelection3[i].id
         }
       }
-      store.commit('SET_SELECTEDQUESTION', selectedQ)
+      this.$store.commit('SET_SELECTEDQUESTION', selectedQ)
       this.$router.replace({
         path: '/PublishAssignment'
       })
     },
     Seequestion1 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     Seequestion2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode1 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowSourcecode'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.id + ',' + row.question_name)
       let { href } = this.$router.resolve({
         name: 'ShowSourcecode'
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
-      store.commit('REMOVE_QUESTION_TO_SHOW')
+      this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     revise1 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.question_id)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id)
       this.$router.replace({
         path: '/AddQuestion'
       })
     },
     revise2 (row) {
-      store.commit('SET_QUESTION_TO_SHOW', row.id)
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.id)
       this.$router.replace({
         path: '/AddQuestion'
       })

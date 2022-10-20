@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getAllAssignments } from '../api/assignment'
+import { getAllAssignments } from '@/api/assignment'
 export default {
   name: 'ShowAssignment',
   data () {
@@ -132,9 +132,15 @@ export default {
       seleted.release_time = seleted.release_time.substring(0, 4) + seleted.release_time.substring(5, 7) + seleted.release_time.substring(8, 10)
       seleted.deadline = seleted.deadline.substring(0, 4) + seleted.deadline.substring(5, 7) + seleted.deadline.substring(8, 10)
       this.$store.commit('SET_ASSIGNMENT', seleted)
-      this.$router.replace({
-        path: '/ShowHomeWork'
-      })
+      if (this.$store.state.role === 'student') {
+        this.$router.replace({
+          path: '/ShowStudentHomework'
+        })
+      } else {
+        this.$router.replace({
+          path: '/ShowHomeWork'
+        })
+      }
     },
     change1 () {
       if (!this.debuted) {
@@ -162,7 +168,7 @@ export default {
 <style>
 .container2 {
   background-color: rgb(228, 228, 228);
-  height: 615px;
+  height: 655px;
 }
 .button1 {
   width: 6%;

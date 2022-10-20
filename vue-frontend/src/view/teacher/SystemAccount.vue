@@ -5,6 +5,7 @@
           <el-row>
             <el-col :span="12">
               <el-table
+                height="580"
                 :data="tableData"
                 style="width: 100%"
                 @selection-change="handlechange">
