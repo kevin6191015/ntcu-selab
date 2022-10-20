@@ -10,10 +10,12 @@
         style="width: 100%"
         @selection-change="handleSelectionChange1"
       >
+      <div v-if="this.Select_Quesition_Mode">
         <el-table-column
             type="selection"
             width="55">
         </el-table-column>
+      </div>
         <el-table-column type="index" label="序號" ></el-table-column>
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
         <el-table-column
@@ -53,10 +55,12 @@
         style="width: 100%"
         @selection-change="handleSelectionChange3"
       >
+      <div v-if="this.Select_Quesition_Mode">
         <el-table-column
             type="selection"
             width="55">
         </el-table-column>
+      </div>
         <el-table-column type="index" label="序號" ></el-table-column>
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
         <el-table-column
@@ -96,15 +100,17 @@
         style="width: 100%"
         @selection-change="handleSelectionChange2"
         >
+        <div v-if="this.Select_Quesition_Mode">
         <el-table-column
-          type="selection"
-          width="55">
+            type="selection"
+            width="55">
         </el-table-column>
+      </div>
         <el-table-column type="index" label="序號" ></el-table-column>
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
         <el-table-column
           fixed="right"
-          label="操作"
+          label="題目預覽"
           >
           <template slot-scope="scope">
             <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
@@ -131,7 +137,7 @@
       </el-table>
     </el-tab-pane>
   </el-tabs>
-  <div id="footer-left">
+  <div id="footer-left" v-if="this.Select_Quesition_Mode">
     <el-button  @click='select'>確認</el-button>
   </div>
 </body>
@@ -154,12 +160,14 @@ export default {
       temp: [],
       check1: true,
       check2: true,
-      Revise_Quesition_Mode: false
+      Revise_Quesition_Mode: false,
+      Select_Quesition_Mode: true
     }
   },
   created () {
     if (this.$store.state.add_question_mode === '3') {
       this.Revise_Quesition_Mode = true
+      this.Select_Quesition_Mode = false
     }
     ShowQuestion1().then(res => {
       this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))

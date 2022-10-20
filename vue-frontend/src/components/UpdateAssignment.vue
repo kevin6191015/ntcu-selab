@@ -4,7 +4,7 @@
       <div id="header">
         <div id="space-top"></div>
         <div id="title-orange">
-          <h3>發布作業</h3>
+          <h3>更新作業</h3>
         </div>
       </div>
       <div id="content1">
@@ -57,7 +57,6 @@
     </div>
     <div v-show="notshow">
       {{newdata}}
-      {{newrealse_time}}
     </div>
   </div>
 </template>
@@ -93,23 +92,6 @@ export default {
         this.refresh()
       }
       return this.$store.state.selectedQuestion
-    },
-    newrealse_time () {
-      let d = new Date()
-      let now = Date.parse(d) / 86400000
-      let temp1 = Date.parse(this.publish_time) / 86400000
-      if ((now - temp1) > 1) {
-        console.log(now)
-        console.log(temp1)
-        this.$message({
-          showClose: true,
-          message: '時間不能早於今天',
-          type: 'warning'
-        })
-      }
-      // let date1 = new Date(temp1 + 28800000)
-
-      return this.publish_time
     }
   },
   methods: {

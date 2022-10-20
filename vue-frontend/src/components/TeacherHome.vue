@@ -93,17 +93,63 @@ export default {
   },
   methods: {
     getBreadcrumb () {
-      this.breadList = []
-      let parent = this.$router.currentRoute.meta.prevName
-      let routeTable = this.$router.options.routes[2].children
-      routeTable.push(this.$router.options.routes[2])
-      this.breadList.push(this.$router.currentRoute)
-      while (parent !== null) {
+      if (this.$store.state.add_question_mode === '3' && this.$router.currentRoute.name === 'AddQuestion') {
+        this.breadList = []
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        let temp = this.$router.currentRoute
+        temp.meta.title = '修改考古'
+        this.breadList.push(temp)
         for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === parent) {
-            parent = routeTable[i].meta.prevName
+          if (routeTable[i].name === 'SelectQuestion') {
             this.breadList.push(routeTable[i])
             break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'PublishAssignment') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'teacherhome') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      } else if (this.$store.state.add_question_mode === '4' && this.$router.currentRoute.name === 'AddQuestion') {
+        this.breadList = []
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        let temp = this.$router.currentRoute
+        temp.meta.title = '自行出題'
+        this.breadList.push(temp)
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'PublishAssignment') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'teacherhome') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      } else {
+        this.breadList = []
+        let parent = this.$router.currentRoute.meta.prevName
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        this.breadList.push(this.$router.currentRoute)
+        while (parent !== null) {
+          for (let i = 0; i < routeTable.length; i++) {
+            if (routeTable[i].name === parent) {
+              parent = routeTable[i].meta.prevName
+              this.breadList.push(routeTable[i])
+              break
+            }
           }
         }
       }

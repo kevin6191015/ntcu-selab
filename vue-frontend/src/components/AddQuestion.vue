@@ -5,6 +5,9 @@
         <div v-if="this.Revise_Quesition_Mode">
           <h3>修改考古</h3>
         </div>
+        <div v-else-if="Add_To_Assignment_Mode">
+          <h3>自行出題</h3>
+        </div>
         <div v-else>
           <h3>新增題目</h3>
         </div>
@@ -134,6 +137,7 @@ export default {
       notshow: false,
       hassouececode: false,
       Revise_Quesition_Mode: false,
+      Add_To_Assignment_Mode: false,
       publicbank: false,
       srcList: [],
       url: ''
@@ -146,7 +150,6 @@ export default {
       if (id.charAt(0) === 'a') {
         ShowSelectedQuestion1(id.slice(0, 5)).then(res => {
           let content = res.data.data
-          console.log(content)
           this.question_name = content.question_name
           this.description = content.question_description
           this.input_num = content.inputornot
@@ -181,7 +184,6 @@ export default {
       } else {
         ShowSelectedQuestion2(id.slice(0, 5)).then(res => {
           let content = res.data.data
-          console.log(content)
           this.question_name = content.question_name
           this.description = content.question_description
           this.input_num = content.inputornot
@@ -214,6 +216,8 @@ export default {
           this.in_output_list = templist
         })
       }
+    } else if (this.$store.state.add_question_mode === '4') {
+      this.Add_To_Assignment_Mode = true
     }
     store.commit('SET_IMAGELINK', '')
     store.commit('SET_SOURCECODE', '')
@@ -254,7 +258,6 @@ export default {
       }
       let description = this.description ? this.description : ''
       let publicornot1 = this.publicbank ? 1 : 0
-      console.log(publicornot1)
       if (!this.question_name) {
         this.$message.error('請輸入題目名稱')
         return
@@ -298,7 +301,6 @@ export default {
       if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4') {
         getLatestQuestionID()
           .then((resp) => {
-            console.log(resp.data.data.qid)
             let qid = resp.data.data.qid
             qid = 'b' + this.padLeft(qid, 4)
             if (store.state.selectedQuestion) {

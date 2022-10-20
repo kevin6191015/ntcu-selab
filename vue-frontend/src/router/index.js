@@ -19,6 +19,7 @@ import ShowStudentStatus from '@/components/ShowStudentStatus'
 import DeleteQuestion from '@/components/DeleteQuestion'
 // import ShowAssignemnt from '@/components/ShowAssignment'
 import ShowSuggestion from '@/components/ShowSuggestion'
+import UpdateAssignment from '@/components/UpdateAssignment'
 import 'bootstrap/dist/css/bootstrap.min.css'
 Vue.use(Router)
 
@@ -66,8 +67,8 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '系統帳號管理',
-            prevName: 'teacherhome'
+            title: '選擇題目',
+            prevName: 'PublishAssignment'
           }
         },
         {
@@ -110,7 +111,18 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '發布題目',
+            title: '發布作業',
+            prevName: 'teacherhome'
+          }
+        },
+        {
+          path: '/UpdateAssignment',
+          name: 'UpdateAssignment',
+          component: UpdateAssignment,
+          meta: {
+            requireAuth: true,
+            Role: true,
+            title: '修改作業',
             prevName: 'teacherhome'
           }
         },
@@ -120,7 +132,9 @@ export default new Router({
           component: DeleteQuestion,
           meta: {
             requireAuth: true,
-            Role: true
+            Role: true,
+            title: '刪除題目',
+            prevName: 'teacherhome'
           }
         },
         {
