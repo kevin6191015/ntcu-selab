@@ -19,6 +19,7 @@ import ShowStudentStatus from '@/view/teacher/ShowStudentStatus'
 import DeleteQuestion from '@/view/teacher/DeleteQuestion'
 import ShowSuggestion from '@/view/teacher/ShowSuggestion'
 import UpdateAssignment from '@/view/teacher/UpdateAssignment'
+import AddCourse from '@/view/teacher/AddCourse'
 
 import StudentHome from '@/view/student/StudentHome'
 import ShowStudentHomework from '@/view/student/ShowStudentHomework'
@@ -170,6 +171,18 @@ export default new Router({
             Auth: '2',
             title: '學生做題狀況',
             prevName: 'ShowCourseStudent'
+          }
+        },
+        {
+          path: '/AddCourse',
+          name: 'AddCourse',
+          component: AddCourse,
+          meta: {
+            requireAuth: true,
+            Role: true,
+            Auth: '4',
+            title: '新增課程',
+            prevName: 'teacherhome'
           }
         }
         // {
