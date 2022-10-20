@@ -113,7 +113,7 @@ public class AssignmentService {
                 //delete 此次建立的 gitlab project
                 gitlabService.DeleteProject(project_name);
 
-                //設定gitlab使其與jenkins連接(必須最後設定不然會直接執行)
+                //設定gitlab使其與jenkins連接
                 gitlabService.setGitlabIntegrations(gitlabProject, project_name);
 
                 //創建jenkins project

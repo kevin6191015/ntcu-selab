@@ -24,6 +24,10 @@
           <el-menu-item index="/SystemAccount" v-if="isRoot">系統帳號管理</el-menu-item>
           <el-menu-item index="/CourseAccount">課程帳號管理</el-menu-item>
         </el-submenu>
+        <el-submenu index="/AddCourse">
+          <template slot="title">課程管理</template>
+          <el-menu-item index="/AddCourse" v-if="isRoot">新增課程</el-menu-item>
+        </el-submenu>
         <el-menu-item style="float:right">
           <el-dropdown>
             <el-button style="background-color:aquamarine" >
