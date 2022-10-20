@@ -9,7 +9,7 @@
       </div>
       <div id="content1">
       <el-table
-        :data="questions"
+        :data="assignments"
         stripe
         tooltip-effect="dark"
         style="width: 100%"
@@ -20,11 +20,12 @@
       </div>
       <div>
         <div id="footer-right">
+          <h5>作業名稱:</h5>
         </div>
         <div id="footer-right-no-margin">
-          作業名稱:
           <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
         </div>
+
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
@@ -33,6 +34,9 @@
         </div>
         <div id="footer-left-no-margin">
           <el-button type="success" @click='selectquestion'>題庫選題</el-button>
+        </div>
+        <div id="footer-left-no-margin-nobackground">
+          <h5>新增題目:</h5>
         </div>
       </div>
       <div id="footer-single">
@@ -55,7 +59,6 @@
         <el-button type="info" @click='updatw'>更新</el-button>
       </div>
     </div>
-    {{assignments}}
     <div v-show="notshow">
       {{newdata}}
       {{newrealse_time}}
@@ -97,7 +100,6 @@ export default {
           this.assignments.push(tmp[i])
         }
       }
-      this.assignments = res.data.data.Assignments
     })
     this.initialize()
   },
@@ -318,9 +320,16 @@ export default {
     border-radius: 12px;
     float: right;
   }
+  #footer-left-no-margin-nobackground{
+    text-align:left;
+    float: right;
+    margin-top: 20px;
+    margin-right: 2%;
+  }
   #footer-right{
-    margin-top: 10px;
+    margin-top: 17px;
     margin-left: 5%;
+    margin-right: 4px;
     width:fit-content;
     padding: 1px;
     text-align:left;

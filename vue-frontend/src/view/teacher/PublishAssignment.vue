@@ -120,7 +120,11 @@ export default {
           message: '截止時間不能早於今天或發布時間',
           type: 'warning'
         })
-        this.set_deadline(d)
+        if (this.publish_time) {
+          this.set_deadline(this.publish_time)
+        } else {
+          this.set_deadline(d)
+        }
       }
       return this.deadline
     }
@@ -184,16 +188,15 @@ export default {
             message: '發布成功',
             type: 'success'
           })
-          let tmp = this.questions.length
-          for (let x = 0; x < tmp; x++) {
-            this.questions.pop()
-          }
+          this.questions = []
           this.id = ''
+          this.publish_time = ''
+          this.deadline = ''
+          this.assignment_name = ''
         }
         this.$store.commit('REMOVE_SELECTEDQUESTION')
         this.$store.commit('SET_ADD_QUESTION_MODE', '0')
-        this.$store.commit('SET_CONTROLRELOAD', '1')
-        this.refresh()
+        // this.$store.commit('SET_CONTROLRELOAD', '1')
       }
     },
     selectquestion () {

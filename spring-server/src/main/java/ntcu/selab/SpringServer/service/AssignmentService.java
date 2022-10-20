@@ -87,7 +87,6 @@ public class AssignmentService {
                     break;
                 }
             }
-
             List<Student> students = sDbManager.getStudents(cid);
             for(Student student : students){
                 //得到project_name
