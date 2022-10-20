@@ -94,10 +94,16 @@ export default {
     }).then(res => {
       let tmp = res.data.data.Assignments
       for (let i = 0; i < tmp.length; i++) {
-        tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
-        tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
         if (tmp[i].assignment_name === this.$store.state.Question_To_Show) {
           this.assignments.push(tmp[i])
+          this.assignment_name = tmp[i].assignment_name
+          // this.publish_time = tmp[i].release_time
+          console.log(tmp[i])
+          let temp = new Date(tmp[i].release_time.slice(0, 4), tmp[i].release_time.slice(4, 6) - 1, tmp[i].release_time.slice(6, 8))
+          this.publish_time = temp
+          let temp2 = new Date(tmp[i].deadline.slice(0, 4), tmp[i].deadline.slice(4, 6) - 1, tmp[i].deadline.slice(6, 8))
+          this.deadline = temp2
+          // console.log(this.publish_time)
         }
       }
     })

@@ -20,9 +20,9 @@
       </div>
       <div>
         <div id="footer-right">
+          <h5>作業名稱:</h5>
         </div>
         <div id="footer-right-no-margin">
-          <span class="demonstration">作業名稱:</span>
           <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
         </div>
         <div id="footer-left">
@@ -332,8 +332,9 @@ export default {
     float: right;
   }
   #footer-right{
-    margin-top: 10px;
+    margin-top: 17px;
     margin-left: 5%;
+    margin-right: 4px;
     width:fit-content;
     padding: 1px;
     text-align:left;
