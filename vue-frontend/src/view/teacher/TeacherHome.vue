@@ -16,8 +16,8 @@
         <el-submenu index="/AddQuestion">
           <template slot="title">題目管理</template>
           <el-menu-item index="/AddQuestion" v-if="isTeacher || isRoot">新增題目</el-menu-item>
-          <el-menu-item index="/PublishAssignment">發布作業</el-menu-item>
           <el-menu-item index="/DeleteQuestion" v-if="isTeacher || isRoot">刪除題目</el-menu-item>
+          <el-menu-item index="/PublishAssignment">發布作業</el-menu-item>
         </el-submenu>
         <el-submenu index="/SystemAccount">
           <template slot="title">帳號管理</template>
@@ -193,10 +193,10 @@ export default {
   },
   created () {
     this.getBreadcrumb()
-    if (this.$store.state.role === 4) {
+    if (this.$store.state.role === '4') {
       this.isRoot = true
     }
-    if (this.$store.state.role === 3) {
+    if (this.$store.state.role === '3') {
       this.isTeacher = true
     }
   },
