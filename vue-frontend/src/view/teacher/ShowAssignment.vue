@@ -92,9 +92,9 @@ export default {
       for (let i = 0; i < tmp.length; i++) {
         tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
         tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-        let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
+        let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 * 365 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
         var Today = new Date()
-        let now = parseInt(Today.getFullYear()) * 12 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
+        let now = parseInt(Today.getFullYear()) * 12 * 365 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
         if (now >= time) {
           if (this.debuted_list.length > 0) {
             let check = true

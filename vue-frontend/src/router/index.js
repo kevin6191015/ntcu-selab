@@ -48,6 +48,7 @@ export default new Router({
       meta: {
         requireAuth: true,
         Role: true,
+        Auth: '2',
         title: '首頁',
         prevName: null
       },
@@ -59,6 +60,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '3',
             title: '新增題目',
             prevName: 'teacherhome'
           }
@@ -71,7 +73,8 @@ export default new Router({
             requireAuth: true,
             Role: true,
             title: '選擇題目',
-            prevName: 'PublishAssignment'
+            prevName: 'PublishAssignment',
+            Auth: '2'
           }
         },
         {
@@ -81,6 +84,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '4',
             title: '系統帳號管理',
             prevName: 'teacherhome'
           }
@@ -92,6 +96,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '2',
             title: '課程帳號管理',
             prevName: 'teacherhome'
           }
@@ -103,6 +108,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '2',
             title: '題目一覽',
             prevName: 'teacherhome'
           }
@@ -126,6 +132,7 @@ export default new Router({
             requireAuth: true,
             Role: true,
             title: '修改作業',
+            Auth: '2',
             prevName: 'teacherhome'
           }
         },
@@ -137,7 +144,8 @@ export default new Router({
             requireAuth: true,
             Role: true,
             title: '刪除題目',
-            prevName: 'teacherhome'
+            prevName: 'teacherhome',
+            Auth: '3'
           }
         },
         {
@@ -147,6 +155,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '2',
             title: '班級一覽',
             prevName: 'ShowHomework'
           }
@@ -158,6 +167,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
+            Auth: '2',
             title: '學生做題狀況',
             prevName: 'ShowCourseStudent'
           }

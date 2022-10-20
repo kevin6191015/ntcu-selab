@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
       // 判斷token是否已過期
       if (now < Expiretime) {
         if (to.meta.Role) {
-          if (store.state.role === 'student') {
+          if (to.meta.Auth > store.state.role) {
             alert('權限不足!')
             next({
               path: '/login',

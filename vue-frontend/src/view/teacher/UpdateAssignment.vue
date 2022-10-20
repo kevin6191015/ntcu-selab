@@ -61,9 +61,9 @@
   </div>
 </template>
 <script>
-import store from '../store'
-import {ShowQuestion1, ShowQuestion2} from '../api/question'
-import {addAssignment} from '../api/assignment'
+import store from '@/store'
+import {ShowQuestion1, ShowQuestion2} from '@/api/question'
+import {addAssignment} from '@/api/assignment'
 // add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
 export default {
   name: 'PublishAssginment',

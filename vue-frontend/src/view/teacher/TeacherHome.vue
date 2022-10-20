@@ -15,13 +15,13 @@
         </el-menu-item>
         <el-submenu index="/AddQuestion">
           <template slot="title">題目管理</template>
-          <el-menu-item index="/AddQuestion">新增題目</el-menu-item>
+          <el-menu-item index="/AddQuestion" v-if="isTeacher || isRoot">新增題目</el-menu-item>
           <el-menu-item index="/PublishAssignment">發布作業</el-menu-item>
-          <el-menu-item index="/DeleteQuestion">刪除題目</el-menu-item>
+          <el-menu-item index="/DeleteQuestion" v-if="isTeacher || isRoot">刪除題目</el-menu-item>
         </el-submenu>
         <el-submenu index="/SystemAccount">
           <template slot="title">帳號管理</template>
-          <el-menu-item index="/SystemAccount">系統帳號管理</el-menu-item>
+          <el-menu-item index="/SystemAccount" v-if="isRoot">系統帳號管理</el-menu-item>
           <el-menu-item index="/CourseAccount">課程帳號管理</el-menu-item>
         </el-submenu>
         <el-menu-item style="float:right">
@@ -83,7 +83,9 @@ export default {
   name: 'TeacherHome',
   data () {
     return {
-      breadList: []
+      breadList: [],
+      isRoot: false,
+      isTeacher: false
     }
   },
   watch: {
@@ -191,6 +193,12 @@ export default {
   },
   created () {
     this.getBreadcrumb()
+    if (this.$store.state.role === 4) {
+      this.isRoot = true
+    }
+    if (this.$store.state.role === 3) {
+      this.isTeacher = true
+    }
   },
   components: {
     ShowAssignment
