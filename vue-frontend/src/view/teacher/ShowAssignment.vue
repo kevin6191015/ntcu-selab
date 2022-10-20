@@ -29,7 +29,7 @@
           </el-table-column>
           <el-table-column
           fixed="right"
-          label="修改作業"
+          label="更新作業"
         >
           <template slot-scope="scope">
             <el-button @click="Update(scope.row)" type="text" size="small">修改該次作業</el-button>
@@ -60,7 +60,7 @@
           </el-table-column>
           <el-table-column
           fixed="right"
-          label="修改作業"
+          label="更新作業"
         >
           <template slot-scope="scope">
             <el-button @click="Update(scope.row)" type="text" size="small">修改該次作業</el-button>
@@ -155,7 +155,6 @@ export default {
       }
     },
     Update (row) {
-      console.log(row)
       this.$store.commit('SET_QUESTION_TO_SHOW', row.assignment_name)
       this.$router.replace({
         path: '/UpdateAssignment'

@@ -58,6 +58,7 @@
     <div v-show="notshow">
       {{newdata}}
       {{newrealse_time}}
+      {{newdeadline}}
     </div>
   </div>
 </template>
@@ -98,17 +99,30 @@ export default {
       let now = Date.parse(d) / 86400000
       let temp1 = Date.parse(this.publish_time) / 86400000
       if ((now - temp1) > 1) {
-        console.log(now)
-        console.log(temp1)
         this.$message({
           showClose: true,
           message: '時間不能早於今天',
           type: 'warning'
         })
+        this.set_publish_time(d)
       }
-      // let date1 = new Date(temp1 + 28800000)
-
       return this.publish_time
+    },
+    newdeadline () {
+      let d = new Date()
+      let now = Date.parse(d) / 86400000
+      let temp2 = Date.parse(this.deadline) / 86400000
+      let deadlinetemp = Date.parse(this.deadline)
+      let publishtemp = Date.parse(this.publish_time)
+      if (publishtemp > deadlinetemp || (now - temp2) > 1) {
+        this.$message({
+          showClose: true,
+          message: '截止時間不能早於今天或發布時間',
+          type: 'warning'
+        })
+        this.set_deadline(d)
+      }
+      return this.deadline
     }
   },
   methods: {
@@ -233,6 +247,12 @@ export default {
           }
         })
       })
+    },
+    set_publish_time (d) {
+      this.publish_time = d
+    },
+    set_deadline (d) {
+      this.deadline = d
     }
   }
 }

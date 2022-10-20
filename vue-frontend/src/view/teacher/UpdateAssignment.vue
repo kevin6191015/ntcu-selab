@@ -52,18 +52,21 @@
         </el-date-picker>
       </div>
       <div id="footer">
-        <el-button type="info" @click='publish'>發布</el-button>
+        <el-button type="info" @click='updatw'>更新</el-button>
       </div>
     </div>
+    {{assignments}}
     <div v-show="notshow">
       {{newdata}}
+      {{newrealse_time}}
+      {{newdeadline}}
     </div>
   </div>
 </template>
 <script>
-import store from '../store'
-import {ShowQuestion1, ShowQuestion2} from '../api/question'
-import {addAssignment} from '../api/assignment'
+import store from '@/store'
+import {ShowQuestion1, ShowQuestion2} from '@/api/question'
+import {addAssignment, getAllAssignments} from '@/api/assignment'
 // add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
 export default {
   name: 'PublishAssginment',
@@ -73,6 +76,7 @@ export default {
       temp: [],
       questions: [],
       question_id: [],
+      assignments: [],
       publish_time: '',
       deadline: '',
       id: '',
@@ -82,6 +86,19 @@ export default {
     }
   },
   created () {
+    getAllAssignments({
+      cid: this.$store.state.class_id
+    }).then(res => {
+      let tmp = res.data.data.Assignments
+      for (let i = 0; i < tmp.length; i++) {
+        tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
+        tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
+        if (tmp[i].assignment_name === this.$store.state.Question_To_Show) {
+          this.assignments.push(tmp[i])
+        }
+      }
+      this.assignments = res.data.data.Assignments
+    })
     this.initialize()
   },
   computed: {
@@ -92,10 +109,23 @@ export default {
         this.refresh()
       }
       return this.$store.state.selectedQuestion
+    },
+    newdeadline () {
+      let deadlinetemp = Date.parse(this.deadline)
+      let publishtemp = Date.parse(this.publish_time)
+      if (publishtemp > deadlinetemp) {
+        this.$message({
+          showClose: true,
+          message: '截止時間不能早於發布時間',
+          type: 'warning'
+        })
+        this.set_deadline(this.publish_time)
+      }
+      return this.deadline
     }
   },
   methods: {
-    publish () {
+    update () {
       if (this.publish_time === '' || this.deadline === '') {
         this.warning()
       } else {

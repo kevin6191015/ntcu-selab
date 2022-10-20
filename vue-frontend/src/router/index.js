@@ -125,7 +125,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             Role: true,
-            title: '修改作業',
+            title: '更新作業',
             prevName: 'teacherhome'
           }
         },
