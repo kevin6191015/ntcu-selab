@@ -2,11 +2,11 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col class="a1">{{this.git}}</el-col>
+        <el-col class="sa1">{{this.git}}</el-col>
       </el-row>
       <el-row>
-        <el-col class="a3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
-        <el-col class="a2">
+        <el-col class="sa3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
+        <el-col class="sa2">
           <el-button @click="Seequestion()">
             觀看題目
           </el-button>
@@ -268,19 +268,19 @@ canvas{
   height: 635px;
 }
 
-.a1 {
+.sa1 {
   font-size: 23px;
   font-family: "Microsoft YaHei";
 }
 
-.a2 {
+.sa2 {
   font-family: "Microsoft YaHei";
   width: 50%;
   display: flex;
   justify-content: right;
 }
 
-.a3 {
+.sa3 {
   font-size: 23px;
   font-family: "Microsoft YaHei";
   width: 50%;

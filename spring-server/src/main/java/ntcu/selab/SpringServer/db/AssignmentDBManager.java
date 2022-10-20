@@ -56,6 +56,7 @@ public class AssignmentDBManager {
             assignment.setName(jsonobject.getString("question_name"));
             assignment.setReleaseTime(jsonobject.getString("release_time"));
             assignment.setDeadLine(jsonobject.getString("deadline"));
+            assignment.setCreatedTime(jsonobject.getString("created_time"));
             assignments.add(assignment);
 		}
         return assignments;

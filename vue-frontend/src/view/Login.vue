@@ -44,7 +44,21 @@ export default {
             let role = user.role
             this.$store.commit('SET_TOKENN', token)
             this.$store.commit('SET_USER', user)
-            this.$store.commit('SET_ROLE', role)
+            if (role === 'ROOT') {
+              this.$store.commit('SET_ROLE', 4)
+            } else if (role === 'teacher') {
+              this.$store.commit('SET_ROLE', 3)
+            } else if (role === 'TA') {
+              this.$store.commit('SET_ROLE', 2)
+            } else if (role === 'student') {
+              this.$store.commit('SET_ROLE', 1)
+            } else {
+              this.$message({
+                showClose: true,
+                message: 'your format of role is wrong!',
+                type: 'warning'
+              })
+            }
             this.$router.replace({
               path: '/chooseclass'
             })

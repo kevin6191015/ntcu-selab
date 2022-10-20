@@ -163,5 +163,6 @@ export default {
 .title {
   display: flex;
   justify-content: center;
+  font-size: 23px;
 }
 </style>
