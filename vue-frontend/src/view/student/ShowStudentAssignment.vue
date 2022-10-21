@@ -45,18 +45,23 @@ export default {
       for (let i = 0; i < tmp.length; i++) {
         tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
         tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-        if (this.debuted_list.length > 0) {
-          let check = true
-          for (let j = 0; j < this.debuted_list.length; j++) {
-            if (this.debuted_list[j].assignment_name === tmp[i].assignment_name) {
-              check = false
+        let time = parseInt(tmp[i].release_time.substring(0, 4)) * 12 * 365 + parseInt(tmp[i].release_time.substring(5, 7)) * 31 + parseInt(tmp[i].release_time.substring(8, 10))
+        var Today = new Date()
+        let now = parseInt(Today.getFullYear()) * 12 * 365 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
+        if (now >= time) {
+          if (this.debuted_list.length > 0) {
+            let check = true
+            for (let j = 0; j < this.debuted_list.length; j++) {
+              if (this.debuted_list[j].assignment_name === tmp[i].assignment_name) {
+                check = false
+              }
             }
-          }
-          if (check) {
+            if (check) {
+              this.debuted_list.push(tmp[i])
+            }
+          } else {
             this.debuted_list.push(tmp[i])
           }
-        } else {
-          this.debuted_list.push(tmp[i])
         }
       }
     })

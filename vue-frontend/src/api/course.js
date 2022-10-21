@@ -30,3 +30,36 @@ export function getSemester () {
     }
   })
 }
+
+export function AddCourse (data) {
+  return request({
+    url: '/course/addCourse',
+    method: 'post',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    },
+    data
+  })
+}
+
+export function UpdateCourse (data) {
+  return request({
+    url: '/course/updateCourse?cid=' + data.cid,
+    method: 'post',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    },
+    data
+  })
+}
+
+export function DeleteCourse (data) {
+  return request({
+    url: '/course/deleteCourse?cid=' + data.cid,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    },
+    data
+  })
+}

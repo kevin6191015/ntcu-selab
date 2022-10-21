@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import ShowAssignment from './ShowStudentAssignment'
+import ShowAssignment from '@/view/student/ShowStudentAssignment'
 export default {
   name: 'studenthome',
   data () {
