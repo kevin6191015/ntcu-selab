@@ -155,7 +155,8 @@ export default {
       }
     },
     Update (row) {
-      this.$store.commit('SET_QUESTION_TO_SHOW', row.assignment_name)
+      this.$store.commit('SET_SELECTEDQUESTION', '')
+      this.$store.commit('SET_PUBLISHEDQUESTION', row.assignment_name)
       this.$router.replace({
         path: '/UpdateAssignment'
       })

@@ -63,6 +63,7 @@
       </div>
         <el-table-column type="index" label="序號" ></el-table-column>
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+        <el-table-column prop="teacher" label="出題老師"></el-table-column>
         <el-table-column
           fixed="right"
           label="題目預覽"
@@ -164,7 +165,7 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.add_question_mode === '3') {
+    if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '7') {
       this.Revise_Quesition_Mode = true
       this.Select_Quesition_Mode = false
     }
@@ -239,9 +240,15 @@ export default {
         }
       }
       this.$store.commit('SET_SELECTEDQUESTION', selectedQ)
-      this.$router.replace({
-        path: '/PublishAssignment'
-      })
+      if (this.$store.state.add_question_mode === '5') {
+        this.$router.replace({
+          path: '/UpdateAssignment'
+        })
+      } else {
+        this.$router.replace({
+          path: '/PublishAssignment'
+        })
+      }
     },
     Seequestion1 (row) {
       this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)

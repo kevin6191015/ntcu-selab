@@ -143,7 +143,7 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.add_question_mode === '3') {
+    if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '7') {
       this.Revise_Quesition_Mode = true
       let id = this.$store.state.Question_To_Show
       if (id.charAt(0) === 'a') {
@@ -297,7 +297,7 @@ export default {
       }
 
       // get latest qid
-      if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4') {
+      if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '6' || this.$store.state.add_question_mode === '7') {
         getLatestQuestionID()
           .then((resp) => {
             let qid = resp.data.data.qid
@@ -308,9 +308,15 @@ export default {
             this.$store.commit('SET_SELECTEDQUESTION', qid)
             this.$store.commit('SET_CONTROLRELOAD', '1')
           })
-        this.$router.replace({
-          path: '/PublishAssignment'
-        })
+        if (this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '3') {
+          this.$router.replace({
+            path: '/PublishAssignment'
+          })
+        } else {
+          this.$router.replace({
+            path: '/UpdateAssignment'
+          })
+        }
       }
     },
     add () {

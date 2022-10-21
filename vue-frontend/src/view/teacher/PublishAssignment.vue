@@ -196,7 +196,7 @@ export default {
         }
         this.$store.commit('REMOVE_SELECTEDQUESTION')
         this.$store.commit('SET_ADD_QUESTION_MODE', '0')
-        this.$store.commit('SET_CONTROLRELOAD', '1')
+        // this.$store.commit('SET_CONTROLRELOAD', '1')
       }
     },
     selectquestion () {

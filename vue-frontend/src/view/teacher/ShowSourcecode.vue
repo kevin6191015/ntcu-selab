@@ -68,7 +68,7 @@ export default {
   }
   #content{
     border: 3px solid rgba(0, 0, 0, 0.397);
-    background-color:  rgba(43, 83, 194, 0.514);
+    background-color:  rgb(228, 228, 228);
     border-radius: 12px;
     padding: 8px;
     margin-top: 10px;

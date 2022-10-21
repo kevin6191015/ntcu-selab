@@ -124,6 +124,31 @@ export default {
             break
           }
         }
+      } else if (this.$store.state.add_question_mode === '7' && this.$router.currentRoute.name === 'AddQuestion') {
+        this.breadList = []
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        let temp = this.$router.currentRoute
+        temp.meta.title = '修改考古'
+        this.breadList.push(temp)
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'SelectQuestion') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'UpdateAssignment') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'teacherhome') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
       } else if (this.$store.state.add_question_mode === '4' && this.$router.currentRoute.name === 'AddQuestion') {
         this.breadList = []
         let routeTable = this.$router.options.routes[2].children
@@ -133,6 +158,43 @@ export default {
         this.breadList.push(temp)
         for (let i = 0; i < routeTable.length; i++) {
           if (routeTable[i].name === 'PublishAssignment') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'teacherhome') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      } else if (this.$store.state.add_question_mode === '6' && this.$router.currentRoute.name === 'AddQuestion') {
+        this.breadList = []
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        let temp = this.$router.currentRoute
+        temp.meta.title = '自行出題'
+        this.breadList.push(temp)
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'UpdateAssignment') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'teacherhome') {
+            this.breadList.push(routeTable[i])
+            break
+          }
+        }
+      } else if ((this.$store.state.add_question_mode === '5' || this.$store.state.add_question_mode === '7') && this.$router.currentRoute.name === 'SelectQuestion') {
+        this.breadList = []
+        let routeTable = this.$router.options.routes[2].children
+        routeTable.push(this.$router.options.routes[2])
+        let temp = this.$router.currentRoute
+        this.breadList.push(temp)
+        for (let i = 0; i < routeTable.length; i++) {
+          if (routeTable[i].name === 'UpdateAssignment') {
             this.breadList.push(routeTable[i])
             break
           }

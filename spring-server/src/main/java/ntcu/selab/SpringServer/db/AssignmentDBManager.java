@@ -105,7 +105,7 @@ public class AssignmentDBManager {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             String info = "release_time=" + assignment.getReleaseTime() + "&deadline=" + assignment.getDeadLine()
-            + "&question_name=" + assignment.getAssignmentName();
+            + "&assignment_name=" + assignment.getAssignmentName();
             byte[] data = info.getBytes();
             conn.connect();
             OutputStream out = conn.getOutputStream();

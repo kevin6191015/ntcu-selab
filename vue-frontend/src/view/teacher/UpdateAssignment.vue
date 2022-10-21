@@ -16,6 +16,22 @@
       >
         <el-table-column type="index" label="序號" ></el-table-column>
         <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="題目預覽"
+        >
+          <template slot-scope="scope">
+            <el-button @click="SeeQuestion(scope.row)" type="text" size="small">查看該題</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="刪除題目"
+        >
+          <template slot-scope="scope">
+            <el-button @click="deleteQuestion(scope.row)" type="text" size="small">刪除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       </div>
       <div>
@@ -56,7 +72,7 @@
         </el-date-picker>
       </div>
       <div id="footer">
-        <el-button type="info" @click='updatw'>更新</el-button>
+        <el-button type="info" @click='update'>更新</el-button>
       </div>
     </div>
     <div v-show="notshow">
@@ -69,8 +85,8 @@
 <script>
 import store from '@/store'
 import {ShowQuestion1, ShowQuestion2} from '@/api/question'
-import {addAssignment, getAllAssignments} from '@/api/assignment'
-// add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
+import {addAssignment, getAllAssignments, DeleteAssignment, updateAssignment} from '@/api/assignment'
+// 5 for select question,6 for add question, 7 for revise old question, 8 for add question for assignment in upadte mode
 export default {
   name: 'PublishAssginment',
   inject: ['reload'],
@@ -94,18 +110,16 @@ export default {
     }).then(res => {
       let tmp = res.data.data.Assignments
       for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].assignment_name === this.$store.state.Question_To_Show) {
+        if (tmp[i].assignment_name === this.$store.state.publishedQuestion) {
           this.assignments.push(tmp[i])
-          this.assignment_name = tmp[i].assignment_name
-          // this.publish_time = tmp[i].release_time
-          console.log(tmp[i])
-          let temp = new Date(tmp[i].release_time.slice(0, 4), tmp[i].release_time.slice(4, 6) - 1, tmp[i].release_time.slice(6, 8))
-          this.publish_time = temp
-          let temp2 = new Date(tmp[i].deadline.slice(0, 4), tmp[i].deadline.slice(4, 6) - 1, tmp[i].deadline.slice(6, 8))
-          this.deadline = temp2
           // console.log(this.publish_time)
         }
       }
+      this.assignment_name = this.assignments[0].assignment_name
+      let temp = new Date(this.assignments[0].release_time.slice(0, 4), this.assignments[0].release_time.slice(4, 6) - 1, this.assignments[0].release_time.slice(6, 8))
+      this.publish_time = temp
+      let temp2 = new Date(this.assignments[0].deadline.slice(0, 4), this.assignments[0].deadline.slice(4, 6) - 1, this.assignments[0].deadline.slice(6, 8))
+      this.deadline = temp2
     })
     this.initialize()
   },
@@ -151,7 +165,7 @@ export default {
             type: 'warning'
           })
           return
-        } else if (this.questions.length === 0) {
+        } else if (this.assignments.length === 0) {
           this.$message({
             showClose: true,
             message: '請選擇題目',
@@ -159,64 +173,123 @@ export default {
           })
           return
         }
-        for (let x in this.questions) {
-          addAssignment({
-            assignment_name: this.assignment_name,
-            qid: this.questions[x].id,
-            cid: cid,
-            release_time: publishtime,
-            deadline: deadline
-          })
-            .then((resp) => {
-              let code = resp.data.code
-              if (code === 200) {
-                this.error_or_not = false
-              } else {
-                this.error_or_not = true
-              }
+        console.log(this.assignments.length)
+        for (let x in this.assignments) {
+          console.log(this.assignments[x].assignment_name)
+          if (this.assignments[x].assignment_name) {
+            updateAssignment({
+              assignmentName: this.assignment_name,
+              name: this.assignments[x].question_name,
+              id: this.assignments[x].question_id,
+              cid: cid,
+              releaseTime: publishtime,
+              createdTime: this.assignments[x].created_time,
+              deadLine: deadline
             })
+              .then((resp) => {
+                let code = resp.data.code
+                if (code === 200) {
+                  this.error_or_not = false
+                } else {
+                  this.error_or_not = true
+                }
+              })
+          } else {
+            addAssignment({
+              assignmentName: this.assignment_name,
+              name: this.assignments[x].question_name,
+              id: this.assignments[x].question_id,
+              cid: cid,
+              releaseTime: publishtime,
+              createdTime: publishtime,
+              deadLine: deadline
+            })
+              .then((resp) => {
+                let code = resp.data.code
+                if (code === 200) {
+                  this.error_or_not = false
+                } else {
+                  this.error_or_not = true
+                }
+              })
+          }
         }
         if (this.error_or_not) {
           this.$message({
             showClose: true,
-            message: '發布失敗',
+            message: '更新失敗',
             type: 'warning'
           })
           return
         } else {
           this.$message({
             showClose: true,
-            message: '發布成功',
+            message: '更新成功',
             type: 'success'
           })
-          let tmp = this.questions.length
-          for (let x = 0; x < tmp; x++) {
-            this.questions.pop()
-          }
           this.id = ''
+          this.assignments = []
+          this.publish_time = ''
+          this.deadline = ''
+          this.assignment_name = ''
         }
         store.commit('REMOVE_SELECTEDQUESTION')
         store.commit('SET_ADD_QUESTION_MODE', '0')
-        store.commit('SET_CONTROLRELOAD', '1')
+        // store.commit('SET_CONTROLRELOAD', '1')
       }
     },
     selectquestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '1')
+      store.commit('SET_ADD_QUESTION_MODE', '5')
       this.$router.replace({
         path: '/Selectquestion'
       })
     },
     addquestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '4')
+      store.commit('SET_ADD_QUESTION_MODE', '6')
       this.$router.replace({
         path: '/AddQuestion'
       })
     },
     revisequestion () {
-      store.commit('SET_ADD_QUESTION_MODE', '3')
+      store.commit('SET_ADD_QUESTION_MODE', '7')
       this.$router.replace({
         path: '/SelectQuestion'
       })
+    },
+    deleteQuestion (row) {
+      if (row.assignment_name) {
+        let temp = []
+        for (let x in this.assignments) {
+          if (row.question_id !== this.assignments[x].question_id) {
+            temp.push(this.assignments[x])
+          }
+        }
+        DeleteAssignment({
+          cid: this.$store.state.class_id,
+          qid: row.question_id,
+          created_time: row.created_time
+        })
+          .then((resp) => {
+            let code = resp.data.code
+            if (code === 200) {
+              this.$message({
+                showClose: true,
+                message: '刪除成功',
+                type: 'success'
+              })
+            }
+          })
+        this.assignments = temp
+      } else {
+        let temp = []
+        for (let x in this.assignments) {
+          if (row.question_id !== this.assignments[x].question_id) {
+            temp.push(this.assignments[x])
+          }
+        }
+        this.assignments = temp
+        console.log('good')
+      }
     },
     refresh () {
       location.reload()
@@ -234,8 +307,9 @@ export default {
         for (let i = 0; i < (this.id.length + 1); i += 6) {
           for (let j = 0; j < res.data.data.Questions.length; j++) {
             if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].question_id) {
-              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].question_id}
+              var temp = {question_name: res.data.data.Questions[j].question_name, question_id: res.data.data.Questions[j].question_id}
               this.questions.push(temp)
+              this.assignments.push(temp)
               break
             }
           }
@@ -245,13 +319,21 @@ export default {
         for (let i = 0; i < (this.id.length + 1); i += 6) {
           for (let j = 0; j < res.data.data.Questions.length; j++) {
             if (this.id.slice((i), (i + 5)) === res.data.data.Questions[j].id) {
-              var temp = {question_name: res.data.data.Questions[j].question_name, id: res.data.data.Questions[j].id}
+              var temp = {question_name: res.data.data.Questions[j].question_name, question_id: res.data.data.Questions[j].id}
               this.questions.push(temp)
+              this.assignments.push(temp)
               break
             }
           }
         }
       })
+    },
+    SeeQuestion (row) {
+      this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id + ',' + row.question_name)
+      let { href } = this.$router.resolve({
+        name: 'ShowQuestion'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
     }
   }
 }

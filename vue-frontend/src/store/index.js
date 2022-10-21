@@ -11,6 +11,7 @@ export default new Vuex.Store({
     class: sessionStorage.getItem('class'),
     class_id: sessionStorage.getItem('class_id'),
     selectedQuestion: sessionStorage.getItem('selectedQuestion'),
+    publishedQuestion: sessionStorage.getItem('publishedQuestion'),
     Question_To_Show: sessionStorage.getItem('Question_To_Show'),
     assignment: JSON.parse(sessionStorage.getItem('assignment')),
     seletedstudent: JSON.parse(sessionStorage.getItem('seletedstudent')),
@@ -69,6 +70,10 @@ export default new Vuex.Store({
       state.add_question_mode = addquestionmode
       sessionStorage.setItem('add_question_mode', JSON.stringify(addquestionmode))
     },
+    SET_PUBLISHEDQUESTION: (state, publishedQuestion) => {
+      state.publishedQuestion = publishedQuestion
+      sessionStorage.setItem('publishedQuestion', publishedQuestion)
+    },
     REMOVE_INFO: () => {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('user')
@@ -76,6 +81,7 @@ export default new Vuex.Store({
       sessionStorage.removeItem('class')
       sessionStorage.removeItem('class_id')
       sessionStorage.removeItem('selectedQuestion')
+      sessionStorage.removeItem('publishedQuestion')
       sessionStorage.removeItem('project_name')
       sessionStorage.removeItem('Question_To_Show')
       sessionStorage.removeItem('imagelink')
