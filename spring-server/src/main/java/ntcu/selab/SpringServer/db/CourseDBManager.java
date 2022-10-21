@@ -139,9 +139,9 @@ public class CourseDBManager {
         }
     }
 
-    public void updateCourse(String class_id, Course course) throws Exception{
+    public void updateCourse(String cid, Course course) throws Exception{
         String dbUrl = MysqlConfig.getObject().getDBUrl();
-        URL url = new URL(dbUrl + "class/update/" + class_id);
+        URL url = new URL(dbUrl + "class/update/" + cid);
         try{
             conn = database.getConnection(url, "POST");
             conn.setRequestProperty("Content-Type", " application/x-www-form-urlencoded");

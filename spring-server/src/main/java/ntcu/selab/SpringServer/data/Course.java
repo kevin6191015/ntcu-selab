@@ -1,27 +1,22 @@
 package ntcu.selab.SpringServer.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Course {
-    private String id = null;
-    private String coursename = null;
-    private String semester = null;
-    private String teacher = null;
+    private String ID = null;
+    private String CourseName = null;
+    private String Semester = null;
+    private String Teacher = null;
     private String TA = null;
-    private List<Student> studentlist = new ArrayList<>();
-    private List<Assignment> assignmentlist = new ArrayList<>();
 
     public Course(String coursename, String semester, String teacher, String TA){
-        this.coursename = coursename;
-        this.semester = semester;
-        this.teacher = teacher;
+        this.CourseName = coursename;
+        this.Semester = semester;
+        this.Teacher = teacher;
         this.TA = TA;
     }
 
     public Course(String coursename, String teacher, String TA){
-        this.coursename = coursename;
-        this.teacher = teacher;
+        this.CourseName = coursename;
+        this.Teacher = teacher;
         this.TA = TA;
     }
 
@@ -30,61 +25,41 @@ public class Course {
     }
 
     public String getId(){
-        return id;
+        return this.ID;
     }
 
     public void setId(String id){
-        this.id = id;
+        this.ID = id;
     }
     public String getCourseName(){
-        return coursename;
+        return this.CourseName;
     }
 
     public void setCourseName(String coursename){
-        this.coursename = coursename;
+        this.CourseName = coursename;
     }
 
     public String getSemester(){
-        return semester;
+        return this.Semester;
     }
 
     public void setSemester(String semester){
-        this.semester = semester;
+        this.Semester = semester;
     }
 
     public String getTeacher(){
-        return teacher;
+        return this.Teacher;
     }
 
     public void setTeacher(String teacher){
-        this.teacher = teacher;
+        this.Teacher= teacher;
     }
 
     public String getTA(){
-        return TA;
+        return this.TA;
     }
 
     public void setTA(String TA){
         this.TA = TA;
-    }
-
-    public List<Student> getStudents(){
-        return studentlist;
-    }
-
-    public void setStudents(List<Student> students){
-        for(Student student : students){
-            studentlist.add(student);
-        }
-    }
-
-    public List<Assignment> getAssigments(){
-        return assignmentlist;
-    }
-
-    public void setAssignments(List<Assignment> assignments){
-        for(Assignment assignment : assignments){
-            assignmentlist.add(assignment);
-        }
     }
 }

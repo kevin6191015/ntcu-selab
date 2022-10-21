@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,11 +85,9 @@ public class CourseService {
         return new Result(200, "Get Semesters Successfull!", root.toMap());
     }
 
-    @GetMapping("addCourse")
-    public Result addCourse(@RequestParam String class_name, @RequestParam String semester, 
-    @RequestParam String teacher, @RequestParam String TA){
+    @PostMapping("addCourse")
+    public Result addCourse(@RequestBody Course course){
         try{
-            Course course = new Course(class_name, semester, teacher, TA);
             cDbManager.addCourse(course);
         }catch(Exception e){
             return new Result(400, "Add Course Failed! " + e.getMessage(), "");
@@ -95,18 +95,16 @@ public class CourseService {
         return new Result(200, "Add Course Successfull!", "");
     }
 
-    @GetMapping("updateCourse")
-    public Result updateCourse(@RequestParam String cid, @RequestParam String class_name
-    , @RequestParam String teacher, @RequestParam String TA){
+    @PostMapping("updateCourse")
+    public Result updateCourse(@RequestBody Course course, @RequestParam String cid){
         try{
             //更新course資料
-            Course course = new Course(class_name, teacher, TA);
             cDbManager.updateCourse(cid, course);
 
             //更新question裡course相關資料(question bank2)
-            List<Question> questions = qDbManager.getQuestionsByClass(cid);
+            List<Question> questions = qDbManager.getQuestionsByTeacher(course.getTeacher());
             for(Question question : questions){                
-                question.setTeacher(teacher);
+                question.setTeacher(course.getTeacher());
                 qDbManager.updateQuestion(question.getId(), question);
             }
         }catch(Exception e){
