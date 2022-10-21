@@ -86,8 +86,8 @@
                 </el-input>
               </el-row>
               <el-row style="display: flex;">
-                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="add()">新增</el-button>
-                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="update()">修改</el-button>
+                  <el-button type="warning" style="margin-left: 130px; font-size: 20px" @click="add()">新增</el-button>
+                  <el-button type="warning" style="margin-left: 40px; font-size: 20px" @click="update()">修改</el-button>
                   <el-upload
                   action="/data/user/upload?file="
                   :before-upload="onBeforeUpload"
@@ -95,9 +95,9 @@
                   :on-error="uploadError"
                   :on-success="uploadSuccess"
                   :show-file-list="false">
-                    <el-button type="warning" style="margin: 32px; font-size: 20px;">匯入</el-button>
+                    <el-button type="warning" style="margin-left: 40px; font-size: 20px;">匯入</el-button>
                   </el-upload>
-                  <el-button type="warning" style="margin: 32px; font-size: 20px" @click="deleted()">刪除</el-button>
+                  <el-button type="warning" style="margin-left: 40px; font-size: 20px" @click="deleted()">刪除</el-button>
               </el-row>
             </el-col>
           </el-row>
