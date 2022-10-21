@@ -77,7 +77,6 @@
     </div>
     <div v-show="notshow">
       {{newdata}}
-      {{newrealse_time}}
       {{newdeadline}}
     </div>
   </div>
