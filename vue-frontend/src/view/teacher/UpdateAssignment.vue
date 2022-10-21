@@ -77,7 +77,6 @@
     </div>
     <div v-show="notshow">
       {{newdata}}
-      {{newrealse_time}}
       {{newdeadline}}
     </div>
   </div>
@@ -96,6 +95,7 @@ export default {
       questions: [],
       question_id: [],
       assignments: [],
+      assignment_name_list: [],
       publish_time: '',
       deadline: '',
       id: '',
@@ -113,6 +113,8 @@ export default {
         if (tmp[i].assignment_name === this.$store.state.publishedQuestion) {
           this.assignments.push(tmp[i])
           // console.log(this.publish_time)
+        } else {
+          this.assignment_name_list.push(tmp[i])
         }
       }
       this.assignment_name = this.assignments[0].assignment_name
@@ -173,7 +175,16 @@ export default {
           })
           return
         }
-        console.log(this.assignments.length)
+        for (let x in this.assignment_name_list) {
+          if (this.assignment_name_list[x].assignment_name === this.assignment_name) {
+            this.$message({
+              showClose: true,
+              message: '作業名稱不可與已有的相同',
+              type: 'warning'
+            })
+            return
+          }
+        }
         for (let x in this.assignments) {
           console.log(this.assignments[x].assignment_name)
           if (this.assignments[x].assignment_name) {

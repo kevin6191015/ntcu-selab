@@ -1,148 +1,148 @@
 <template>
-<body>
-  <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-    <el-tab-pane label="系統題庫" name="first">
-      <el-table
-        ref="multipleTable1"
-        :data="content1"
-        stripe
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange1"
-      >
-      <div v-if="this.Select_Quesition_Mode">
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-      </div>
-        <el-table-column type="index" label="序號" ></el-table-column>
-        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="題目預覽"
-        >
-          <template slot-scope="scope">
-            <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看該題</el-button>
-          </template>
-        </el-table-column>
-        <div v-if="this.Revise_Quesition_Mode">
-          <el-table-column
-          fixed="right"
-          label="修改考古"
-        >
-          <template slot-scope="scope">
-            <el-button @click="revise1(scope.row)" type="text" size="small">選擇該題</el-button>
-          </template>
-        </el-table-column>
-        </div>
-        <el-table-column
-          fixed="right"
-          label="題目程式碼"
-        >
-          <template slot-scope="scope">
-            <el-button @click="SeeCode1(scope.row)" type="text" size="small">查看程式碼</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-    <el-tab-pane label="公共題庫" name="third">
-      <el-table
-        ref="multipleTable3"
-        :data="content3"
-        stripe
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange3"
-      >
-      <div v-if="this.Select_Quesition_Mode">
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-      </div>
-        <el-table-column type="index" label="序號" ></el-table-column>
-        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-        <el-table-column prop="teacher" label="出題老師"></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="題目預覽"
-        >
-          <template slot-scope="scope">
-            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
-          </template>
-        </el-table-column>
-        <div v-if="this.Revise_Quesition_Mode">
-          <el-table-column
-          fixed="right"
-          label="修改考古"
-        >
-          <template slot-scope="scope">
-            <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
-          </template>
-        </el-table-column>
-        </div>
-        <el-table-column
-          fixed="right"
-          label="題目程式碼"
-        >
-          <template slot-scope="scope">
-            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-    <el-tab-pane label="私人題庫" name="second">
-      <el-table
-        ref="multipleTable2"
-        :data="content2"
-        stripe
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange2"
+  <body>
+    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+      <el-tab-pane label="系統題庫" name="first">
+        <el-table
+          ref="multipleTable1"
+          :data="content1"
+          stripe
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange1"
         >
         <div v-if="this.Select_Quesition_Mode">
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-      </div>
-        <el-table-column type="index" label="序號" ></el-table-column>
-        <el-table-column prop="question_name" label="題目名稱"></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="題目預覽"
-          >
-          <template slot-scope="scope">
-            <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
-          </template>
-        </el-table-column>
-        <div v-if="this.Revise_Quesition_Mode">
           <el-table-column
-          fixed="right"
-          label="修改考古"
-        >
-          <template slot-scope="scope">
-            <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
-          </template>
-        </el-table-column>
+              type="selection"
+              width="55">
+          </el-table-column>
         </div>
-        <el-table-column
-          fixed="right"
-          label="題目程式碼"
+          <el-table-column type="index" label="序號" ></el-table-column>
+          <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="題目預覽"
+          >
+            <template slot-scope="scope">
+              <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看該題</el-button>
+            </template>
+          </el-table-column>
+          <div v-if="this.Revise_Quesition_Mode">
+            <el-table-column
+            fixed="right"
+            label="修改考古"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise1(scope.row)" type="text" size="small">選擇該題</el-button>
+            </template>
+          </el-table-column>
+          </div>
+          <el-table-column
+            fixed="right"
+            label="題目程式碼"
+          >
+            <template slot-scope="scope">
+              <el-button @click="SeeCode1(scope.row)" type="text" size="small">查看程式碼</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="公共題庫" name="third">
+        <el-table
+          ref="multipleTable3"
+          :data="content3"
+          stripe
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange3"
         >
-          <template slot-scope="scope">
-            <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-  </el-tabs>
-  <div id="footer-left" v-if="this.Select_Quesition_Mode">
-    <el-button  @click='select'>確認</el-button>
-  </div>
-</body>
-</template>
+        <div v-if="this.Select_Quesition_Mode">
+          <el-table-column
+              type="selection"
+              width="55">
+          </el-table-column>
+        </div>
+          <el-table-column type="index" label="序號" ></el-table-column>
+          <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+          <el-table-column prop="teacher" label="出題老師"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="題目預覽"
+          >
+            <template slot-scope="scope">
+              <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
+            </template>
+          </el-table-column>
+          <div v-if="this.Revise_Quesition_Mode">
+            <el-table-column
+            fixed="right"
+            label="修改考古"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
+            </template>
+          </el-table-column>
+          </div>
+          <el-table-column
+            fixed="right"
+            label="題目程式碼"
+          >
+            <template slot-scope="scope">
+              <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="私人題庫" name="second">
+        <el-table
+          ref="multipleTable2"
+          :data="content2"
+          stripe
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange2"
+          >
+          <div v-if="this.Select_Quesition_Mode">
+          <el-table-column
+              type="selection"
+              width="55">
+          </el-table-column>
+        </div>
+          <el-table-column type="index" label="序號" ></el-table-column>
+          <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="題目預覽"
+            >
+            <template slot-scope="scope">
+              <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
+            </template>
+          </el-table-column>
+          <div v-if="this.Revise_Quesition_Mode">
+            <el-table-column
+            fixed="right"
+            label="修改考古"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
+            </template>
+          </el-table-column>
+          </div>
+          <el-table-column
+            fixed="right"
+            label="題目程式碼"
+          >
+            <template slot-scope="scope">
+              <el-button @click="SeeCode2(scope.row)" type="text" size="small">查看程式碼</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+    <div id="footer-left" v-if="this.Select_Quesition_Mode">
+      <el-button  @click='select'>確認</el-button>
+    </div>
+  </body>
+  </template>
 <script>
 import {ShowQuestion1, ShowQuestion2byTeacher, ShowPublicQuestion} from '@/api/question'
 export default {
@@ -335,43 +335,43 @@ export default {
   }
 }
 </script>
-<style scoped>
-  .layout{
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    height: 100%;
-  }
-  .layout-logo{
-    width: 100px;
-    height: 30px;
-    background: #5b6270;
-    border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #49ffcc;
-  }
-  .layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    margin-right: 20px;
-  }
+  <style scoped>
+    .layout{
+      border: 1px solid #d7dde4;
+      background: #f5f7f9;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      height: 100%;
+    }
+    .layout-logo{
+      width: 100px;
+      height: 30px;
+      background: #5b6270;
+      border-radius: 3px;
+      float: left;
+      position: relative;
+      top: 15px;
+      left: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #49ffcc;
+    }
+    .layout-nav{
+      width: 420px;
+      margin: 0 auto;
+      margin-right: 20px;
+    }
 
-  #footer-left{
-  clear:both;
-  margin-right: 5%;
-  margin-left: 5%;
-  text-align:center;
-  line-height:80px;
-  float:right;
-}
-  .layout-footer-center{
-    text-align: center;
+    #footer-left{
+    clear:both;
+    margin-right: 5%;
+    margin-left: 5%;
+    text-align:center;
+    line-height:80px;
+    float:right;
   }
-</style>
+    .layout-footer-center{
+      text-align: center;
+    }
+  </style>
