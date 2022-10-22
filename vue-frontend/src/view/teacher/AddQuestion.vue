@@ -215,7 +215,7 @@ export default {
           this.in_output_list = templist
         })
       }
-    } else if (this.$store.state.add_question_mode === '4') {
+    } else if (this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '6') {
       this.Add_To_Assignment_Mode = true
     }
     this.$store.commit('SET_IMAGELINK', '')
@@ -274,6 +274,19 @@ export default {
       })
         .then((resp) => {
           let code = resp.data.code
+          if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '6' || this.$store.state.add_question_mode === '7') {
+            getLatestQuestionID()
+              .then((resp) => {
+                let qid = resp.data.data.qid
+                console.log(qid)
+                qid = 'b' + this.padLeft(qid, 4)
+                if (this.$store.state.selectedQuestion) {
+                  qid = this.$store.state.selectedQuestion + ',' + qid
+                }
+                this.$store.commit('SET_SELECTEDQUESTION', qid)
+                this.$store.commit('SET_CONTROLRELOAD', '1')
+              })
+          }
           if (code === 200) {
             this.$message({
               showClose: true,
@@ -298,16 +311,6 @@ export default {
 
       // get latest qid
       if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '6' || this.$store.state.add_question_mode === '7') {
-        getLatestQuestionID()
-          .then((resp) => {
-            let qid = resp.data.data.qid
-            qid = 'b' + this.padLeft(qid, 4)
-            if (this.$store.state.selectedQuestion) {
-              qid = this.$store.state.selectedQuestion + ',' + qid
-            }
-            this.$store.commit('SET_SELECTEDQUESTION', qid)
-            this.$store.commit('SET_CONTROLRELOAD', '1')
-          })
         if (this.$store.state.add_question_mode === '4' || this.$store.state.add_question_mode === '3') {
           this.$router.replace({
             path: '/PublishAssignment'
