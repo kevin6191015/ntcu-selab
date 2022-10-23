@@ -109,7 +109,7 @@ export default {
         classID += '0'
       }
       classID += this.$store.state.class_id.toString()
-      let project = seleted.question_id + '_' + classID + '_' + this.$store.state.class.substring(0, 5) + '_' + seleted.release_time
+      let project = seleted.question_id + '_' + classID + '_' + this.$store.state.class.substring(0, 5) + '_' + seleted.created_time
       this.$store.commit('SET_PROJECT_NAME', project)
       this.$store.commit('SET_ASSIGNMENT', seleted)
       this.$router.replace({

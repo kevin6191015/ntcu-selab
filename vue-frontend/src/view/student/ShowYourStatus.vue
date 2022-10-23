@@ -101,15 +101,15 @@ export default {
         project_name: this.project_name
       }).then(res => {
         for (let i = 0; i < tmp1.length && i < res.data.data['Personal Report'].length; i++) {
-          tmp1[i].compile_result = res.data.data['Personal Report'][i].compile_result
-          tmp1[i].source_code = res.data.data['Personal Report'][i].source_code
-          tmp1[i].report_suggestion = res.data.data['Personal Report'][i].report_suggestion
-          this.labels1.push(res.data.data['Personal Report'][i].submit_times)
-          this.labels2.push(res.data.data['Personal Report'][i].submit_times)
-          this.labels3.push(res.data.data['Personal Report'][i].submit_times)
-          this.data1.push(res.data.data['Personal Report'][i].bugs)
-          this.data2.push(res.data.data['Personal Report'][i].vulnerabilities)
-          this.data3.push(res.data.data['Personal Report'][i].code_smells)
+          tmp1[i].compile_result = res.data.data['Personal Report'][tmp1.length - i - 1].compile_result
+          tmp1[i].source_code = res.data.data['Personal Report'][tmp1.length - i - 1].source_code
+          tmp1[i].report_suggestion = res.data.data['Personal Report'][tmp1.length - i - 1].report_suggestion
+          this.labels1.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
+          this.labels2.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
+          this.labels3.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
+          this.data1.push(res.data.data['Personal Report'][tmp1.length - i - 1].bugs)
+          this.data2.push(res.data.data['Personal Report'][tmp1.length - i - 1].vulnerabilities)
+          this.data3.push(res.data.data['Personal Report'][tmp1.length - i - 1].code_smells)
           if (tmp1[i].unit_test_score <= 60) {
             tmp1[i].color = 'https://i.imgur.com/HJGBB1X.jpg'
           } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {

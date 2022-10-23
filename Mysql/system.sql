@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 10 月 11 日 08:07
+-- 產生時間： 2022 年 10 月 23 日 12:07
 -- 伺服器版本： 8.0.30
 -- PHP 版本： 8.0.19
 
@@ -40,10 +40,10 @@ CREATE TABLE `classes_list` (
 --
 
 INSERT INTO `classes_list` (`class_id`, `semester`, `class_name`, `teacher`, `TA`) VALUES
-(1, '108-1', '程式設計B班', 'Kevin', 'John'),
-(2, '109-1', '程式設計A班', 'James', 'Robert'),
-(3, '109-1', '程式設計B班', 'Michael', 'David'),
-(4, '109-1', '程式設計C班', 'Daniel', 'Mark');
+(1, '108-1', '程式設計B班', '小智', '小剛'),
+(2, '109-1', '程式設計A班', '小智', '小剛'),
+(3, '109-1', '程式設計B班', '小智', '小剛'),
+(4, '109-1', '程式設計C班', '小智', '小剛');
 
 -- --------------------------------------------------------
 
@@ -55,6 +55,7 @@ CREATE TABLE `class_001_questions` (
   `question_id` text,
   `assignment_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `question_name` text,
+  `created_time` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -63,11 +64,17 @@ CREATE TABLE `class_001_questions` (
 -- 傾印資料表的資料 `class_001_questions`
 --
 
-INSERT INTO `class_001_questions` (`question_id`, `assignment_name`, `question_name`, `release_time`, `deadline`) VALUES
-('a0001', 'HW_1', 'Fibonacci_Number', '20221001', '20221101'),
-('a0002', 'HW_1', 'Matrix-chain_Multiplication', '20221001', '20221101'),
-('a0003', 'HW_1', 'Longest_Common_Subsequence', '20221001', '20221101'),
-('a0004', 'HW_2', 'Optimal_Binary_Search_Tree', '20220930', '20221201');
+INSERT INTO `class_001_questions` (`question_id`, `assignment_name`, `question_name`, `created_time`, `release_time`, `deadline`) VALUES
+('a0001', 'hw1', 'Fibonacci_Number', '20221021', '20221028', '20221029'),
+('a0002', 'hw1', 'Matrix-chain_Multiplication', '20221021', '20221028', '20221029'),
+('a0003', 'hw1', 'Longest_Common_Subsequence', '20221021', '20221028', '20221029'),
+('a0004', 'hw1', 'Optimal_Binary_Search_Tree', '20221021', '20221028', '20221029'),
+('a0019', 'hw1', 'Change-Making_Problem', '20221028', '20221028', '20221029'),
+('a0020', 'hw1', 'Fractional_Knapsack_Problem', '20221028', '20221028', '20221029'),
+('a0019', 'hw1', 'Change-Making_Problem', '20221028', '20221028', '20221029'),
+('a0020', 'hw1', 'Fractional_Knapsack_Problem', '20221028', '20221028', '20221029'),
+('a0002', 'hw2', 'Matrix-chain_Multiplication', '20221022', '20221022', '20221031'),
+('a0001', 'hw2', 'Fibonacci_Number', '20221022', '20221022', '20221031');
 
 -- --------------------------------------------------------
 
@@ -85,8 +92,6 @@ CREATE TABLE `class_001_student` (
 --
 
 INSERT INTO `class_001_student` (`student_id`, `student_name`) VALUES
-('acs109102', '周二二'),
-('acs109101', '陳一一'),
 ('acs108122', '閃電鳥');
 
 -- --------------------------------------------------------
@@ -99,6 +104,7 @@ CREATE TABLE `class_002_questions` (
   `assignment_name` text,
   `question_id` text,
   `question_name` text,
+  `created_time` text NOT NULL,
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -132,6 +138,7 @@ CREATE TABLE `class_003_questions` (
   `assignment_name` text,
   `question_id` text,
   `question_name` text,
+  `created_time` text NOT NULL,
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -152,8 +159,8 @@ CREATE TABLE `class_003_student` (
 --
 
 INSERT INTO `class_003_student` (`student_id`, `student_name`) VALUES
-('acs109102', '周二二'),
-('acs108122', '閃電鳥');
+('acs108122', '閃電鳥'),
+('acs109103', '李三三');
 
 -- --------------------------------------------------------
 
@@ -165,6 +172,7 @@ CREATE TABLE `class_004_questions` (
   `assignment_name` text,
   `question_id` text,
   `question_name` text,
+  `created_time` text NOT NULL,
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -173,12 +181,10 @@ CREATE TABLE `class_004_questions` (
 -- 傾印資料表的資料 `class_004_questions`
 --
 
-INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `release_time`, `deadline`) VALUES
-('HW1', 'a0002', 'Matrix-chain_Multiplication', '20221011', '20221025'),
-('HW1', 'a0004', 'Optimal_Binary_Search_Tree', '20221011', '20221025'),
-('HW1', 'b0002', '123', '20221011', '20221025'),
-('HW1', 'a0003', 'Longest_Common_Subsequence', '20221011', '20221025'),
-('HW1', 'a0001', 'Fibonacci_Number', '20221011', '20221025');
+INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `created_time`, `release_time`, `deadline`) VALUES
+('hw2', 'a0002', 'Matrix-chain_Multiplication', '20221027', '20221027', '20221101'),
+('hw3', 'a0003', 'Longest_Common_Subsequence', '20221028', '20221028', '20221102'),
+('hw1', 'a0001', 'Fibonacci_Number', '20221022', '20221022', '20221103');
 
 -- --------------------------------------------------------
 

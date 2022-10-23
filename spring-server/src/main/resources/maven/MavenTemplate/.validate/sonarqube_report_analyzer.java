@@ -184,7 +184,7 @@ public class sonarqube_report_analyzer
           BufferedReader reader;
           int line;
           StringBuilder responseContent = new StringBuilder();
-          String urls = "{Sonar-url}/api/issues/search?componentKeys=edu.selab:"+name+"&scope=MAIN&types=CODE_SMELL";
+          String urls = "{Sonar-url}/api/issues/search?componentKeys=edu.selab:"+name+"&scope=MAIN&types=CODE_SMELL&resolved=false";
           String token = "{Sonar-token}"+":";
           String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
           URL url = new URL(urls);
