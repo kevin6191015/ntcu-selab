@@ -37,7 +37,6 @@ export default {
 <style scoped>
   #sitebody{
     width:100%;
-    height: 100%;
     margin:0 auto;
     font-size:20px;
     background-color: rgba(111, 122, 144, 0.555);

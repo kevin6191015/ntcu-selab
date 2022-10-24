@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql_server
--- 產生時間： 2022 年 10 月 23 日 12:07
+-- 產生時間： 2022 年 10 月 24 日 16:26
 -- 伺服器版本： 8.0.30
 -- PHP 版本： 8.0.19
 
@@ -59,22 +59,6 @@ CREATE TABLE `class_001_questions` (
   `release_time` text,
   `deadline` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- 傾印資料表的資料 `class_001_questions`
---
-
-INSERT INTO `class_001_questions` (`question_id`, `assignment_name`, `question_name`, `created_time`, `release_time`, `deadline`) VALUES
-('a0001', 'hw1', 'Fibonacci_Number', '20221021', '20221028', '20221029'),
-('a0002', 'hw1', 'Matrix-chain_Multiplication', '20221021', '20221028', '20221029'),
-('a0003', 'hw1', 'Longest_Common_Subsequence', '20221021', '20221028', '20221029'),
-('a0004', 'hw1', 'Optimal_Binary_Search_Tree', '20221021', '20221028', '20221029'),
-('a0019', 'hw1', 'Change-Making_Problem', '20221028', '20221028', '20221029'),
-('a0020', 'hw1', 'Fractional_Knapsack_Problem', '20221028', '20221028', '20221029'),
-('a0019', 'hw1', 'Change-Making_Problem', '20221028', '20221028', '20221029'),
-('a0020', 'hw1', 'Fractional_Knapsack_Problem', '20221028', '20221028', '20221029'),
-('a0002', 'hw2', 'Matrix-chain_Multiplication', '20221022', '20221022', '20221031'),
-('a0001', 'hw2', 'Fibonacci_Number', '20221022', '20221022', '20221031');
 
 -- --------------------------------------------------------
 
@@ -182,9 +166,10 @@ CREATE TABLE `class_004_questions` (
 --
 
 INSERT INTO `class_004_questions` (`assignment_name`, `question_id`, `question_name`, `created_time`, `release_time`, `deadline`) VALUES
-('hw2', 'a0002', 'Matrix-chain_Multiplication', '20221027', '20221027', '20221101'),
-('hw3', 'a0003', 'Longest_Common_Subsequence', '20221028', '20221028', '20221102'),
-('hw1', 'a0001', 'Fibonacci_Number', '20221022', '20221022', '20221103');
+('hw3', 'a0003', 'Longest_Common_Subsequence', '20221026', '20221026', '20221103'),
+('hw1', 'a0001', 'Fibonacci_Number', '20221024', '20221024', '20221101'),
+('hw2', 'a0002', 'Matrix-chain_Multiplication', '20221025', '20221025', '20221102'),
+('hw4', 'a0004', 'Optimal_Binary_Search_Tree', '20221027', '20221027', '20221104');
 
 -- --------------------------------------------------------
 

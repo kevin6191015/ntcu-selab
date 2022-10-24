@@ -18,9 +18,10 @@
           style="width: 100%; margin-top: 10px;">
           <el-table-column
             prop="color"
-            width="60">
+            width="60"
+            align="center">
             <template slot-scope="scope">
-              <img :src="scope.row.color" width="30px" height="30px"/>
+              <img :src="scope.row.color" width="20px" height="20px"/>
             </template>
           </el-table-column>
           <el-table-column
@@ -63,9 +64,9 @@
         <div class="item">
             <canvas id="myChart" class="item" ></canvas>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <canvas id="myChart1" class="item" ></canvas>
-        </div>
+        </div> -->
         <div class="item">
             <canvas id="myChart2" class="item" ></canvas>
         </div>
@@ -120,32 +121,32 @@ export default {
         }
         this.tabledata = tmp1
         const ctx = document.getElementById('myChart')
-        const ctx1 = document.getElementById('myChart1')
+        // const ctx1 = document.getElementById('myChart1')
         const ctx2 = document.getElementById('myChart2')
         const data1 = {
           labels: this.labels1.reverse(),
           datasets: [{
-            label: '# of bugs',
+            label: 'number of bugs',
             data: this.data1.reverse(),
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0
           }]
         }
-        const data2 = {
-          labels: this.labels2.reverse(),
-          datasets: [{
-            label: '# of vulnerabilities',
-            data: this.data2.reverse(),
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0
-          }]
-        }
+        // const data2 = {
+        //   labels: this.labels2.reverse(),
+        //   datasets: [{
+        //     label: '# of vulnerabilities',
+        //     data: this.data2.reverse(),
+        //     fill: false,
+        //     borderColor: 'rgb(75, 192, 192)',
+        //     tension: 0
+        //   }]
+        // }
         const data3 = {
           labels: this.labels3.reverse(),
           datasets: [{
-            label: '# of code smells',
+            label: 'number of code smells',
             data: this.data3.reverse(),
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
@@ -168,22 +169,23 @@ export default {
             }
           }
         })
-    const myChart1 = new Chart(ctx1, { //eslint-disable-line
-          type: 'line',
-          data: data2,
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  min: 0,
-                  suggestedMax: 10,
-                  beginAtZero: true,
-                  stepSize: 1
-                }
-              }]
-            }
-          }
-        })
+        // eslint-disable-next-line indent
+        // const myChart1 = new Chart(ctx1, { //eslint-disable-line
+        //       type: 'line',
+        //       data: data2,
+        //       options: {
+        //         scales: {
+        //           yAxes: [{
+        //             ticks: {
+        //               min: 0,
+        //               suggestedMax: 10,
+        //               beginAtZero: true,
+        //               stepSize: 1
+        //             }
+        //           }]
+        //         }
+        //       }
+        //     })
     const myChart2 = new Chart(ctx2, { //eslint-disable-line
           type: 'line',
           data: data3,
@@ -257,7 +259,7 @@ canvas{
 }
 .flex{
   display: flex;
-  justify-content:space-between;
+  justify-content:space-around;
   width: auto;
   height: auto;
   margin: 40px 0px 20px;

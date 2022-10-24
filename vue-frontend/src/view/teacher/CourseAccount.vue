@@ -1,14 +1,14 @@
 <template>
-  <el-container class="iner1">
+  <el-container class="iner2">
     <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px">
       <el-main style="margin-top : 40px;">
       <el-row :gutter="30">
-        <el-col :span="8" class="el-col1"><div align="center" class="grid-content1">未加入帳號</div></el-col>
-        <el-col :offset="3" :span="8" class="el-col1"><div align="center" class="grid-content1">已加入帳號</div></el-col>
+        <el-col :span="8" class="el-col2"><div align="center" class="grid-content3">未加入帳號</div></el-col>
+        <el-col :offset="3" :span="8" class="el-col2"><div align="center" class="grid-content3">已加入帳號</div></el-col>
       </el-row>
       <el-row :gutter="30">
         <el-col align="center" :span="8">
-          <div class="grid-content2">
+          <div class="grid-content4">
             <el-table
               :header-cell-style="{background:'#eef1f6'}"
               :row-class-name="tableRowClassName"
@@ -30,7 +30,7 @@
           </div>
         </el-col>
         <el-col :offset="3" :span="8">
-          <div class="grid-content2">
+          <div class="grid-content4">
             <el-table
               :header-cell-style="{background:'#eef1f6'}"
               ref="multipleTable"
@@ -54,13 +54,13 @@
       <div style="margin: 20px;"></div>
       <el-row :gutter="30">
         <el-col :offset="3" :span="5">
-          <div class="grid-content2">
-            <el-button type="warning" @click="addStudent()" class="button2">新增</el-button>
+          <div class="grid-content4">
+            <el-button type="warning" @click="addStudent()" class="button3">新增</el-button>
           </div>
         </el-col>
         <el-col :offset="6" :span="5">
-          <div class="grid-content2">
-            <el-button type="warning"  @click="deleteStudent()" class="button2">刪除</el-button>
+          <div class="grid-content4">
+            <el-button type="warning"  @click="deleteStudent()" class="button3">刪除</el-button>
           </div>
         </el-col>
       </el-row>
@@ -165,29 +165,29 @@ export default {
 </script>
 
 <style>
-.el-col1 {
+.el-col2 {
   position: relative;
   left: 150px;
 }
 
-.grid-content1 {
+.grid-content3 {
   font-size: 30px;
   background-color: orange;
   position: relative;
 }
 
-.grid-content2 {
+.grid-content4 {
   font-size: 30px;
   position: relative;
   left: 150px;
 }
 
-.iner1 {
+.iner2 {
   background-color: #EDEDED;
   height: 655px
 }
 
-.button2{
+.button3{
   background-color: orange;
   color: black;
   font-size: 20px;
