@@ -7,7 +7,7 @@
         <h2 class="grid-content bg-purple-dark" align="center">課程選擇(學生)</h2>
       </el-header>
       <el-header>
-        <h4 align="center">登入者: {{this.$store.state.user.name}}</h4>
+        <h4 align="center">使用者 : {{this.$store.state.user.name}}</h4>
       </el-header>
       <el-header align="center" v-if="teacher">
         <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">

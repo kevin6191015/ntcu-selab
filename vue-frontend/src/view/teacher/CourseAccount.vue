@@ -1,71 +1,69 @@
 <template>
   <el-container class="iner2">
-    <div style="background-color: rgba(0,0,0,0.05); width:100%;margin:20px">
-      <el-main style="margin-top : 40px;">
-      <el-row :gutter="30">
-        <el-col :span="8" class="el-col2"><div align="center" class="grid-content3">未加入帳號</div></el-col>
-        <el-col :offset="3" :span="8" class="el-col2"><div align="center" class="grid-content3">已加入帳號</div></el-col>
-      </el-row>
-      <el-row :gutter="30">
-        <el-col align="center" :span="8">
-          <div class="grid-content4">
-            <el-table
-              :header-cell-style="{background:'#eef1f6'}"
-              :row-class-name="tableRowClassName"
-              ref="multipleTable"
-              :data="not_class_student"
-              tooltip-effect="dark"
-              style="min-height: 400px;"
-              @selection-change="not_in_Course">
-              <el-table-column
-                type="selection"
-                width="190%">
-              </el-table-column>
-              <el-table-column
-                label="學生名字"
-                >
-                <template slot-scope="scope">{{ scope.row.name }}</template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-col>
-        <el-col :offset="3" :span="8">
-          <div class="grid-content4">
-            <el-table
-              :header-cell-style="{background:'#eef1f6'}"
-              ref="multipleTable"
-              :data="class_student"
-              tooltip-effect="dark"
-              style="min-height: 400px;"
-              @selection-change="in_Course">
-              <el-table-column
-                type="selection"
-                width="190%">
-              </el-table-column>
-              <el-table-column
-                label="學生名字"
-                >
-                <template slot-scope="scope">{{ scope.row.name }}</template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-col>
-      </el-row>
-      <div style="margin: 20px;"></div>
-      <el-row :gutter="30">
-        <el-col :offset="3" :span="5">
-          <div class="grid-content4">
-            <el-button type="warning" @click="addStudent()" class="button3">新增</el-button>
-          </div>
-        </el-col>
-        <el-col :offset="6" :span="5">
-          <div class="grid-content4">
-            <el-button type="warning"  @click="deleteStudent()" class="button3">刪除</el-button>
-          </div>
-        </el-col>
-      </el-row>
-    </el-main>
-    </div>
+    <el-main style="margin-top : 40px;">
+    <el-row :gutter="30">
+      <el-col :span="8" class="el-col2"><div align="center" class="grid-content3">未加入帳號</div></el-col>
+      <el-col :offset="3" :span="8" class="el-col2"><div align="center" class="grid-content3">已加入帳號</div></el-col>
+    </el-row>
+    <el-row :gutter="30">
+      <el-col align="center" :span="8">
+        <div class="grid-content4">
+          <el-table
+            :header-cell-style="{background:'#eef1f6'}"
+            :row-class-name="tableRowClassName"
+            ref="multipleTable"
+            :data="not_class_student"
+            tooltip-effect="dark"
+            style="min-height: 400px;"
+            @selection-change="not_in_Course">
+            <el-table-column
+              type="selection"
+              width="190%">
+            </el-table-column>
+            <el-table-column
+              label="學生名字"
+              >
+              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-col>
+      <el-col :offset="3" :span="8">
+        <div class="grid-content4">
+          <el-table
+            :header-cell-style="{background:'#eef1f6'}"
+            ref="multipleTable"
+            :data="class_student"
+            tooltip-effect="dark"
+            style="min-height: 400px;"
+            @selection-change="in_Course">
+            <el-table-column
+              type="selection"
+              width="190%">
+            </el-table-column>
+            <el-table-column
+              label="學生名字"
+              >
+              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-col>
+    </el-row>
+    <div style="margin: 20px;"></div>
+    <el-row :gutter="30">
+      <el-col :offset="3" :span="5">
+        <div class="grid-content4">
+          <el-button type="warning" @click="addStudent()" class="button3">新增</el-button>
+        </div>
+      </el-col>
+      <el-col :offset="6" :span="5">
+        <div class="grid-content4">
+          <el-button type="warning"  @click="deleteStudent()" class="button3">刪除</el-button>
+        </div>
+      </el-col>
+    </el-row>
+  </el-main>
   </el-container>
 </template>
 

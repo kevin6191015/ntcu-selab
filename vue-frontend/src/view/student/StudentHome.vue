@@ -32,7 +32,7 @@
           </el-dropdown>
         </el-menu-item>
         <el-menu-item style="float:right" index="/ChooseClass">
-          <span class="head-center-title">當前課程: {{this.$store.state.class}}</span>
+          <span class="head-center-title">當前課程 : {{this.$store.state.class}}</span>
         </el-menu-item>
       </el-menu>
     </el-row>

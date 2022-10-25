@@ -527,7 +527,7 @@ export default {
   float:right;
 }
 #container{
-    background-color: rgb(228, 228, 228);
+    background-color: #EDEDED;
     height: 1700px;
   }
 </style>

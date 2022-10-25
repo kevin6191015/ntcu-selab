@@ -116,6 +116,7 @@ export default {
           tmp1[i].compile_result = res.data.data['Personal Report'][tmp1.length - i - 1].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][tmp1.length - i - 1].source_code
           tmp1[i].report_suggestion = res.data.data['Personal Report'][tmp1.length - i - 1].report_suggestion
+          tmp1[i].submit_times = res.data.data['Personal Report'][tmp1.length - i - 1].submit_times
           this.labels1.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
           this.labels2.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
           this.labels3.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
@@ -289,8 +290,8 @@ canvas{
 }
 
 .container2 {
-  background-color: rgb(228, 228, 228);
-  height: 635px;
+  background-color: #EDEDED;
+  height: 655px;
 }
 
 .sa1 {

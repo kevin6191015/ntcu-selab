@@ -278,7 +278,7 @@ canvas{
 }
 
 .container2 {
-  background-color: rgb(228, 228, 228);
+  background-color: #EDEDED;
   height: 655px;
 }
 
