@@ -23,6 +23,7 @@
     "element-ui": "^2.15.9",
     "vue": "^2.5.2",
     "vue-axios": "^3.4.1",
+    "vue-clipboard2": "^0.3.3",
     "vue-layer": "^1.2.5",
     "vue-router": "^3.0.1",
     "vuetify": "^2.6.9",

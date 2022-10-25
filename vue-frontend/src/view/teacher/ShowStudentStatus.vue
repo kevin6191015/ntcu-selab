@@ -2,16 +2,23 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col class="a1">{{this.git}}</el-col>
+        <el-input class="git" :placeholder="this.git" disabled>
+          <template slot="prepend">Git Repository : </template>
+          <el-button slot="append" size="small" icon="el-icon-document-copy"
+            v-clipboard:copy="this.git"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError">
+          </el-button>
+        </el-input>
       </el-row>
       <el-row>
-        <el-col class="a2">{{'學生姓名: ' + this.$store.state.seletedstudent.student_name}}</el-col>
-        <el-col class="a3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
+        <el-col class="a2">{{'學生姓名 : ' + this.$store.state.seletedstudent.student_name}}</el-col>
+        <el-col class="a3">{{'題目名稱 : ' + this.$store.state.assignment.question_name}}</el-col>
       </el-row>
       <el-row>
         <el-table
           :data="tabledata"
-          style="width: 100%; margin-top: 10px;">
+          style="width: 100%;">
           <el-table-column
             prop="color"
             width="60"
@@ -21,18 +28,24 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="submit_times"
+            align="center"
+            label="次數"
+            width="50">
+          </el-table-column>
+          <el-table-column
             prop="analysis_date"
             label="繳交時間"
             width="250">
           </el-table-column>
           <el-table-column
+            prop="compile_result"
+            label="編譯結果">
+          </el-table-column>
+          <el-table-column
             prop="unit_test_score"
             label="單元測試分數"
             width="180">
-          </el-table-column>
-          <el-table-column
-            prop="compile_result"
-            label="編譯結果">
           </el-table-column>
           <el-table-column
             prop="code_quality"
@@ -79,7 +92,7 @@ export default {
   data () {
     return {
       tabledata: [],
-      git: 'Git Repository: ',
+      git: '',
       project_name: this.$store.state.project_name + '_' + this.$store.state.seletedstudent.student_id,
       labels1: [],
       labels2: [],
@@ -101,6 +114,7 @@ export default {
           tmp1[i].compile_result = res.data.data['Personal Report'][tmp1.length - i - 1].compile_result
           tmp1[i].source_code = res.data.data['Personal Report'][tmp1.length - i - 1].source_code
           tmp1[i].report_suggestion = res.data.data['Personal Report'][tmp1.length - i - 1].report_suggestion
+          tmp1[i].submit_times = res.data.data['Personal Report'][tmp1.length - i - 1].submit_times
           this.labels1.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
           this.labels2.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
           this.labels3.push(res.data.data['Personal Report'][tmp1.length - i - 1].submit_times)
@@ -203,7 +217,7 @@ export default {
       username: 'root',
       project_name: this.project_name
     }).then(res => {
-      this.git = this.git + res.data.data
+      this.git = res.data.data
     })
   },
   methods: {
@@ -226,6 +240,18 @@ export default {
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000')
       this.$store.commit('SET_PROJECT_NAME', temp)
+    },
+    onCopy () {
+      this.$notify({
+        title: '複製成功!!',
+        message: ('i', {style: 'color: teal'}, '可以clone題目後開始作答!')
+      })
+    },
+    onError () {
+      this.$notify({
+        title: '複製失敗!!',
+        message: ('i', {style: 'color: teal'}, '好像沒有複製到喔!')
+      })
     }
   }
 }
@@ -258,32 +284,53 @@ canvas{
 
 .a1 {
   font-size: 23px;
+  height: 20%;
   font-family: "Microsoft YaHei";
+  background: #fff;
+  width: auto;
 }
 
 .a2 {
   font-size: 23px;
   font-family: "Microsoft YaHei";
-  width: 50%;
+  width: auto;
+  float:left;
+  font-size: 20px;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
+  margin-top: 10px;
 }
 
 .a3 {
-  font-size: 23px;
+  font-size: 20px;
+  margin-top: 10px;
   font-family: "Microsoft YaHei";
-  width: 50%;
+  width: auto;
+  float: right;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.item1 {
+  width: 6%;
   display: flex;
-  justify-content: right;
+  justify-content: center;
 }
 
-.el-table .bad-row {
-  background: rgba(211, 27, 27, 0.423);
+.git {
+  width: 61%;
+  font-size: 17px;
+  font-family: "Microsoft YaHei";
 }
 
-.el-table .normal-row {
-  background: rgba(214, 197, 15, 0.379);
-}
-
-.el-table .good-row {
-  background: #52da087d;
+.el-input-group__prepend {
+  color: black;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Microsoft YaHei";
 }
 </style>

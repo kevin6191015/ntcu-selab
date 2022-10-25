@@ -1,71 +1,44 @@
 <template>
   <el-container class="container2">
     <el-main>
-      <el-row>
-        <el-button class="button1" @click="change1">已公布</el-button>
-        <el-button class="button1" @click="change2">未公布</el-button>
-      </el-row>
-      <div style="margin:10px"></div>
+      <div class="assignment">作業一覽</div>
       <el-row>
         <el-table
-          v-if="debuted"
-          :data="debuted_list"
+          :data="content"
           stripe
           highlight-current-row
           @current-change="seleted_class"
           style="width: 100%">
           <el-table-column
             prop="assignment_name"
-            label="題目名稱"
+            label="作業名稱"
             width="250">
           </el-table-column>
           <el-table-column
             prop="release_time"
-            label="出題日期">
+            label="公布日期">
           </el-table-column>
           <el-table-column
             prop="deadline"
             label="截止日期">
           </el-table-column>
           <el-table-column
-          fixed="right"
-          label="更新作業"
-        >
-          <template slot-scope="scope">
-            <el-button @click="Update(scope.row)" type="text" size="small">修改該次作業</el-button>
-          </template>
-        </el-table-column>
-        </el-table>
-      </el-row>
-      <el-row>
-        <el-table
-          v-if="not_debuted"
-          :data="not_debuted_list"
-          stripe
-          highlight-current-row
-          @current-change="seleted_class"
-          style="width: 100%">
-          <el-table-column
-            prop="assignment_name"
-            label="題目名稱"
-            width="250">
+          label="更新作業">
+            <template slot-scope="scope">
+              <el-button @click="Update(scope.row)" type="text" size="small">修改該次作業</el-button>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="release_time"
-            label="出題日期">
+            prop="release_or_not"
+            label="公布與否"
+            :filters="[{ text: '已公布', value: '已公布' }, { text: '未公布', value: '未公布' }]"
+            :filter-method="filterTag"
+            filter-placement="bottom-end">
+            <template slot-scope="scope">
+              <el-tag
+                disable-transitions>{{scope.row.release_or_not}}</el-tag>
+            </template>
           </el-table-column>
-          <el-table-column
-            prop="deadline"
-            label="截止日期">
-          </el-table-column>
-          <el-table-column
-          fixed="right"
-          label="更新作業"
-        >
-          <template slot-scope="scope">
-            <el-button @click="Update(scope.row)" type="text" size="small">修改該次作業</el-button>
-          </template>
-        </el-table-column>
         </el-table>
       </el-row>
     </el-main>
@@ -78,10 +51,9 @@ export default {
   name: 'ShowAssignment',
   data () {
     return {
+      content: [],
       debuted_list: [],
-      not_debuted_list: [],
-      debuted: true,
-      not_debuted: false
+      not_debuted_list: []
     }
   },
   created () {
@@ -105,9 +77,11 @@ export default {
             }
             if (check) {
               this.debuted_list.push(tmp[i])
+              tmp[i].release_or_not = '已公布'
             }
           } else {
             this.debuted_list.push(tmp[i])
+            tmp[i].release_or_not = '已公布'
           }
         } else {
           if (this.not_debuted_list.length > 0) {
@@ -119,12 +93,15 @@ export default {
             }
             if (check) {
               this.not_debuted_list.push(tmp[i])
+              tmp[i].release_or_not = '未公布'
             }
           } else {
             this.not_debuted_list.push(tmp[i])
+            tmp[i].release_or_not = '未公布'
           }
         }
       }
+      this.content = tmp
     })
   },
   methods: {
@@ -142,24 +119,15 @@ export default {
         })
       }
     },
-    change1 () {
-      if (!this.debuted) {
-        this.debuted = true
-        this.not_debuted = false
-      }
-    },
-    change2 () {
-      if (!this.not_debuted) {
-        this.not_debuted = true
-        this.debuted = false
-      }
-    },
     Update (row) {
       this.$store.commit('SET_SELECTEDQUESTION', '')
       this.$store.commit('SET_PUBLISHEDQUESTION', row.assignment_name)
       this.$router.replace({
         path: '/UpdateAssignment'
       })
+    },
+    filterTag (value, row) {
+      return row.release_or_not === value
     }
   }
 }
@@ -178,5 +146,15 @@ export default {
   padding: 5px;
   color: aliceblue;
   margin: 5px;
+}
+.assignment {
+  width: auto;
+  float:left;
+  font-size: 20px;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-family: "Microsoft YaHei";
 }
 </style>

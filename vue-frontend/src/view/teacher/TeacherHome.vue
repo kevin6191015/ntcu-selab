@@ -24,7 +24,7 @@
           <el-menu-item index="/SystemAccount" v-if="isRoot">系統帳號管理</el-menu-item>
           <el-menu-item index="/CourseAccount">課程帳號管理</el-menu-item>
         </el-submenu>
-        <el-menu-item index="/ManageCourse" v-if="isRoot">課程帳號管理</el-menu-item>
+        <el-menu-item index="/ManageCourse" v-if="isRoot">課程管理</el-menu-item>
         <el-menu-item style="float:right">
           <el-dropdown>
             <el-button style="background-color:aquamarine" >
@@ -284,8 +284,9 @@ export default {
 
 .bread {
   background-color: rgb(228, 228, 228);
-  font-size:23px;
-  padding: 10px
+  font-size: 20px;
+  padding: 10px;
+  font-family: "Microsoft YaHei";
 }
 
 .but {

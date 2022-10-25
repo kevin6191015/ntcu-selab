@@ -2,20 +2,25 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col class="sa1">{{this.git}}</el-col>
+        <el-input class="git" :placeholder="this.git" disabled>
+          <template slot="prepend">Git Repository : </template>
+          <el-button slot="append" size="small" icon="el-icon-document-copy"
+            v-clipboard:copy="this.git"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError">
+          </el-button>
+        </el-input>
       </el-row>
       <el-row>
-        <el-col class="sa3">{{'題目名稱: ' + this.$store.state.assignment.question_name}}</el-col>
+        <el-col class="sa3">{{'題目名稱 : ' + this.$store.state.assignment.question_name}}</el-col>
         <el-col class="sa2">
-          <el-button @click="Seequestion()">
-            觀看題目
-          </el-button>
+          <el-button @click="Seequestion() " >觀看題目</el-button>
         </el-col>
       </el-row>
       <el-row>
         <el-table
           :data="tabledata"
-          style="width: 100%; margin-top: 10px;">
+          style="width: 100%;">
           <el-table-column
             prop="color"
             width="60"
@@ -25,18 +30,24 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="submit_times"
+            align="center"
+            label="繳交次序"
+            width="100">
+          </el-table-column>
+          <el-table-column
             prop="analysis_date"
             label="繳交時間"
             width="250">
           </el-table-column>
           <el-table-column
+            prop="compile_result"
+            label="編譯結果">
+          </el-table-column>
+          <el-table-column
             prop="unit_test_score"
             label="單元測試分數"
             width="180">
-          </el-table-column>
-          <el-table-column
-            prop="compile_result"
-            label="編譯結果">
           </el-table-column>
           <el-table-column
             prop="code_quality"
@@ -83,7 +94,7 @@ export default {
   data () {
     return {
       tabledata: [],
-      git: 'Git Repository: ',
+      git: '',
       project_name: this.$store.state.project_name + '_' + this.$store.state.user.id,
       labels1: [],
       labels2: [],
@@ -208,7 +219,7 @@ export default {
       username: 'root',
       project_name: this.project_name
     }).then(res => {
-      this.git = this.git + res.data.data
+      this.git = res.data.data
     })
   },
   methods: {
@@ -240,6 +251,18 @@ export default {
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
       this.$store.commit('REMOVE_QUESTION_TO_SHOW')
+    },
+    onCopy () {
+      this.$notify({
+        title: '複製成功!!',
+        message: ('i', {style: 'color: teal'}, '可以clone題目後開始作答!')
+      })
+    },
+    onError () {
+      this.$notify({
+        title: '複製失敗!!',
+        message: ('i', {style: 'color: teal'}, '好像沒有複製到喔!')
+      })
     }
   }
 }
@@ -276,18 +299,23 @@ canvas{
 }
 
 .sa2 {
-  font-family: "Microsoft YaHei";
-  width: 50%;
-  display: flex;
-  justify-content: right;
+  width: auto;
+  float:right;
+  font-size: 20px;
+  padding: 10px;
+  margin-top: 10px;
 }
 
 .sa3 {
-  font-size: 23px;
+  width: auto;
+  float:left;
+  font-size: 20px;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
   font-family: "Microsoft YaHei";
-  width: 50%;
-  display: flex;
-  justify-content: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .el-table .bad-row {
@@ -300,5 +328,25 @@ canvas{
 
 .el-table .good-row {
   background: #52da087d;
+}
+
+.item1 {
+  width: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.git {
+  width: 61%;
+  font-size: 17px;
+  font-family: "Microsoft YaHei";
+}
+
+.el-input-group__prepend {
+  color: black;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Microsoft YaHei";
 }
 </style>

@@ -1,79 +1,82 @@
 <template>
     <el-container>
-        <el-header v-if="teacher">
-            <h2 class="grid-content bg-purple-dark" align="center">課程選擇(老師)</h2>
-        </el-header>
-        <el-header v-if="student">
-            <h2 class="grid-content bg-purple-dark" align="center">課程選擇(學生)</h2>
-        </el-header>
-        <el-header align="center" v-if="teacher">
-            <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
-                <el-option
-                v-for="item in all_sem"
-                :key="item"
-                :label="item"
-                :value="item">
-                </el-option>
-            </el-select>
-            <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
-                <el-option
-                v-for="item in class_by_sem"
-                :key="item.class_name"
-                :label="item.class_name"
-                :value="item.class_name">
-                </el-option>
-            </el-select>
-        </el-header>
-        <el-header align="center" v-if="student">
-            <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
-                <el-option
-                v-for="item in all_sem"
-                :key="item"
-                :label="item"
-                :value="item">
-                </el-option>
-            </el-select>
-            <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
-                <el-option
-                v-for="item in student_class"
-                :key="item.class_name"
-                :label="item.class_name"
-                :value="item.class_name">
-                </el-option>
-            </el-select>
-        </el-header>
-        <el-main v-if="teacher">
-          <el-table
-            :header-cell-style="{background:'#eef1f6',color:'#606266'}"
-            :data="content"
-            stripe
-            border
-            highlight-current-row
-            @current-change="changePage"
-            style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
-            <el-table-column
-              align="center"
-              prop="semester"
-              label="班級名稱">
-            </el-table-column>
-          </el-table>
-        </el-main>
-        <el-main v-if="student">
-          <el-table
-            :header-cell-style="{background:'#eef1f6',color:'#606266'}"
-            :data="student_Allclass"
-            stripe
-            border
-            highlight-current-row
-            @current-change="changePage"
-            style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
-            <el-table-column
-              align="center"
-              prop="semester"
-              label="班級名稱">
-            </el-table-column>
-          </el-table>
-        </el-main>
+      <el-header v-if="teacher">
+        <h2 class="grid-content bg-purple-dark" align="center">課程選擇(老師)</h2>
+      </el-header>
+      <el-header v-if="student">
+        <h2 class="grid-content bg-purple-dark" align="center">課程選擇(學生)</h2>
+      </el-header>
+      <el-header>
+        <h4 align="center">登入者: {{this.$store.state.user.name}}</h4>
+      </el-header>
+      <el-header align="center" v-if="teacher">
+        <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
+          <el-option
+          v-for="item in all_sem"
+          :key="item"
+          :label="item"
+          :value="item">
+          </el-option>
+        </el-select>
+        <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
+          <el-option
+          v-for="item in class_by_sem"
+          :key="item.class_name"
+          :label="item.class_name"
+          :value="item.class_name">
+          </el-option>
+        </el-select>
+      </el-header>
+      <el-header align="center" v-if="student">
+        <el-select v-model="sem" placeholder="學期" @change="ChangeSem()">
+          <el-option
+          v-for="item in all_sem"
+          :key="item"
+          :label="item"
+          :value="item">
+          </el-option>
+        </el-select>
+        <el-select v-model="class_name" placeholder="課程名稱" @change="ChangeClass()">
+          <el-option
+          v-for="item in student_class"
+          :key="item.class_name"
+          :label="item.class_name"
+          :value="item.class_name">
+          </el-option>
+        </el-select>
+      </el-header>
+      <el-main v-if="teacher">
+        <el-table
+          :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+          :data="content"
+          stripe
+          border
+          highlight-current-row
+          @current-change="changePage"
+          style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
+          <el-table-column
+            align="center"
+            prop="semester"
+            label="班級名稱">
+          </el-table-column>
+        </el-table>
+      </el-main>
+      <el-main v-if="student">
+        <el-table
+          :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+          :data="student_Allclass"
+          stripe
+          border
+          highlight-current-row
+          @current-change="changePage"
+          style="width: 30%;margin-left: 35%; border: 3px solid rgba(0, 0, 0, 0.397);">
+          <el-table-column
+            align="center"
+            prop="semester"
+            label="班級名稱">
+          </el-table-column>
+        </el-table>
+      </el-main>
     </el-container>
 </template>
 

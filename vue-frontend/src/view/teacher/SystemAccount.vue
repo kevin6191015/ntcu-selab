@@ -30,7 +30,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="role"
-                  label="標籤"
+                  label="帳號類型"
                   :filters="[{ text: '學生', value: 'student' }, { text: '老師', value: 'teacher' }, { text: 'TA', value: 'TA' }]"
                   :filter-method="filterTag"
                   filter-placement="bottom-end">

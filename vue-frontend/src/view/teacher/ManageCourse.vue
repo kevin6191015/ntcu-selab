@@ -24,15 +24,15 @@
             </el-table-column>
             <el-table-column
               prop="teacher"
-              label="老師名字">
+              label="老師">
             </el-table-column>
             <el-table-column
               prop="TA"
-              label="助教名字">
+              label="助教">
             </el-table-column>
             <el-table-column
               prop="semester"
-              label="標籤"
+              label="學期分類"
               :filters=allsemester
               :filter-method="filterTag"
               filter-placement="bottom-end">
@@ -85,11 +85,11 @@
                 </el-table-column>
                 <el-table-column
                   prop="teacher"
-                  label="老師名字">
+                  label="老師">
                 </el-table-column>
                 <el-table-column
                   prop="TA"
-                  label="助教名字">
+                  label="助教">
                 </el-table-column>
               </el-table>
               <el-input v-model="class_name" placeholder="請輸入課程名稱" style="margin:10%;width: 80%;"></el-input>
@@ -127,11 +127,11 @@
                 </el-table-column>
                 <el-table-column
                   prop="teacher"
-                  label="老師名字">
+                  label="老師">
                 </el-table-column>
                 <el-table-column
                   prop="TA"
-                  label="助教名字">
+                  label="助教">
                 </el-table-column>
               </el-table>
               <el-button style="margin-left:42%; margin-top:100px; margin-bottom: 5%;" @click="deletecourse">刪除</el-button>

@@ -1,7 +1,7 @@
 <template>
   <el-container class="container2">
     <el-main>
-      <el-row class="title">{{this.$store.state.assignment.assignment_name}}</el-row>
+      <el-row class="title">作業名稱 : {{this.$store.state.assignment.assignment_name}}</el-row>
       <div style="margin:10px"></div>
       <el-row>
         <el-table
@@ -161,7 +161,13 @@ export default {
 }
 
 .title {
-  display: flex;
-  justify-content: center;
+  width: auto;
+  float:left;
+  font-size: 20px;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-family: "Microsoft YaHei";
 }
 </style>

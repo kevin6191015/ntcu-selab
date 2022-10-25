@@ -10,7 +10,9 @@ import './assets/formulate.css'
 import VueFormulate from '@braid/vue-formulate'
 import locale from 'element-ui/lib/locale/lang/zh-TW'
 import store from './store'
+import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueClipboard)
 Vue.use(VueFormulate)
 Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false

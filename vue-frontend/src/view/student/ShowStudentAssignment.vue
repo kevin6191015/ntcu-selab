@@ -1,7 +1,7 @@
 <template>
   <el-container class="container2">
     <el-main>
-      <div style="margin:10px"></div>
+      <div class="assignment">作業一覽</div>
       <el-row>
         <el-table
           :data="debuted_list"
@@ -11,12 +11,12 @@
           style="width: 100%">
           <el-table-column
             prop="assignment_name"
-            label="題目名稱"
+            label="作業名稱"
             width="250">
           </el-table-column>
           <el-table-column
             prop="release_time"
-            label="出題日期">
+            label="公布日期">
           </el-table-column>
           <el-table-column
             prop="deadline"
@@ -92,5 +92,15 @@ export default {
   padding: 5px;
   color: aliceblue;
   margin: 5px;
+}
+.assignment {
+  width: auto;
+  float:left;
+  font-size: 20px;
+  padding: 10px;
+  border: 4px solid rgba(0, 0, 0, 0.397);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-family: "Microsoft YaHei";
 }
 </style>

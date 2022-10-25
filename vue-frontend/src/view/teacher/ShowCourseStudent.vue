@@ -2,7 +2,7 @@
   <el-container class="container2">
     <el-main>
       <el-row>
-        <el-col class="title1">{{this.$store.state.assignment.question_name}}</el-col>
+        <el-col class="title1">題目名稱 : {{this.$store.state.assignment.question_name}}</el-col>
         <el-col class="title2">
           <el-button @click="Seequestion()">
             觀看題目
@@ -139,7 +139,8 @@ export default {
   font-size: 20px;
   padding: 10px;
   border: 4px solid rgba(0, 0, 0, 0.397);
-  border-radius: 12px
+  border-radius: 12px;
+  font-family: "Microsoft YaHei";
 }
 
 .title2 {

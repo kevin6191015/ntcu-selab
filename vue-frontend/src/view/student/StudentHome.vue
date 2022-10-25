@@ -135,7 +135,8 @@ export default {
 
 .bread {
   background-color: rgb(228, 228, 228);
-  font-size: 23px;
-  padding: 20px
+  font-size: 20px;
+  padding: 10px;
+  font-family: "Microsoft YaHei";
 }
 </style>
