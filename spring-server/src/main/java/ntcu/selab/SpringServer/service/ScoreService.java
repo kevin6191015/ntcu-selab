@@ -147,6 +147,25 @@ public class ScoreService {
         return new Result(200, "Get Personal Report Successfull!", root.toMap());
     }
 
+    @GetMapping("/getAnsweredEveryday")
+    public Result getAnsweredEveryday(@RequestParam String project_name) throws Exception{
+        List<JSONObject> scorelist = new ArrayList<>();
+        List<Score> scores = scoreDBManager.getAnsweredEveryday(project_name);
+        try{
+            for(Score score : scores){
+                JSONObject object = new JSONObject();
+                object.put("day", score.getDay());
+                object.put("answered_today", score.getAnsweredToday());
+                scorelist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Answered Everyday Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Answered Everyday", scorelist);
+        return new Result(200, "Get Answered Everyday Successfull!", root.toMap());
+    }
+
     @GetMapping("/getGitUrl")
     public Result getGitUrl(@RequestParam String username, @RequestParam String project_name) throws Exception{  
         String url = null;

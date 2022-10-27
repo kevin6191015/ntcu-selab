@@ -13,6 +13,8 @@ public class Score {
     private String bugs = null;
     private String vulnerabilities = null;
     private String code_smells = null;
+    private String day = null;
+    private int answered_today = 0;
 
     public Score(String student_id, String project_name, int submit_times, String analysis_date, int unit_test_score, int code_quality){
         this.student_id = student_id;
@@ -131,5 +133,21 @@ public class Score {
 
     public void setCode_smells(String code_smells){
         this.code_smells = code_smells;
+    }
+
+    public String getDay(){
+        return this.day;
+    }
+
+    public void setDay(String day){
+        this.day = day;
+    }
+
+    public int getAnsweredToday(){
+        return this.answered_today;
+    }
+
+    public void setAnsweredToday(int answered_today){
+        this.answered_today = answered_today;
     }
 }

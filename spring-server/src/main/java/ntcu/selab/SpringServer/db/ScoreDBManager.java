@@ -175,4 +175,27 @@ public class ScoreDBManager {
 		}
         return scores;
     }
+
+    public List<Score> getAnsweredEveryday(String project_name) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "score/getpeopleanswereveryday/" + project_name); 
+
+        List<Score> scores = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+            Score score = new Score();
+    		jsonobject = jsonarray.getJSONObject(i);
+            score.setDay(jsonobject.getString("day"));
+            score.setAnsweredToday(jsonobject.getInt("answered_today"));
+            scores.add(score);
+		}
+        return scores;
+    }
 }
