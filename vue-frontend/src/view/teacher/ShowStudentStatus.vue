@@ -30,8 +30,8 @@
           <el-table-column
             prop="submit_times"
             align="center"
-            label="次數"
-            width="50">
+            label="繳交次序"
+            width="100">
           </el-table-column>
           <el-table-column
             prop="analysis_date"

@@ -8,7 +8,7 @@
             :data="allcourse"
             style="width: 100%;margin-top: 20px;margin-left: 20px;"
             tooltip-effect="dark"
-            highlight-current-row="true"
+            highlight-current-row
             @current-change="handlechange"
             @selection-change="handlechange2">
             <el-table-column v-if="Delete"
@@ -44,12 +44,13 @@
           </el-table>
           </el-col>
           <el-col :span="7" style="margin-left: 10%">
-            <el-button @click="change2add">新增課程</el-button>
-            <el-button style="margin-left: 15%;" @click="change2update">修改課程</el-button>
-            <el-button style="margin-left: 15%;" @click="change2delete">刪除課程</el-button>
+            <el-button @click="change2add">切換為新增課程</el-button>
+            <el-button style="margin-left: 4px;" @click="change2update">切換為修改課程</el-button>
+            <el-button style="margin-left: 4px;" @click="change2delete">切換為刪除課程</el-button>
             <div v-if="Add" style="margin-top:5%;border: 3px solid black;background-color: rgb(200, 200, 200);">
               <span style="font-size: 30px;margin-left:35%;">新增課程</span>
-              <el-input v-model="class_name" placeholder="請輸入課程名稱" style="margin:10%;width: 80%;"></el-input>
+              <el-input v-model="class_name" placeholder="請輸入課程名稱" style="margin-left:10%;margin-top:10%;width: 80%;"></el-input>
+              <el-input v-model="semester" placeholder="請輸入課程開設學期(ex : 109-1)" style="margin-left:10%;margin-top:5%;margin-bottom: 10%;width: 80%;"></el-input>
               <el-select v-model="seleted_teacher" placeholder="請選擇課程老師" style="margin-left:10px">
                 <el-option
                   v-for="item in teacher"
@@ -186,18 +187,31 @@ export default {
         this.allsemester.push({'text': tmp[i], 'value': tmp[i]})
       }
     })
-    var Today = new Date()
-    this.semester = Today.getFullYear() - 1911
-    if (Today.getMonth() + 1 >= 8) {
-      this.semester += '-2'
-    } else {
-      this.semester += '-1'
-    }
   },
   methods: {
     addcourse () {
       if (this.class_name === '') {
         this.$alert('課程名稱不得為空!!', '注意!', {
+          confirmButtonText: '確定'
+        })
+      } else if (this.semester === '') {
+        this.$alert('請選擇課程開設學期!!', '注意!', {
+          confirmButtonText: '確定'
+        })
+      } else if (this.semester.length !== 5) {
+        this.$alert('學期模板為XXX-X!!', '注意!', {
+          confirmButtonText: '確定'
+        })
+      } else if (this.semester[3] !== '-') {
+        this.$alert('學期模板為XXX-X!!', '注意!', {
+          confirmButtonText: '確定'
+        })
+      } else if (this.semester[4] !== '1' && this.semester[4] !== '2') {
+        this.$alert('上學期請填XXX-1,下學期請填XXX-2!!', '注意!', {
+          confirmButtonText: '確定'
+        })
+      } else if (isNaN(this.semester.substring(0, 3))) {
+        this.$alert('請輸入數字!!', '注意!', {
           confirmButtonText: '確定'
         })
       } else if (this.seleted_teacher === '') {

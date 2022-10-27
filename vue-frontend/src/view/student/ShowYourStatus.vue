@@ -63,10 +63,10 @@
           </el-table-column>
           <el-table-column
             fixed="right"
-            label="建議程式碼"
+            label="程式碼建議"
           >
             <template slot-scope="scope">
-              <el-button @click="Seequestion2(scope.row)" type="text" size="small">建議程式碼</el-button>
+              <el-button @click="Seequestion2(scope.row)" type="text" size="small">程式碼建議</el-button>
             </template>
           </el-table-column>
         </el-table>
