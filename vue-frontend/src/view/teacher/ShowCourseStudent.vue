@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getLatestScore } from '@/api/score'
+import { getLatestScore } from '@/api/personalscore'
 import { getStudent } from '@/api/student'
 export default {
   name: 'ShowCourseStudent',

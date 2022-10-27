@@ -20,6 +20,7 @@
 import { userLogin } from '../api/user'
 export default {
   name: 'Login',
+  inject: ['reload'],
   data () {
     return {
       loginForm: {
@@ -58,6 +59,7 @@ export default {
                 message: 'your format of role is wrong!',
                 type: 'warning'
               })
+              this.reload()
             }
             this.$router.replace({
               path: '/chooseclass'

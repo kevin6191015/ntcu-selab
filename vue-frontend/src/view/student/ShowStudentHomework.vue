@@ -52,15 +52,13 @@
 
 <script>
 import { getAllAssignments } from '@/api/assignment'
-import { getAnswered, getCorrect } from '@/api/score'
+import { getClassScore } from '@/api/classscore'
 import { getStudent } from '@/api/student'
 export default {
   name: 'ShowStudentHomework',
   data () {
     return {
-      tableData: [],
-      answered: [],
-      correct: [],
+      classscore: [],
       student: [],
       assignment: [],
       loading: true
@@ -72,33 +70,27 @@ export default {
     }).then(res => {
       this.student = res.data.data.Students
     })
-    getAnswered({
+    getClassScore({
       semester: this.$store.state.class.substring(0, 5),
       class_id: this.$store.state.class_id
     }).then(res => {
-      this.answered = res.data.data.Answered
-      getCorrect({
-        semester: this.$store.state.class.substring(0, 5),
-        class_id: this.$store.state.class_id
+      this.classscore = res.data.data.ClassScore
+      getAllAssignments({
+        cid: this.$store.state.class_id
       }).then(res => {
-        this.correct = res.data.data.Correct
-        getAllAssignments({
-          cid: this.$store.state.class_id
-        }).then(res => {
-          let tmp = res.data.data.Assignments
-          for (let i = 0; i < tmp.length; i++) {
-            tmp[i].answered = this.answered[i].people_answered + '/' + this.student.length
-            tmp[i].correct = this.correct[i].people_correct
-            tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
-            tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
-            if (this.$store.state.assignment.assignment_name === tmp[i].assignment_name) {
-              this.assignment.push(tmp[i])
-            }
+        let tmp = res.data.data.Assignments
+        for (let i = 0; i < tmp.length; i++) {
+          tmp[i].answered = this.classscore[i].people_answered + '/' + this.student.length
+          tmp[i].correct = this.classscore[i].people_correct
+          tmp[i].release_time = tmp[i].release_time.substring(0, 4) + '/' + tmp[i].release_time.substring(4, 6) + '/' + tmp[i].release_time.substring(6, 8)
+          tmp[i].deadline = tmp[i].deadline.substring(0, 4) + '/' + tmp[i].deadline.substring(4, 6) + '/' + tmp[i].deadline.substring(6, 8)
+          if (this.$store.state.assignment.assignment_name === tmp[i].assignment_name) {
+            this.assignment.push(tmp[i])
           }
-        })
+        }
       })
-      this.loading = false
     })
+    this.loading = false
   },
   methods: {
     seleted_class (seleted) {

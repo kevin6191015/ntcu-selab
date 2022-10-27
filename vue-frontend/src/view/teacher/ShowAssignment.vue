@@ -5,7 +5,6 @@
       <el-row>
         <el-table
           :data="content"
-          stripe
           highlight-current-row
           @current-change="seleted_class"
           style="width: 100%">
