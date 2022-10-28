@@ -4,6 +4,9 @@
       <el-row>
         <el-col class="title1">題目名稱 : {{this.$store.state.assignment.question_name}}</el-col>
         <el-col class="title2">
+          <el-button @click="SeeCourseStatus()">
+            查看班級作答資訊
+          </el-button>
           <el-button @click="Seequestion()">
             觀看題目
           </el-button>
@@ -92,6 +95,12 @@ export default {
       })
       window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
       this.$store.commit('REMOVE_QUESTION_TO_SHOW')
+    },
+    SeeCourseStatus () {
+      let { href } = this.$router.resolve({
+        name: 'ShowCourseStatus'
+      })
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
     }
   }
 }
