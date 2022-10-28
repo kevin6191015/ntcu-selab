@@ -67,40 +67,39 @@ export default {
         var Today = new Date()
         let now = parseInt(Today.getFullYear()) * 12 * 365 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
         if (now >= time) {
-          if (this.debuted_list.length > 0) {
+          if (this.content.length > 0) {
             let check = true
-            for (let j = 0; j < this.debuted_list.length; j++) {
-              if (this.debuted_list[j].assignment_name === tmp[i].assignment_name) {
+            for (let j = 0; j < this.content.length; j++) {
+              if (this.content[j].assignment_name === tmp[i].assignment_name) {
                 check = false
               }
             }
             if (check) {
-              this.debuted_list.push(tmp[i])
               tmp[i].release_or_not = '已公布'
+              this.content.push(tmp[i])
             }
           } else {
-            this.debuted_list.push(tmp[i])
             tmp[i].release_or_not = '已公布'
+            this.content.push(tmp[i])
           }
         } else {
-          if (this.not_debuted_list.length > 0) {
+          if (this.content.length > 0) {
             let check = true
-            for (let j = 0; j < this.not_debuted_list.length; j++) {
-              if (this.not_debuted_list[j].assignment_name === tmp[i].assignment_name) {
+            for (let j = 0; j < this.content.length; j++) {
+              if (this.content[j].assignment_name === tmp[i].assignment_name) {
                 check = false
               }
             }
             if (check) {
-              this.not_debuted_list.push(tmp[i])
               tmp[i].release_or_not = '未公布'
+              this.content.push(tmp[i])
             }
           } else {
-            this.not_debuted_list.push(tmp[i])
             tmp[i].release_or_not = '未公布'
+            this.content.push(tmp[i])
           }
         }
       }
-      this.content = tmp
     })
   },
   methods: {
