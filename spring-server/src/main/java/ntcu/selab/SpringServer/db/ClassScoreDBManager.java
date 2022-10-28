@@ -98,4 +98,31 @@ public class ClassScoreDBManager {
 		}
         return answeredlist;
     }
+
+    public List<ClassScore> getEveryRange(String project_name) throws Exception{
+        String dbUrl = MysqlConfig.getObject().getDBUrl();
+        URL url = new URL(dbUrl + "score/getpeopleeveryrange/" + project_name); 
+
+        List<ClassScore> answeredlist = new ArrayList<>();
+
+        conn = database.getConnection(url, "GET");
+        response = new StringBuilder();  
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while((line = br.readLine())!= null)
+        response.append(line);
+        br.close();
+        jsonarray = new JSONArray( response.toString());
+        for (int i = 0; i < jsonarray.length(); i++) {
+    		jsonobject = jsonarray.getJSONObject(i);
+            ClassScore score = new ClassScore();
+            score.setSixtyDown(jsonobject.getInt("sixty_down"));
+            score.setSixtySeventy(jsonobject.getInt("sixty_seventy"));
+            score.setSeventyEighty(jsonobject.getInt("seventy_eighty"));
+            score.setEightyNinty(jsonobject.getInt("eighty_ninty"));
+            score.setNintyHunderd(jsonobject.getInt("ninty_hundred"));
+            score.setHundred(jsonobject.getInt("hundred"));
+            answeredlist.add(score);
+		}
+        return answeredlist;
+    }
 }

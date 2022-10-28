@@ -61,4 +61,27 @@ public class ClassScoreService {
         root.put("Answered Everyday", scorelist);
         return new Result(200, "Get Answered Everyday Successfull!", root.toMap());
     }
+
+    @GetMapping("/getEveryRange")
+    public Result getEveryRange(@RequestParam String project_name) throws Exception{
+        List<JSONObject> scorelist = new ArrayList<>();
+        List<ClassScore> scores = classScoreDBManager.getEveryRange(project_name);
+        try{
+            for(ClassScore score : scores){
+                JSONObject object = new JSONObject();
+                object.put("sixty_down", score.getSixtyDown());
+                object.put("sixty_seventy", score.getSixtySeventy());
+                object.put("seventy_eighty", score.getSeventyEighty());
+                object.put("eighty_ninty", score.getEightyNinty());
+                object.put("ninty_hundred", score.getNinetyHunderd());
+                object.put("hundred", score.getHundred());
+                scorelist.add(object);
+            }     
+        }catch(Exception e){
+            return new Result(400, "Get Every Range Failed! " + e.getMessage(), "");
+        }   
+        JSONObject root = new JSONObject();
+        root.put("Answered Everyday", scorelist);
+        return new Result(200, "Get Every Range Successfull!", root.toMap());
+    }
 }
