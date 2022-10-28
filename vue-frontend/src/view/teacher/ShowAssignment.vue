@@ -50,9 +50,7 @@ export default {
   name: 'ShowAssignment',
   data () {
     return {
-      content: [],
-      debuted_list: [],
-      not_debuted_list: []
+      content: []
     }
   },
   created () {

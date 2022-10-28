@@ -4,7 +4,7 @@
       <div class="assignment">作業一覽</div>
       <el-row>
         <el-table
-          :data="debuted_list"
+          :data="content"
           highlight-current-row
           @current-change="seleted_class"
           style="width: 100%">
@@ -33,7 +33,7 @@ export default {
   name: 'ShowStudentAssignment',
   data () {
     return {
-      debuted_list: []
+      content: []
     }
   },
   created () {
@@ -48,18 +48,18 @@ export default {
         var Today = new Date()
         let now = parseInt(Today.getFullYear()) * 12 * 365 + parseInt(Today.getMonth() + 1) * 31 + parseInt(Today.getDate())
         if (now >= time) {
-          if (this.debuted_list.length > 0) {
+          if (this.content.length > 0) {
             let check = true
-            for (let j = 0; j < this.debuted_list.length; j++) {
-              if (this.debuted_list[j].assignment_name === tmp[i].assignment_name) {
+            for (let j = 0; j < this.content.length; j++) {
+              if (this.content[j].assignment_name === tmp[i].assignment_name) {
                 check = false
               }
             }
             if (check) {
-              this.debuted_list.push(tmp[i])
+              this.content.push(tmp[i])
             }
           } else {
-            this.debuted_list.push(tmp[i])
+            this.content.push(tmp[i])
           }
         }
       }
