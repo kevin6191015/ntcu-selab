@@ -10,6 +10,7 @@ import ShowHomework from '@/view/teacher/ShowHomework'
 import AddQuestion from '@/view/teacher/AddQuestion'
 import SelectQuestion from '@/view/teacher/SelectQuestion'
 import ShowQuestion from '@/view/teacher/ShowQuestion'
+import ShowCourseStatus from '@/view/teacher/ShowCourseStatus'
 import SystemAccount from '@/view/teacher/SystemAccount'
 import ShowSourcecode from '@/view/teacher/ShowSourcecode'
 import ShowStudentSourcecode from '@/view/teacher/ShowStudentSourcecode'
@@ -263,6 +264,14 @@ export default new Router({
       path: '/ShowSuggestion',
       name: 'ShowSuggestion',
       component: ShowSuggestion,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/ShowCourseStatus',
+      name: 'ShowCourseStatus',
+      compoment: ShowCourseStatus,
       meta: {
         requireAuth: true
       }
