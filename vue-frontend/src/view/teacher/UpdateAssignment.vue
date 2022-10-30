@@ -35,18 +35,28 @@
       </el-table>
       </div>
       <div>
-        <div id="footer-right">
-          <h5>作業名稱:</h5>
-        </div>
-        <div id="footer-right-no-margin">
-          <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
-        </div>
-
+        <div id="footer-single">
+        <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="auto">
+          <el-form-item label="作業名稱：" prop="name">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="auto">
+          <el-form-item label="發布日期：" prop="publish_time" >
+            <el-date-picker type="date" placeholder="選擇日期" v-model="form.publish_time" style="width: 87%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
+          </el-form-item>
+         <el-form-item label="截止日期：" prop="deadline">
+          <el-date-picker type="date" placeholder="選擇日期" v-model="form.deadline" style="width: 87%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
-        <div id="footer-left-no-margin">
-          <el-button type="success" @click='revisequestion'>修改考古</el-button>
+        <div id="tooltip">
+          <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
+            <el-button type="text" disabled icon="el-icon-question" circle></el-button>
+          </el-tooltip>
         </div>
         <div id="footer-left-no-margin">
           <el-button type="success" @click='selectquestion'>題庫選題</el-button>
@@ -55,26 +65,11 @@
           <h5>新增題目:</h5>
         </div>
       </div>
-      <div id="footer-single">
-        <span class="demonstration">發布時間:</span>
-        <el-date-picker
-          v-model="publish_time"
-          type="date"
-          placeholder="發布時間"
-          format="yyyy 年 MM 月 dd 日">
-        </el-date-picker>
-        <span class="demonstration">截止時間:</span>
-        <el-date-picker
-          v-model="deadline"
-          type="date"
-          placeholder="截止時間"
-          format="yyyy 年 MM 月 dd 日">
-        </el-date-picker>
-      </div>
       <div id="footer">
         <el-button type="info" @click='update'>更新</el-button>
       </div>
     </div>
+    {{deadline}}
     <div v-show="notshow">
       {{newdata}}
       {{newdeadline}}
@@ -101,7 +96,24 @@ export default {
       id: '',
       assignment_name: '',
       notshow: false,
-      error_or_not: false
+      error_or_not: false,
+      samename: false,
+      form: {
+        name: '',
+        publish_time: '',
+        deadline: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '請輸入作業名稱', trigger: 'blur' }
+        ],
+        publish_time: [
+          { type: 'date', required: true, message: '請選擇發布日期', trigger: 'change' }
+        ],
+        deadline: [
+          { type: 'date', required: true, message: '請選擇截止日期', trigger: 'change' }
+        ]
+      }
     }
   },
   created () {
@@ -117,11 +129,11 @@ export default {
           this.assignment_name_list.push(tmp[i])
         }
       }
-      this.assignment_name = this.assignments[0].assignment_name
+      this.form.name = this.assignments[0].assignment_name
       let temp = new Date(this.assignments[0].release_time.slice(0, 4), this.assignments[0].release_time.slice(4, 6) - 1, this.assignments[0].release_time.slice(6, 8))
-      this.publish_time = temp
+      this.form.publish_time = temp
       let temp2 = new Date(this.assignments[0].deadline.slice(0, 4), this.assignments[0].deadline.slice(4, 6) - 1, this.assignments[0].deadline.slice(6, 8))
-      this.deadline = temp2
+      this.form.deadline = temp2
     })
     this.initialize()
   },
@@ -135,32 +147,32 @@ export default {
       return this.$store.state.selectedQuestion
     },
     newdeadline () {
-      let deadlinetemp = Date.parse(this.deadline)
-      let publishtemp = Date.parse(this.publish_time)
+      let deadlinetemp = Date.parse(this.form.deadline)
+      let publishtemp = Date.parse(this.form.publish_time)
       if (publishtemp > deadlinetemp) {
         this.$message({
           showClose: true,
           message: '截止時間不能早於發布時間',
           type: 'warning'
         })
-        this.set_deadline(this.publish_time)
+        this.set_deadline(this.form.publish_time)
       }
-      return this.deadline
+      return this.form.deadline
     }
   },
   methods: {
     update () {
-      if (this.publish_time === '' || this.deadline === '') {
+      if (this.form.publish_time === '' || this.form.deadline === '') {
         this.warning()
       } else {
-        let temp1 = Date.parse(this.publish_time)
+        let temp1 = Date.parse(this.form.publish_time)
         let date1 = new Date(temp1 + 28800000)
         let publishtime = date1.toISOString().slice(0, 4) + date1.toISOString().slice(5, 7) + date1.toISOString().slice(8, 10)
-        let temp2 = Date.parse(this.deadline)
+        let temp2 = Date.parse(this.form.deadline)
         let date2 = new Date(temp2 + 28800000)
         let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
         let cid = store.state.class_id
-        if (this.assignment_name === '') {
+        if (this.form.name === '') {
           this.$message({
             showClose: true,
             message: '請輸入此次作業名稱',
@@ -176,7 +188,7 @@ export default {
           return
         }
         for (let x in this.assignment_name_list) {
-          if (this.assignment_name_list[x].assignment_name === this.assignment_name) {
+          if (this.assignment_name_list[x].assignment_name === this.form.name) {
             this.$message({
               showClose: true,
               message: '作業名稱不可與已有的相同',
@@ -189,7 +201,7 @@ export default {
           console.log(this.assignments[x].assignment_name)
           if (this.assignments[x].assignment_name) {
             updateAssignment({
-              assignmentName: this.assignment_name,
+              assignmentName: this.form.name,
               name: this.assignments[x].question_name,
               id: this.assignments[x].question_id,
               cid: cid,
@@ -207,7 +219,7 @@ export default {
               })
           } else {
             addAssignment({
-              assignmentName: this.assignment_name,
+              assignmentName: this.form.name,
               name: this.assignments[x].question_name,
               id: this.assignments[x].question_id,
               cid: cid,
@@ -411,7 +423,6 @@ export default {
   }
   #footer-left-no-margin{
     margin-top: 10px;
-    margin-right: 2%;
     width:fit-content;
     padding: 1px;
     text-align:left;
@@ -424,7 +435,7 @@ export default {
     text-align:left;
     float: right;
     margin-top: 20px;
-    margin-right: 2%;
+    margin-right: 1%;
   }
   #footer-right{
     margin-top: 17px;
@@ -434,6 +445,12 @@ export default {
     padding: 1px;
     text-align:left;
     float: left;
+  }
+  #tooltip{
+    text-align:left;
+    float: right;
+    margin-top: 10px;
+    margin-right: 1%;
   }
   #footer-right-no-margin{
     margin-top: 10px;
@@ -447,7 +464,7 @@ export default {
     margin-top: 20px;
     margin-left: 5%;
     margin-right: 8%;
-    width:90%;
+    width:50%;
     padding: 1px;
     text-align:left;
     float: left
@@ -461,6 +478,6 @@ export default {
   }
   #container{
     background-color: rgb(228, 228, 228);
-    height: 615px;
+    height: 800px;
   }
   </style>

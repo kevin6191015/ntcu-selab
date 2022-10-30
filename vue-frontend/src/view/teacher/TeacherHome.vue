@@ -101,7 +101,7 @@ export default {
         let routeTable = this.$router.options.routes[2].children
         routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
-        temp.meta.title = '修改考古'
+        temp.meta.title = '修改現有題目'
         this.breadList.push(temp)
         for (let i = 0; i < routeTable.length; i++) {
           if (routeTable[i].name === 'SelectQuestion') {
@@ -126,7 +126,7 @@ export default {
         let routeTable = this.$router.options.routes[2].children
         routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
-        temp.meta.title = '修改考古'
+        temp.meta.title = '修改現有題目'
         this.breadList.push(temp)
         for (let i = 0; i < routeTable.length; i++) {
           if (routeTable[i].name === 'SelectQuestion') {

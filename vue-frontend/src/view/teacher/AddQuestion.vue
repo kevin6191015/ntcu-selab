@@ -3,7 +3,7 @@
     <div id="sitebody">
       <div id="header">
         <div v-if="this.Revise_Quesition_Mode">
-          <h3>修改考古</h3>
+          <h3>修改現有題目</h3>
         </div>
         <div v-else-if="Add_To_Assignment_Mode">
           <h3>自行出題</h3>
@@ -103,16 +103,18 @@
       </el-switch>
       <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
     </div>
-    <div v-show="notshow">
+    <div v-show="nowshow">
       code
       {{newsourcecode}}
+      {{newname}}
+      {{question_name}}
     </div>
   </div>
   </div>
 </template>
 
 <script scoped>
-import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID } from '@/api/question'
+import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID, ShowQuestion2 } from '@/api/question'
 export default {
   name: 'AddQuestion',
   data () {
@@ -138,6 +140,7 @@ export default {
       Revise_Quesition_Mode: false,
       Add_To_Assignment_Mode: false,
       publicbank: false,
+      samename: false,
       srcList: [],
       url: ''
     }
@@ -225,6 +228,10 @@ export default {
     newsourcecode () {
       this.changecode()
       return this.$store.state.sourcecode
+    },
+    newname () {
+      this.checkname()
+      return this.question_name
     }
   },
   methods: {
@@ -261,6 +268,10 @@ export default {
         this.$message.error('請輸入題目名稱')
         return
       }
+      if (this.samename) {
+        this.$message.error('不能與題目庫中已有的題目名稱相同')
+        return
+      }
       AddQuestionbank2({
         input: input,
         output: output,
@@ -291,7 +302,7 @@ export default {
             this.$message({
               showClose: true,
               message: '成功新增題目',
-              type: 'warning'
+              type: 'success'
             })
           } else {
             this.$message({
@@ -447,6 +458,23 @@ export default {
     },
     changecode () {
       this.sourcecode = this.$store.state.sourcecode
+    },
+    checkname () {
+      this.samename = false
+      ShowQuestion2().then(res => {
+        var temp = JSON.parse(JSON.stringify(res.data.data.Questions))
+        for (let i = 0; i < temp.length; i++) {
+          if (this.question_name === temp[i].question_name) {
+            this.$message({
+              showClose: true,
+              message: '不能與題目庫中已有的題目名稱相同',
+              type: 'error'
+            })
+            this.samename = true
+            return true
+          }
+        }
+      })
     },
     padLeft (str, lenght) {
       if (str.length >= lenght) {

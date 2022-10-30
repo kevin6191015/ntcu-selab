@@ -10,14 +10,20 @@
           style="width: 100%"
           @selection-change="handleSelectionChange1"
         >
-        <div v-if="this.Select_Quesition_Mode">
           <el-table-column
               type="selection"
               width="55">
           </el-table-column>
-        </div>
           <el-table-column type="index" label="序號" ></el-table-column>
           <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="修改現有題目"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+            </template>
+          </el-table-column>
           <el-table-column
             fixed="right"
             label="題目預覽"
@@ -26,16 +32,6 @@
               <el-button @click="Seequestion1(scope.row)" type="text" size="small">查看該題</el-button>
             </template>
           </el-table-column>
-          <div v-if="this.Revise_Quesition_Mode">
-            <el-table-column
-            fixed="right"
-            label="修改考古"
-          >
-            <template slot-scope="scope">
-              <el-button @click="revise1(scope.row)" type="text" size="small">選擇該題</el-button>
-            </template>
-          </el-table-column>
-          </div>
           <el-table-column
             fixed="right"
             label="題目程式碼"
@@ -55,15 +51,21 @@
           style="width: 100%"
           @selection-change="handleSelectionChange3"
         >
-        <div v-if="this.Select_Quesition_Mode">
           <el-table-column
               type="selection"
               width="55">
           </el-table-column>
-        </div>
           <el-table-column type="index" label="序號" ></el-table-column>
           <el-table-column prop="question_name" label="題目名稱"></el-table-column>
           <el-table-column prop="teacher" label="出題老師"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="修改現有題目"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+            </template>
+          </el-table-column>
           <el-table-column
             fixed="right"
             label="題目預覽"
@@ -72,16 +74,6 @@
               <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
             </template>
           </el-table-column>
-          <div v-if="this.Revise_Quesition_Mode">
-            <el-table-column
-            fixed="right"
-            label="修改考古"
-          >
-            <template slot-scope="scope">
-              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
-            </template>
-          </el-table-column>
-          </div>
           <el-table-column
             fixed="right"
             label="題目程式碼"
@@ -101,14 +93,20 @@
           style="width: 100%"
           @selection-change="handleSelectionChange2"
           >
-          <div v-if="this.Select_Quesition_Mode">
           <el-table-column
               type="selection"
               width="55">
           </el-table-column>
-        </div>
           <el-table-column type="index" label="序號" ></el-table-column>
           <el-table-column prop="question_name" label="題目名稱"></el-table-column>
+          <el-table-column
+            fixed="right"
+            label="修改現有題目"
+          >
+            <template slot-scope="scope">
+              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+            </template>
+          </el-table-column>
           <el-table-column
             fixed="right"
             label="題目預覽"
@@ -117,16 +115,6 @@
               <el-button @click="Seequestion2(scope.row)" type="text" size="small">查看該題</el-button>
             </template>
           </el-table-column>
-          <div v-if="this.Revise_Quesition_Mode">
-            <el-table-column
-            fixed="right"
-            label="修改考古"
-          >
-            <template slot-scope="scope">
-              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
-            </template>
-          </el-table-column>
-          </div>
           <el-table-column
             fixed="right"
             label="題目程式碼"
@@ -138,7 +126,7 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <div id="footer-left" v-if="this.Select_Quesition_Mode">
+    <div id="footer-left">
       <el-button  @click='select'>確認</el-button>
     </div>
   </body>
@@ -159,15 +147,11 @@ export default {
       activeName: 'first',
       temp: [],
       check1: true,
-      check2: true,
-      Revise_Quesition_Mode: false,
-      Select_Quesition_Mode: true
+      check2: true
     }
   },
   created () {
     if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '7') {
-      this.Revise_Quesition_Mode = true
-      this.Select_Quesition_Mode = false
     }
     ShowQuestion1().then(res => {
       this.content1 = JSON.parse(JSON.stringify(res.data.data.Questions))
@@ -283,12 +267,22 @@ export default {
       this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     revise1 (row) {
+      if (this.$store.state.add_question_mode === '1') {
+        this.$store.commit('SET_ADD_QUESTION_MODE', '3')
+      } else if (this.$store.state.add_question_mode === '5') {
+        this.$store.commit('SET_ADD_QUESTION_MODE', '7')
+      }
       this.$store.commit('SET_QUESTION_TO_SHOW', row.question_id)
       this.$router.replace({
         path: '/AddQuestion'
       })
     },
     revise2 (row) {
+      if (this.$store.state.add_question_mode === '1') {
+        this.$store.commit('SET_ADD_QUESTION_MODE', '3')
+      } else if (this.$store.state.add_question_mode === '5') {
+        this.$store.commit('SET_ADD_QUESTION_MODE', '7')
+      }
       this.$store.commit('SET_QUESTION_TO_SHOW', row.id)
       this.$router.replace({
         path: '/AddQuestion'

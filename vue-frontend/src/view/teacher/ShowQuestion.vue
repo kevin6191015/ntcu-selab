@@ -88,8 +88,8 @@ export default {
   width:fit-content;
   padding: 5px;
   text-align:left;
-  background-color: rgb(127, 185, 121);
   border: 3px solid rgba(0, 0, 0, 0.397);
+  background-color: rgba(228, 228, 228, 0.651);
   border-radius: 12px;
 }
 #content{

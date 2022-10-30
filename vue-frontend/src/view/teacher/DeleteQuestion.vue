@@ -58,6 +58,8 @@ export default {
     }
   },
   created () {
+    this.$store.commit('SET_ADD_QUESTION_MODE', '')
+    this.$store.commit('REMOVE_SELECTEDQUESTION')
     ShowQuestion2byTeacher(this.$store.state.user.name).then(res => {
       this.content2 = JSON.parse(JSON.stringify(res.data.data.Questions))
     }).catch(error => {

@@ -19,37 +19,32 @@
       </el-table>
       </div>
       <div>
-        <div id="footer-right">
-          <h5>作業名稱:</h5>
-        </div>
-        <div id="footer-right-no-margin">
-          <el-input v-model="assignment_name" clearable placeholder="請輸入該次作業名稱"></el-input>
-        </div>
+        <div id="footer-single">
+        <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="auto">
+          <el-form-item label="作業名稱：" prop="name">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="auto">
+          <el-form-item label="發布日期：" prop="publish_time" >
+            <el-date-picker type="date" placeholder="選擇日期" v-model="form.publish_time" style="width: 87%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
+          </el-form-item>
+         <el-form-item label="截止日期：" prop="deadline">
+          <el-date-picker type="date" placeholder="選擇日期" v-model="form.deadline" style="width: 87%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
-        <div id="footer-left-no-margin">
-          <el-button type="success" @click='revisequestion'>修改考古</el-button>
+        <div id="tooltip">
+          <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
+            <el-button type="text" disabled icon="el-icon-question" circle></el-button>
+        </el-tooltip>
         </div>
         <div id="footer-left-no-margin">
           <el-button type="success" @click='selectquestion'>題庫選題</el-button>
         </div>
-      </div>
-      <div id="footer-single">
-        <span class="demonstration">發布時間:</span>
-        <el-date-picker
-          v-model="publish_time"
-          type="date"
-          placeholder="發布時間"
-          format="yyyy 年 MM 月 dd 日">
-        </el-date-picker>
-        <span class="demonstration">截止時間:</span>
-        <el-date-picker
-          v-model="deadline"
-          type="date"
-          placeholder="截止時間"
-          format="yyyy 年 MM 月 dd 日">
-        </el-date-picker>
       </div>
       <div id="footer">
         <el-button type="info" @click='publish'>發布</el-button>
@@ -59,12 +54,13 @@
       {{newdata}}
       {{newrealse_time}}
       {{newdeadline}}
+      {{newname}}
     </div>
   </div>
 </template>
 <script>
 import {ShowQuestion1, ShowQuestion2} from '@/api/question'
-import {addAssignment} from '@/api/assignment'
+import {getAllAssignments, addAssignment} from '@/api/assignment'
 // add_question_mode: 1 for select question, 2 for add question, 3 for revise old question, 4 for add question for assignment
 export default {
   name: 'PublishAssginment',
@@ -79,7 +75,24 @@ export default {
       id: '',
       assignment_name: '',
       notshow: false,
-      error_or_not: false
+      error_or_not: false,
+      samename: false,
+      form: {
+        name: '',
+        publish_time: '',
+        deadline: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '請輸入作業名稱', trigger: 'blur' }
+        ],
+        publish_time: [
+          { type: 'date', required: true, message: '請選擇發布日期', trigger: 'change' }
+        ],
+        deadline: [
+          { type: 'date', required: true, message: '請選擇截止日期', trigger: 'change' }
+        ]
+      }
     }
   },
   created () {
@@ -97,7 +110,7 @@ export default {
     newrealse_time () {
       let d = new Date()
       let now = Date.parse(d) / 86400000
-      let temp1 = Date.parse(this.publish_time) / 86400000
+      let temp1 = Date.parse(this.form.publish_time) / 86400000
       if ((now - temp1) > 1) {
         this.$message({
           showClose: true,
@@ -106,46 +119,57 @@ export default {
         })
         this.set_publish_time(d)
       }
-      return this.publish_time
+      return this.form.publish_time
     },
     newdeadline () {
       let d = new Date()
       let now = Date.parse(d) / 86400000
-      let temp2 = Date.parse(this.deadline) / 86400000
-      let deadlinetemp = Date.parse(this.deadline)
-      let publishtemp = Date.parse(this.publish_time)
+      let temp2 = Date.parse(this.form.deadline) / 86400000
+      let deadlinetemp = Date.parse(this.form.deadline)
+      let publishtemp = Date.parse(this.form.publish_time)
       if (publishtemp > deadlinetemp || (now - temp2) > 1) {
         this.$message({
           showClose: true,
           message: '截止時間不能早於今天或發布時間',
           type: 'warning'
         })
-        if (this.publish_time) {
-          this.set_deadline(this.publish_time)
+        if (this.form.publish_time) {
+          this.set_deadline(this.form.publish_time)
         } else {
           this.set_deadline(d)
         }
       }
-      return this.deadline
+      return this.form.deadline
+    },
+    newname () {
+      this.checkname()
+      return this.form.name
     }
   },
   methods: {
     publish () {
-      if (this.publish_time === '' || this.deadline === '') {
+      if (this.form.publish_time === '' || this.form.deadline === '') {
         this.warning()
       } else {
-        let temp1 = Date.parse(this.publish_time)
+        let temp1 = Date.parse(this.form.publish_time)
         let date1 = new Date(temp1 + 28800000)
         let publishtime = date1.toISOString().slice(0, 4) + date1.toISOString().slice(5, 7) + date1.toISOString().slice(8, 10)
-        let temp2 = Date.parse(this.deadline)
+        let temp2 = Date.parse(this.form.deadline)
         let date2 = new Date(temp2 + 28800000)
         let deadline = date2.toISOString().slice(0, 4) + date2.toISOString().slice(5, 7) + date2.toISOString().slice(8, 10)
         let cid = this.$store.state.class_id
-        if (this.assignment_name === '') {
+        if (this.form.name === '') {
           this.$message({
             showClose: true,
             message: '請輸入此次作業名稱',
             type: 'warning'
+          })
+          return
+        } else if (this.samename) {
+          this.$message({
+            showClose: true,
+            message: '不能與已有的作業名稱相同',
+            type: 'error'
           })
           return
         } else if (this.questions.length === 0) {
@@ -158,7 +182,7 @@ export default {
         }
         for (let x in this.questions) {
           addAssignment({
-            assignmentName: this.assignment_name,
+            assignmentName: this.form.name,
             name: this.questions[x].question_name,
             id: this.questions[x].id,
             cid: cid,
@@ -253,10 +277,29 @@ export default {
       })
     },
     set_publish_time (d) {
-      this.publish_time = d
+      this.form.publish_time = d
     },
     set_deadline (d) {
-      this.deadline = d
+      this.form.deadline = d
+    },
+    checkname () {
+      this.samename = false
+      getAllAssignments({
+        cid: this.$store.state.class_id
+      }).then(res => {
+        let tmp = res.data.data.Assignments
+        for (let i = 0; i < tmp.length; i++) {
+          if (tmp[i].assignment_name === this.form.name) {
+            this.samename = true
+            this.$message({
+              showClose: true,
+              message: '不能與已有的作業名稱相同',
+              type: 'error'
+            })
+            return
+          }
+        }
+      })
     }
   }
 }
@@ -322,7 +365,6 @@ export default {
   }
   #footer-left-no-margin{
     margin-top: 10px;
-    margin-right: 2%;
     width:fit-content;
     padding: 1px;
     text-align:left;
@@ -348,11 +390,17 @@ export default {
     text-align:left;
     float: left;
   }
+  #tooltip{
+    text-align:left;
+    float: right;
+    margin-top: 10px;
+    margin-right: 1%;
+  }
   #footer-single{
     margin-top: 20px;
     margin-left: 5%;
     margin-right: 8%;
-    width:90%;
+    width:50%;
     padding: 1px;
     text-align:left;
     float: left

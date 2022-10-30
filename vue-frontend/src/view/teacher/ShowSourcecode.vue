@@ -3,7 +3,7 @@
     <div id="header">
       <div id="space-top"></div>
       <div id="qname-green">
-        <h3>題目名稱:{{questionname}}</h3>
+        <h3>題目名稱 :{{questionname}}</h3>
       </div>
     </div>
     <div id="content">
@@ -62,7 +62,7 @@ export default {
     width:fit-content;
     padding: 5px;
     text-align:left;
-    background-color: rgb(127, 185, 121);
+    background-color: rgba(228, 228, 228, 0.573);
     border: 3px solid rgba(0, 0, 0, 0.397);
     border-radius: 12px;
   }
