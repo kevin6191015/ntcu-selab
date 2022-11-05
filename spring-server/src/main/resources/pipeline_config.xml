@@ -136,12 +136,14 @@
             org.jenkinsci.plugins.pipeline.modeldefinition.Utils.markStageSkippedForConditional(&apos;Test&apos;)
             }else{
             try {
+            timeout(1){
             def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;
             sh &quot;${mvnHome}/bin/mvn clean test&quot;
             env.test_result=&quot;1&quot;
             } catch (err) {
             echo &quot;test fail&quot;
             env.test_result=&quot;0&quot;;
+            }
             }
             }
             }
