@@ -52,18 +52,6 @@ public class QuestionDBManager {
     		jsonobject = jsonarray.getJSONObject(i);
             s.setId(jsonobject.getString("id"));
             s.setName(jsonobject.getString("question_name"));
-            s.setDescription(jsonobject.getString(("question_description")));
-            s.setImage1(jsonobject.getString("image1"));
-            s.setImage2(jsonobject.getString("image2"));
-            String[] input = new String[11];
-            String[] output = new String[11];
-            for(int j=1 ; j<11 ; j++){
-                input[j] = jsonobject.getString("input" + String.valueOf(j));
-                output[j] = jsonobject.getString("output" + String.valueOf(j));
-            }
-            s.setInput(input);
-            s.setOutput(output);
-            s.setInputornot(jsonobject.getInt("input_or_not"));
             questions.add(s);
 		}          
         return questions;
@@ -87,20 +75,6 @@ public class QuestionDBManager {
     		jsonobject = jsonarray.getJSONObject(i);
             s.setId(jsonobject.getString("id"));
             s.setName(jsonobject.getString("question_name"));
-            s.setDescription(jsonobject.getString(("question_description")));
-            s.setTeacher(jsonobject.getString("teacher"));
-            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
-            s.setImage1(jsonobject.getString("image1"));
-            s.setImage2(jsonobject.getString("image2"));
-            String[] input = new String[11];
-            String[] output = new String[11];
-            for(int j=1 ; j<11 ; j++){
-                input[j] = jsonobject.getString("input" + String.valueOf(j));
-                output[j] = jsonobject.getString("output" + String.valueOf(j));
-            }
-            s.setInput(input);
-            s.setOutput(output);
-            s.setInputornot(jsonobject.getInt("input_or_not"));
             questions.add(s);
 		}          
         return questions;
@@ -124,20 +98,7 @@ public class QuestionDBManager {
     		jsonobject = jsonarray.getJSONObject(i);
             s.setId(jsonobject.getString("id"));
             s.setName(jsonobject.getString("question_name"));
-            s.setDescription(jsonobject.getString(("question_description")));
             s.setTeacher(jsonobject.getString("teacher"));
-            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
-            s.setImage1(jsonobject.getString("image1"));
-            s.setImage2(jsonobject.getString("image2"));
-            String[] input = new String[11];
-            String[] output = new String[11];
-            for(int j=1 ; j<11 ; j++){
-                input[j] = jsonobject.getString("input" + String.valueOf(j));
-                output[j] = jsonobject.getString("output" + String.valueOf(j));
-            }
-            s.setInput(input);
-            s.setOutput(output);
-            s.setInputornot(jsonobject.getInt("input_or_not"));
             questions.add(s);
 		}          
         return questions;
@@ -161,20 +122,6 @@ public class QuestionDBManager {
     		jsonobject = jsonarray.getJSONObject(i);
             s.setId(jsonobject.getString("id"));
             s.setName(jsonobject.getString("question_name"));
-            s.setDescription(jsonobject.getString(("question_description")));
-            s.setTeacher(jsonobject.getString("teacher"));
-            s.setPublicOrNot(jsonobject.getInt("public_or_not"));
-            s.setImage1(jsonobject.getString("image1"));
-            s.setImage2(jsonobject.getString("image2"));
-            String[] input = new String[11];
-            String[] output = new String[11];
-            for(int j=1 ; j<11 ; j++){
-                input[j] = jsonobject.getString("input" + String.valueOf(j));
-                output[j] = jsonobject.getString("output" + String.valueOf(j));
-            }
-            s.setInput(input);
-            s.setOutput(output);
-            s.setInputornot(jsonobject.getInt("input_or_not"));
             questions.add(s);
 		}          
         return questions;
