@@ -20,3 +20,13 @@ export function getAnsweredEveryday (data) {
     }
   })
 }
+
+export function getEveryRange (data) {
+  return request({
+    url: '/ClassScore/getEveryRange?project_name=' + data.project_name,
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + store.state.token
+    }
+  })
+}

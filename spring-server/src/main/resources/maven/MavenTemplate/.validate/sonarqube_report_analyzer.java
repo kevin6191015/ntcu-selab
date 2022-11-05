@@ -207,9 +207,9 @@ public class sonarqube_report_analyzer
           for (int i = 0; i < arr.length(); i++)
           {
                if( i != 0 )
-                    sonar_issues += "|" + arr.getJSONObject(i).getString("message");
+                    sonar_issues += "|" +"Line: "+ arr.getJSONObject(i).getString("line")+"  " + arr.getJSONObject(i).getString("message");
                else
-                    sonar_issues +=  arr.getJSONObject(i).getString("message");
+                    sonar_issues +=  "Line: "+ arr.getJSONObject(i).getString("line")+"  "arr.getJSONObject(i).getString("message");
           }
           sonar_value[14]=sonar_issues;
      }
