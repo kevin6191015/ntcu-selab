@@ -271,7 +271,7 @@ export default new Router({
     {
       path: '/ShowCourseStatus',
       name: 'ShowCourseStatus',
-      compoment: ShowCourseStatus,
+      component: ShowCourseStatus,
       meta: {
         requireAuth: true
       }

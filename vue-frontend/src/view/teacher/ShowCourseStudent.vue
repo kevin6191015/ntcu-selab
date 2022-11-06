@@ -55,7 +55,6 @@
 <script>
 import { getLatestScore } from '@/api/personalscore'
 import { getStudent } from '@/api/student'
-import { getEveryRange, getAnsweredEveryday } from '@/api/classscore'
 export default {
   name: 'ShowCourseStudent',
   data () {
@@ -66,96 +65,6 @@ export default {
     }
   },
   created () {
-    getAnsweredEveryday(
-      {
-        project_name: this.$store.state.project_name
-      }
-    ).then(res => {
-      var day = []
-      var AnsweredToday = []
-      for (let i = 0; i < res.data.data['Answered Everyday'].length; i++) {
-        AnsweredToday.push(res.data.data['Answered Everyday'][i].answered_today)
-        day.push(res.data.data['Answered Everyday'][i].day)
-      }
-      const ctx = document.getElementById('myChart')
-      const data = {
-        labels: day,
-        datasets: [{
-          label: 'people submissions',
-          data: AnsweredToday,
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0
-        }]
-      }
-      const myChart = new Chart(ctx, { //eslint-disable-line
-        type: 'line',
-        data: data,
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                min: 0,
-                suggestedMax: 5,
-                beginAtZero: true,
-                stepSize: 1
-              }
-            }]
-          }
-        }
-      })
-    })
-    getEveryRange(
-      {
-        project_name: this.$store.state.project_name
-      }
-    ).then(res => {
-      var TotalPeople
-      var AnsweredPeople = res.data.data['Answered Everyday'][0].sixty_down + res.data.data['Answered Everyday'][0].sixty_seventy + res.data.data['Answered Everyday'][0].seventy_eighty + res.data.data['Answered Everyday'][0].eighty_ninty + res.data.data['Answered Everyday'][0].ninty_hundred + res.data.data['Answered Everyday'][0].hundred
-      getStudent({
-        class_id: this.$store.state.class_id
-      }).then(res => {
-        TotalPeople = res.data.data['Students'].length
-      })
-      var people = []
-      people.push(TotalPeople - AnsweredPeople)
-      people.push(res.data.data['Answered Everyday'][0].sixty_down === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].sixty_down)
-      people.push(res.data.data['Answered Everyday'][0].sixty_seventy === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].sixty_seventy)
-      people.push(res.data.data['Answered Everyday'][0].seventy_eighty === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].seventy_eighty)
-      people.push(res.data.data['Answered Everyday'][0].eighty_ninty === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].eighty_ninty)
-      people.push(res.data.data['Answered Everyday'][0].ninty_hundred === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].ninty_hundred)
-      people.push(res.data.data['Answered Everyday'][0].hundred === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].hundred)
-      const ctx1 = document.getElementById('myChart1')
-      const data1 = {
-        labels: [
-          'unanswered',
-          '0 ~ 60',
-          '60 ~ 70',
-          '70 ~ 80',
-          '80 ~ 90',
-          '90 ~ 100',
-          '100'
-        ],
-        datasets: [{
-          label: 'My First Dataset',
-          data: people,
-          backgroundColor: [
-            '#004c6d',
-            '#2d6484',
-            '#4c7c9b',
-            '#6996b3',
-            '#86b0cc',
-            '#a3cbe5',
-            '#c1e7ff'
-          ],
-          hoverOffset: 4
-        }]
-      }
-      const myChart1 = new Chart(ctx1, { //eslint-disable-line
-        type: 'pie',
-        data: data1
-      })
-    })
     getStudent({
       class_id: this.$store.state.class_id
     }).then(res => {
@@ -206,24 +115,6 @@ export default {
 </script>
 
 <style>
-.item {
-  background-color: #fff;
-  padding: 10px 10px;
-  width: 500px;
-  display: flex;
-  justify-content: center;
-}
-canvas{
-  display: flex;
-  align-content: center;
-}
-.flex{
-  display: flex;
-  justify-content:space-around;
-  width: auto;
-  height: auto;
-  margin: 40px 0px 20px;
-}
 .container2 {
   background-color: #EDEDED;
   height: 655px;

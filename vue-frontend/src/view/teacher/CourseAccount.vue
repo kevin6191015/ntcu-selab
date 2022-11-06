@@ -2,8 +2,8 @@
   <el-container class="iner2">
     <el-main style="margin-top : 40px;">
     <el-row :gutter="30">
-      <el-col :span="8" class="el-col2"><div align="center" class="grid-content3">未加入帳號</div></el-col>
-      <el-col :offset="3" :span="8" class="el-col2"><div align="center" class="grid-content3">已加入帳號</div></el-col>
+      <el-col :span="8" class="el-co4"><div align="center" class="grid-conten3">未加入帳號</div></el-col>
+      <el-col :offset="3" :span="8" class="el-co4"><div align="center" class="grid-conten3">已加入帳號</div></el-col>
     </el-row>
     <el-row :gutter="30">
       <el-col align="center" :span="8">
@@ -163,12 +163,12 @@ export default {
 </script>
 
 <style>
-.el-col2 {
+.el-co4 {
   position: relative;
   left: 150px;
 }
 
-.grid-content3 {
+.grid-conten3 {
   font-size: 30px;
   background-color: orange;
   position: relative;
