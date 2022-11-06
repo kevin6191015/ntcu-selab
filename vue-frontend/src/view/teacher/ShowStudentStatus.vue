@@ -10,6 +10,10 @@
             v-clipboard:error="onError">
           </el-button>
         </el-input>
+        <el-tooltip effect="dark" placement="top">
+          <div slot="content">利用 Git Repository 將 GitLab 上的作答模板 clone 到本機，<br/>觀看題目後依規定作答，作答完畢 git commit 到 GitLab ，<br/>稍等 10~20 秒後刷新本頁即可觀看作答狀況</div>
+          <el-button type="text" icon="el-icon-question" circle></el-button>
+        </el-tooltip>
       </el-row>
       <el-row>
         <el-col class="a2">{{'學生姓名 : ' + this.$store.state.seletedstudent.student_name}}</el-col>
