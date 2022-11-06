@@ -34,16 +34,6 @@ public class QuestionService {
                 JSONObject object = new JSONObject();
                 object.put("question_id", question.getId());
                 object.put("question_name", question.getName());
-                object.put("question_description", question.getDescription());
-                object.put("image1", question.getImage1());
-                object.put("image2", question.getImage2());
-                String[] input = question.getInput();
-                String[] output = question.getOutnput();
-                for(int i=1 ; i<=10 ; i++){
-                    object.put("input" + String.valueOf(i), input[i]);
-                    object.put("output" + String.valueOf(i), output[i]);
-                }
-                object.put("inputornot", question.getInputornot());
                 questionlist.add(object);
             }
         }catch(Exception e){

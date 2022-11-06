@@ -24,8 +24,13 @@ public class MysqlDatabase {
             Thread.sleep(50);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(httpmethod);
+<<<<<<< HEAD
             conn.setConnectTimeout(100000);
             conn.setReadTimeout(100000);
+=======
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+>>>>>>> 00b5c145b720d05d4ddff930d83f115c3fb8d387
         }catch(Exception e){
             logger.error(e.getMessage());
         }

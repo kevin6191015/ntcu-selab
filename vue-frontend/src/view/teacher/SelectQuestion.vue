@@ -21,7 +21,7 @@
             label="修改現有題目"
           >
             <template slot-scope="scope">
-              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+              <el-button @click="revise1(scope.row)" type="text" size="small">修改該題</el-button>
             </template>
           </el-table-column>
           <el-table-column

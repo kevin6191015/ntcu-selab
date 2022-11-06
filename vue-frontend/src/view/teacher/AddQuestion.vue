@@ -40,7 +40,7 @@
           label="輸入"
           width="200PX">
           <template slot-scope="scope">
-            <el-input clearble type="textarea" v-model="scope.row.input" placeholder="清輸入input"></el-input>
+            <el-input clearble type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="scope.row.input" placeholder="清輸入input"></el-input>
           </template>
         </el-table-column>
         <el-table-column
@@ -48,7 +48,7 @@
           label="輸出"
           fixed="right">
           <template slot-scope="scope">
-            <el-input clearble type="textarea" v-model="scope.row.output" placeholder="清輸入output"></el-input>
+            <el-input clearble type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="scope.row.output" placeholder="清輸入output"></el-input>
           </template>
         </el-table-column>
         </el-table>
@@ -556,6 +556,6 @@ export default {
 }
 #container{
     background-color: #EDEDED;
-    height: 1700px;
+    height: 2600px;
   }
 </style>
