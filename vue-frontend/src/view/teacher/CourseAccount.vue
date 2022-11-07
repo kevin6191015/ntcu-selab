@@ -18,7 +18,7 @@
             @selection-change="not_in_Course">
             <el-table-column
               type="selection"
-              width="190%">
+              width="250%">
             </el-table-column>
             <el-table-column
               label="學生名字"
@@ -39,7 +39,7 @@
             @selection-change="in_Course">
             <el-table-column
               type="selection"
-              width="190%">
+              width="250%">
             </el-table-column>
             <el-table-column
               label="學生名字"
@@ -182,7 +182,7 @@ export default {
 
 .iner2 {
   background-color: #EDEDED;
-  height: 655px
+  height: 825px
 }
 
 .button3{

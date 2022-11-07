@@ -1,12 +1,13 @@
 <template>
     <div style=" background-color: rgba(111, 122, 144, 0.555)">
-      <div  style="height: 1100px">
+      <div  style="height: 1250px">
         <div class="item" align="center">
             <div id="qname-green">
               <h3>班級作答人數曲線圖</h3>
             </div>
-            <canvas id="myChart" class="item" ></canvas>
+            <canvas id="myChart" class="item"></canvas>
         </div>
+        <div style="height: 200px"></div>
         <div class="item1" align="center">
           <div id="qname-green">
               <h3>班級作答分數分布</h3>
@@ -26,7 +27,8 @@ export default {
   data () {
     return {
       content: [],
-      project_name: this.$store.state.project_name
+      project_name: this.$store.state.project_name,
+      TotalPeople: ''
     }
   },
   created () {
@@ -72,20 +74,19 @@ export default {
         }
       })
     })
+    getStudent({
+      class_id: this.$store.state.class_id
+    }).then(res => {
+      this.TotalPeople = res.data.data['Students'].length
+    })
     getEveryRange(
       {
         project_name: this.$store.state.project_name
       }
     ).then(res => {
-      var TotalPeople
       var AnsweredPeople = res.data.data['Answered Everyday'][0].sixty_down + res.data.data['Answered Everyday'][0].sixty_seventy + res.data.data['Answered Everyday'][0].seventy_eighty + res.data.data['Answered Everyday'][0].eighty_ninty + res.data.data['Answered Everyday'][0].ninty_hundred + res.data.data['Answered Everyday'][0].hundred
-      getStudent({
-        class_id: this.$store.state.class_id
-      }).then(res => {
-        TotalPeople = res.data.data['Students'].length
-      })
       var people = []
-      people.push(TotalPeople - AnsweredPeople)
+      people.push(this.TotalPeople - AnsweredPeople)
       people.push(res.data.data['Answered Everyday'][0].sixty_down === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].sixty_down)
       people.push(res.data.data['Answered Everyday'][0].sixty_seventy === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].sixty_seventy)
       people.push(res.data.data['Answered Everyday'][0].seventy_eighty === 0 ? 'undefine' : res.data.data['Answered Everyday'][0].seventy_eighty)
@@ -142,26 +143,26 @@ export default {
   border-radius: 12px;
   position: relative;
   top: 30px;
-  left: 200px;
+  left: 160px;
 }
 .item {
   width: 700px;
-  height: 550px;
+  height: 400px;
 }
 .item1 {
   width: 700px;
-  height: 550px;
+  height: 400px;
 }
 canvas{
   position: relative;
   top: 60px;
-  left: 200px;
+  left: 160px;
   background-color: #fff;
   padding: 20px 20px 20px 20px;
-  width: 500px;
+  width: 40px;
 }
 .flex{
-  width: 500px;
+  width: 400px;
 }
 .footer{
   clear:both;

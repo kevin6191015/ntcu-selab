@@ -135,8 +135,8 @@
             if(env.input_or_not.equals(&quot;[0]&quot;)){
             org.jenkinsci.plugins.pipeline.modeldefinition.Utils.markStageSkippedForConditional(&apos;Test&apos;)
             }else{
-            try {
             timeout(1){
+            try {
             def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;
             sh &quot;${mvnHome}/bin/mvn clean test&quot;
             env.test_result=&quot;1&quot;
