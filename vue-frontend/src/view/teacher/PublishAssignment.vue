@@ -39,7 +39,7 @@
         </div>
         <div id="tooltip">
           <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
-            <el-button type="text" disabled icon="el-icon-question" circle></el-button>
+            <el-button type="text"  icon="el-icon-question" circle></el-button>
         </el-tooltip>
         </div>
         <div id="footer-left-no-margin">

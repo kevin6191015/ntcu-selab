@@ -103,7 +103,7 @@
       </el-switch>
       <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
     </div>
-    <div v-show="nowshow">
+    <div v-show="notshow">
       code
       {{newsourcecode}}
       {{newname}}
