@@ -4,11 +4,13 @@
       <el-row>
         <el-input class="git" :placeholder="this.git" disabled>
           <template slot="prepend">Git Repository : </template>
-          <el-button slot="append" size="small" icon="el-icon-document-copy"
-            v-clipboard:copy="this.git"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError">
-          </el-button>
+          <el-tooltip slot="append" effect="dark" placement="top" content="一鍵複製">
+            <el-button size="small" icon="el-icon-document-copy"
+              v-clipboard:copy="this.git"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError">
+            </el-button>
+          </el-tooltip>
         </el-input>
         <el-tooltip effect="dark" placement="top">
           <div slot="content">利用 Git Repository 將 GitLab 上的作答模板 clone 到本機，<br/>觀看題目後依規定作答，作答完畢 git commit 到 GitLab ，<br/>稍等 10~20 秒後刷新本頁即可觀看作答狀況</div>
@@ -123,9 +125,15 @@ export default {
           this.labels1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
           this.labels2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
           this.labels3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
-          this.data1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].bugs)
-          this.data2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].vulnerabilities)
-          this.data3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].code_smells)
+          if (tmp1[i].compile_result === 'compile error') {
+            this.data1.push('0')
+            this.data2.push('0')
+            this.data3.push('0')
+          } else {
+            this.data1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].bugs)
+            this.data2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].vulnerabilities)
+            this.data3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].code_smells)
+          }
           if (tmp1[i].unit_test_score <= 60) {
             tmp1[i].color = 'https://i.imgur.com/HJGBB1X.jpg'
           } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {
@@ -237,14 +245,21 @@ export default {
       this.$store.commit('SET_PROJECT_NAME', temp)
     },
     Seequestion2 (row) {
-      let temp = this.$store.state.project_name
-      let suggestion = row.report_suggestion
-      this.$store.commit('SET_PROJECT_NAME', suggestion)
-      let { href } = this.$router.resolve({
-        name: 'ShowSuggestion'
-      })
-      window.open(href, '_blank', 'toolbar=yes, width=1000')
-      this.$store.commit('SET_PROJECT_NAME', temp)
+      if (row.compile_result === 'compile error') {
+        this.$notify({
+          title: '注意!!',
+          message: ('i', {style: 'color: teal'}, '請先編譯成功再觀看程式碼建議!')
+        })
+      } else {
+        let temp = this.$store.state.project_name
+        let suggestion = row.report_suggestion
+        this.$store.commit('SET_PROJECT_NAME', suggestion)
+        let { href } = this.$router.resolve({
+          name: 'ShowSuggestion'
+        })
+        window.open(href, '_blank', 'toolbar=yes, width=1000')
+        this.$store.commit('SET_PROJECT_NAME', temp)
+      }
     },
     onCopy () {
       this.$notify({

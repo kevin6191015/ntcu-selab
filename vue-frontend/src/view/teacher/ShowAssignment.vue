@@ -1,5 +1,5 @@
 <template>
-  <el-container class="container2">
+  <el-container class="container2" :style="{height: scrollerHeight}">
     <el-main>
       <div class="assignment">作業一覽</div>
       <el-row>
@@ -54,6 +54,7 @@ export default {
     }
   },
   created () {
+    console.log((window.innerHeight - 46 - 50) + 'px')
     getAllAssignments({
       cid: this.$store.state.class_id
     }).then(res => {
@@ -125,6 +126,11 @@ export default {
     filterTag (value, row) {
       return row.release_or_not === value
     }
+  },
+  computed: {
+    scrollerHeight: function () {
+      return (window.innerHeight - 46 - 50 - 10) + 'px'
+    }
   }
 }
 </script>
@@ -132,7 +138,6 @@ export default {
 <style>
 .container2 {
   background-color: #EDEDED;
-  height: 655px;
 }
 .button1 {
   width: 6%;

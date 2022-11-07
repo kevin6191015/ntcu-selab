@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="container" :style="{height: this.height}">
     <div id="sitebody">
       <div id="header">
         <div v-if="this.Revise_Quesition_Mode">
@@ -142,10 +142,12 @@ export default {
       publicbank: false,
       samename: false,
       srcList: [],
-      url: ''
+      url: '',
+      height: ''
     }
   },
   created () {
+    this.height = (window.innerHeight - 46 - 50 - 10) + 'px'
     if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '7') {
       this.Revise_Quesition_Mode = true
       let id = this.$store.state.Question_To_Show
@@ -232,6 +234,15 @@ export default {
     newname () {
       this.checkname()
       return this.question_name
+    },
+    scrollerHeight: function () {
+      console.log(document.body.scrollHeight)
+      console.log(window.innerHeight - 46 - 50 - 10)
+      if (document.body.scrollHeight < window.innerHeight) {
+        return (window.innerHeight - 46 - 50 - 10) + 'px'
+      } else {
+        return (document.body.scrollHeight) + 'px'
+      }
     }
   },
   methods: {
@@ -343,6 +354,8 @@ export default {
           type: 'warning'
         })
       } else {
+        console.log('add ' + document.body.scrollHeight)
+        this.height = (document.body.scrollHeight - 102) + 'px'
         this.in_output_list.push(JSON.parse(JSON.stringify(this.object)))
       }
     },
@@ -356,6 +369,8 @@ export default {
           type: 'warning'
         })
       } else {
+        console.log('sub ' + document.body.scrollHeight)
+        this.height = (document.body.scrollHeight - 102) + 'px'
         this.in_output_list.pop()
       }
     },
@@ -556,6 +571,5 @@ export default {
 }
 #container{
     background-color: #EDEDED;
-    height: 2600px;
   }
 </style>
