@@ -49,13 +49,13 @@
           <el-date-picker type="date" placeholder="選擇日期" v-model="form.deadline" style="width: 87%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
           </el-form-item>
         </el-form>
-      </div>
+        </div>
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
         <div id="tooltip">
           <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
-            <el-button type="text" disabled icon="el-icon-question" circle></el-button>
+            <el-button type="text" icon="el-icon-question" circle></el-button>
           </el-tooltip>
         </div>
         <div id="footer-left-no-margin">
@@ -64,16 +64,15 @@
         <div id="footer-left-no-margin-nobackground">
           <h5>新增題目:</h5>
         </div>
-      </div>
-      <div id="footer">
+        </div>
+        <div id="footer">
         <el-button type="info" @click='update'>更新</el-button>
+        </div>
       </div>
-    </div>
-    {{deadline}}
-    <div v-show="notshow">
+      <div v-show="notshow">
       {{newdata}}
       {{newdeadline}}
-    </div>
+      </div>
   </div>
 </template>
 <script>
@@ -92,7 +91,6 @@ export default {
       assignments: [],
       assignment_name_list: [],
       publish_time: '',
-      deadline: '',
       id: '',
       assignment_name: '',
       notshow: false,
@@ -188,7 +186,7 @@ export default {
           return
         }
         for (let x in this.assignment_name_list) {
-          if (this.assignment_name_list[x].assignment_name === this.form.name) {
+          if (this.assignment_name_list[x].assignment_name === this.form.name.trim()) {
             this.$message({
               showClose: true,
               message: '作業名稱不可與已有的相同',
@@ -252,9 +250,9 @@ export default {
           })
           this.id = ''
           this.assignments = []
-          this.publish_time = ''
-          this.deadline = ''
-          this.assignment_name = ''
+          this.form.deadline = ''
+          this.form.publish_time = ''
+          this.form.name = ''
         }
         store.commit('REMOVE_SELECTEDQUESTION')
         store.commit('SET_ADD_QUESTION_MODE', '0')

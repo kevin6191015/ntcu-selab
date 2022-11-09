@@ -103,6 +103,7 @@
       </el-switch>
       <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
     </div>
+    {{question_name}}
     <div v-show="notshow">
       code
       {{newsourcecode}}
@@ -247,6 +248,7 @@ export default {
   },
   methods: {
     questionsumbit () {
+      console.log(this.question_name.trim())
       let output = []
       let input = []
       let temp = this.in_output_list.length
@@ -479,7 +481,7 @@ export default {
       ShowQuestion2().then(res => {
         var temp = JSON.parse(JSON.stringify(res.data.data.Questions))
         for (let i = 0; i < temp.length; i++) {
-          if (this.question_name === temp[i].question_name) {
+          if (this.question_name.trim() === temp[i].question_name) {
             this.$message({
               showClose: true,
               message: '不能與題目庫中已有的題目名稱相同',

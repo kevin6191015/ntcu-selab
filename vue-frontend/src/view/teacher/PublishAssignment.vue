@@ -214,9 +214,9 @@ export default {
           })
           this.questions = []
           this.id = ''
-          this.publish_time = ''
-          this.deadline = ''
-          this.assignment_name = ''
+          this.form.deadline = ''
+          this.form.publish_time = ''
+          this.form.name = ''
         }
         this.$store.commit('REMOVE_SELECTEDQUESTION')
         this.$store.commit('SET_ADD_QUESTION_MODE', '0')
@@ -289,7 +289,7 @@ export default {
       }).then(res => {
         let tmp = res.data.data.Assignments
         for (let i = 0; i < tmp.length; i++) {
-          if (tmp[i].assignment_name === this.form.name) {
+          if (tmp[i].assignment_name === this.form.name.trim()) {
             this.samename = true
             this.$message({
               showClose: true,

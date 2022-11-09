@@ -1,5 +1,6 @@
 <template>
   <div id="sitebody">
+    <el-backtop></el-backtop>
     <div id="header">
       <div id="space-top"></div>
       <div id="qname-green">
