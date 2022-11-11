@@ -82,7 +82,7 @@ export default {
 
 <style scoped>
 #login-page {
-  background: url("../assets/img/bg3.png") no-repeat;
+  background: url("../assets/img/bg.png") no-repeat;
   background-position: center;
   height: 100%;
   width: 100%;

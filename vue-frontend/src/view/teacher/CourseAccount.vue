@@ -18,12 +18,30 @@
             @selection-change="not_in_Course">
             <el-table-column
               type="selection"
-              width="250%">
+              width="100%">
             </el-table-column>
             <el-table-column
-              label="學生名字"
+              prop="id"
+              label="學號"
+              sortable
               >
-              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="學生名字"
+              sortable
+              >
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="年級分類"
+              :filters=allage
+              :filter-method="filterTag"
+              filter-placement="bottom-end">
+              <template slot-scope="scope">
+                <el-tag
+                  disable-transitions>{{scope.row.id.substring(3, 6)}}</el-tag>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -39,12 +57,30 @@
             @selection-change="in_Course">
             <el-table-column
               type="selection"
-              width="250%">
+              width="100%">
             </el-table-column>
             <el-table-column
-              label="學生名字"
+              prop="id"
+              label="學號"
+              sortable
               >
-              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="學生名字"
+              sortable
+              >
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="年級分類"
+              :filters=allage
+              :filter-method="filterTag"
+              filter-placement="bottom-end">
+              <template slot-scope="scope">
+                <el-tag
+                  disable-transitions>{{scope.row.id.substring(3, 6)}}</el-tag>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -77,7 +113,9 @@ export default {
     return {
       class_student: [],
       not_class_student: [],
-      seleted: []
+      seleted: [],
+      allage: [],
+      allage_list: []
     }
   },
   created () {
@@ -88,6 +126,10 @@ export default {
         for (let j = 0; j < res.data.data.Users[i].CLASSES.split(',').length; j++) {
           if (res.data.data.Users[i].CLASSES.split(',')[j] === this.$store.state.class_id) {
             this.class_student.push(res.data.data.Users[i])
+            if (!this.allage_list.includes(res.data.data.Users[i].id.substring(3, 6))) {
+              this.allage_list.push(res.data.data.Users[i].id.substring(3, 6))
+              this.allage.push({'text': res.data.data.Users[i].id.substring(3, 6), 'value': res.data.data.Users[i].id.substring(3, 6)})
+            }
           }
         }
       }
@@ -99,9 +141,14 @@ export default {
           }
         }
         if (check && res.data.data.Users[i].role === 'student') {
+          if (!this.allage_list.includes(res.data.data.Users[i].id.substring(3, 6))) {
+            this.allage.push({'text': res.data.data.Users[i].id.substring(3, 6), 'value': res.data.data.Users[i].id.substring(3, 6)})
+            this.allage_list.push(res.data.data.Users[i].id.substring(3, 6))
+          }
           this.not_class_student.push(res.data.data.Users[i])
         }
       }
+      console.log(this.allage)
     })
   },
   methods: {
@@ -157,6 +204,9 @@ export default {
     },
     tableRowClassName ({row, rowIndex}) {
       return 'row1'
+    },
+    filterTag (value, row) {
+      return row.id.substring(3, 6) === value
     }
   }
 }
@@ -182,7 +232,7 @@ export default {
 
 .iner2 {
   background-color: #EDEDED;
-  height: 825px
+  height: 655px
 }
 
 .button3{

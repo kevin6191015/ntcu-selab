@@ -257,7 +257,7 @@ export default {
         let { href } = this.$router.resolve({
           name: 'ShowSuggestion'
         })
-        window.open(href, '_blank', 'toolbar=yes, width=1000')
+        window.open(href, '_blank', 'height=400,width=900,toolbar=no,menubar=no,resizable=no,location=no')
         this.$store.commit('SET_PROJECT_NAME', temp)
       }
     },

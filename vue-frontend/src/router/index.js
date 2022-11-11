@@ -216,7 +216,7 @@ export default new Router({
       children: [
         {
           path: '/ShowStudentHomework',
-          name: 'ShowStudnetHomework',
+          name: 'ShowStudentHomework',
           component: ShowStudentHomework,
           meta: {
             requireAuth: true,
@@ -231,7 +231,7 @@ export default new Router({
           meta: {
             requireAuth: true,
             title: '做題狀況',
-            prevName: 'ShowStudnetHomework'
+            prevName: 'ShowStudentHomework'
           }
         }
       ]

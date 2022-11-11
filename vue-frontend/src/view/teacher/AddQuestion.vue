@@ -1,7 +1,7 @@
 <template>
-  <div id="container" :style="{height: this.height}">
-    <div id="sitebody">
-      <div id="header">
+  <el-container id="sitebody" :style="{height: this.height}">
+    <el-main>
+      <el-row id="header">
         <div v-if="this.Revise_Quesition_Mode">
           <h3>修改現有題目</h3>
         </div>
@@ -23,8 +23,8 @@
           placeholder="題目敘述"
           v-model="description">
         </el-input>
-      </div>
-      <div id = "content">
+      </el-row>
+      <el-row id = "content">
         <el-table
           ref="singleTable"
           :data="in_output_list"
@@ -54,16 +54,16 @@
         </el-table>
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-plus" @click="add" type="primary">增加輸入、輸出</el-button>
         <el-button sytle="width:50%;height:50px;backbround:#fff;color:#000" icon="el-icon-minus" @click="sub" type="primary">減少輸入、輸出</el-button>
-      </div>
-      <div v-if = "this.Revise_Quesition_Mode" id = "temp">
+      </el-row>
+      <el-row v-if = "this.Revise_Quesition_Mode" id = "temp">
         <h4>圖片預覽:</h4>
         <el-image
           style="width: 450px; height: 300px"
           :src="url"
           :preview-src-list="srcList">
         </el-image>
-      </div>
-      <div v-else id = "footer-left">
+      </el-row>
+      <el-row v-else id = "footer-left">
         <el-upload
           action
           accept="image/jpeg, image/png"
@@ -78,8 +78,8 @@
         >
         <el-button icon="el-icon-upload" type="warning" plain>圖片上傳</el-button>
         </el-upload>
-      </div>
-      <div id ="footer-right">
+      </el-row>
+      <el-row id ="footer-right">
         <el-upload
           action
           :on-change="onfileUploadChange"
@@ -93,25 +93,23 @@
           <el-button icon="el-icon-upload" type="warning" plain>程式碼上傳</el-button>
         </el-upload>
         <el-input clearble type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="sourcecode" placeholder="程式碼內容"></el-input>
-      </div>
-      <div id="footer">
+      </el-row>
+      <el-row id="footer">
         <el-switch
-        style="display: block"
-        v-model="publicbank"
-        active-text="放入公共題庫"
-        inactive-text="不放入公共題庫">
-      </el-switch>
-      <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
-    </div>
-    {{question_name}}
-    <div v-show="notshow">
-      code
-      {{newsourcecode}}
-      {{newname}}
-      {{question_name}}
-    </div>
-  </div>
-  </div>
+          style="display: block"
+          v-model="publicbank"
+          active-text="放入公共題庫"
+          inactive-text="不放入公共題庫">
+        </el-switch>
+        <el-button type="success" icon="el-icon-s-check" @click='questionsumbit'>確認</el-button>
+      </el-row>
+      <el-row v-show="notshow">
+        {{newsourcecode}}
+        {{newname}}
+        {{question_name}}
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
 
 <script scoped>
@@ -148,7 +146,12 @@ export default {
     }
   },
   created () {
-    this.height = (window.innerHeight - 46 - 50 - 10) + 'px'
+    console.log(document.body.scrollHeight - 101)
+    if (document.body.scrollHeight - 102 < 0) {
+      this.height = (window.innerHeight - 42 - 50 - 10) + 'px'
+    } else {
+      this.height = (document.body.scrollHeight - 101) + 'px'
+    }
     if (this.$store.state.add_question_mode === '3' || this.$store.state.add_question_mode === '7') {
       this.Revise_Quesition_Mode = true
       let id = this.$store.state.Question_To_Show
@@ -357,7 +360,7 @@ export default {
         })
       } else {
         console.log('add ' + document.body.scrollHeight)
-        this.height = (document.body.scrollHeight - 102) + 'px'
+        this.height = (document.body.scrollHeight - 101) + 'px'
         this.in_output_list.push(JSON.parse(JSON.stringify(this.object)))
       }
     },
@@ -372,7 +375,7 @@ export default {
         })
       } else {
         console.log('sub ' + document.body.scrollHeight)
-        this.height = (document.body.scrollHeight - 102) + 'px'
+        this.height = (document.body.scrollHeight - 101) + 'px'
         this.in_output_list.pop()
       }
     },
@@ -515,6 +518,7 @@ export default {
   float:left;
 }
 #sitebody{
+  background-color: #EDEDED;
   width:100%;
   margin:0 auto;
   font-size:13px;
@@ -571,7 +575,4 @@ export default {
   line-height:80px;
   float:right;
 }
-#container{
-    background-color: #EDEDED;
-  }
 </style>

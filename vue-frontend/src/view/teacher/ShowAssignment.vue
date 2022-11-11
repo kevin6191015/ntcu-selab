@@ -54,7 +54,6 @@ export default {
     }
   },
   created () {
-    console.log((window.innerHeight - 46 - 50) + 'px')
     getAllAssignments({
       cid: this.$store.state.class_id
     }).then(res => {

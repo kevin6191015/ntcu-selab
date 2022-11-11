@@ -66,11 +66,11 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <el-row>
-      <router-view></router-view>
-    </el-row>
     <el-row v-if="isDashboard(this.$router)">
       <ShowAssignment></ShowAssignment>
+    </el-row>
+    <el-row>
+      <router-view></router-view>
     </el-row>
     <!-- <el-row class="but">
       <el-button type="primary" @click="goBack()">上一頁</el-button>
@@ -86,7 +86,8 @@ export default {
     return {
       breadList: [],
       isRoot: false,
-      isTeacher: false
+      isTeacher: false,
+      routeTable: []
     }
   },
   watch: {
@@ -98,122 +99,102 @@ export default {
     getBreadcrumb () {
       if (this.$store.state.add_question_mode === '3' && this.$router.currentRoute.name === 'AddQuestion') {
         this.breadList = []
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
         temp.meta.title = '修改現有題目'
         this.breadList.push(temp)
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'SelectQuestion') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'SelectQuestion') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'PublishAssignment') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'PublishAssignment') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'teacherhome') {
-            this.breadList.push(routeTable[i])
-            break
-          }
-        }
+        this.breadList.push(this.$router.options.routes[2])
       } else if (this.$store.state.add_question_mode === '7' && this.$router.currentRoute.name === 'AddQuestion') {
         this.breadList = []
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
         temp.meta.title = '修改現有題目'
         this.breadList.push(temp)
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'SelectQuestion') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'SelectQuestion') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'UpdateAssignment') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'UpdateAssignment') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'teacherhome') {
-            this.breadList.push(routeTable[i])
-            break
-          }
-        }
+        this.$router.options.routes[2].meta.title = '首頁'
+        this.breadList.push(this.$router.options.routes[2])
       } else if (this.$store.state.add_question_mode === '4' && this.$router.currentRoute.name === 'AddQuestion') {
         this.breadList = []
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
         temp.meta.title = '自行出題'
         this.breadList.push(temp)
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'PublishAssignment') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'PublishAssignment') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'teacherhome') {
-            this.breadList.push(routeTable[i])
-            break
-          }
-        }
+        this.$router.options.routes[2].meta.title = '首頁'
+        this.breadList.push(this.$router.options.routes[2])
       } else if (this.$store.state.add_question_mode === '6' && this.$router.currentRoute.name === 'AddQuestion') {
         this.breadList = []
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
         temp.meta.title = '自行出題'
         this.breadList.push(temp)
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'UpdateAssignment') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'UpdateAssignment') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'teacherhome') {
-            this.breadList.push(routeTable[i])
-            break
-          }
-        }
+        this.$router.options.routes[2].meta.title = '首頁'
+        this.breadList.push(this.$router.options.routes[2])
       } else if ((this.$store.state.add_question_mode === '5' || this.$store.state.add_question_mode === '7') && this.$router.currentRoute.name === 'SelectQuestion') {
         this.breadList = []
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
         let temp = this.$router.currentRoute
         this.breadList.push(temp)
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'UpdateAssignment') {
-            this.breadList.push(routeTable[i])
+        for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+          if (this.$router.options.routes[2].children[i].name === 'UpdateAssignment') {
+            this.breadList.push(this.$router.options.routes[2].children[i])
             break
           }
         }
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === 'teacherhome') {
-            this.breadList.push(routeTable[i])
-            break
-          }
-        }
+        this.$router.options.routes[2].meta.title = '首頁'
+        this.breadList.push(this.$router.options.routes[2])
       } else {
         this.breadList = []
         let parent = this.$router.currentRoute.meta.prevName
-        let routeTable = this.$router.options.routes[2].children
-        routeTable.push(this.$router.options.routes[2])
+        if (this.$router.currentRoute.name === 'teacherhome') {
+          this.$router.currentRoute.meta.title = '首頁'
+        }
         this.breadList.push(this.$router.currentRoute)
         while (parent !== null) {
-          for (let i = 0; i < routeTable.length; i++) {
-            if (routeTable[i].name === parent) {
-              parent = routeTable[i].meta.prevName
-              this.breadList.push(routeTable[i])
-              break
+          if (parent === 'teacherhome') {
+            if (this.$router.currentRoute.name === 'ShowHomework' || this.$router.currentRoute.name === 'ShowCourseStudent' || this.$router.currentRoute.name === 'ShowStudentStatus') {
+              this.$router.options.routes[2].meta.title = this.$store.state.assignment.assignment_name
+            } else {
+              this.$router.options.routes[2].meta.title = '首頁'
+            }
+            this.breadList.push(this.$router.options.routes[2])
+            break
+          } else {
+            for (let i = 0; i < this.$router.options.routes[2].children.length; i++) {
+              if (this.$router.options.routes[2].children[i].name === parent) {
+                parent = this.$router.options.routes[2].children[i].meta.prevName
+                this.breadList.push(this.$router.options.routes[2].children[i])
+                break
+              }
             }
           }
         }

@@ -88,7 +88,6 @@ export default {
             this.assignment.push(tmp[i])
           }
         }
-        console.log(this.assignment)
       })
     })
     this.loading = false

@@ -73,15 +73,27 @@ export default {
     getBreadcrumb () {
       this.breadList = []
       let parent = this.$router.currentRoute.meta.prevName
-      let routeTable = this.$router.options.routes[4].children
-      routeTable.push(this.$router.options.routes[4])
+      if (this.$router.currentRoute.name === 'studenthome') {
+        this.$router.currentRoute.meta.title = '首頁'
+      }
       this.breadList.push(this.$router.currentRoute)
       while (parent !== null) {
-        for (let i = 0; i < routeTable.length; i++) {
-          if (routeTable[i].name === parent) {
-            parent = routeTable[i].meta.prevName
-            this.breadList.push(routeTable[i])
-            break
+        if (parent === 'studenthome') {
+          console.log(this.$router.currentRoute.name)
+          if (this.$router.currentRoute.name === 'ShowStudentHomework' || this.$router.currentRoute.name === 'ShowYourStatus') {
+            this.$router.options.routes[4].meta.title = this.$store.state.assignment.assignment_name
+          } else {
+            this.$router.options.routes[4].meta.title = '首頁'
+          }
+          this.breadList.push(this.$router.options.routes[4])
+          break
+        } else {
+          for (let i = 0; i < this.$router.options.routes[4].children.length; i++) {
+            if (this.$router.options.routes[4].children[i].name === parent) {
+              parent = this.$router.options.routes[4].children[i].meta.prevName
+              this.breadList.push(this.$router.options.routes[4].children[i])
+              break
+            }
           }
         }
       }
