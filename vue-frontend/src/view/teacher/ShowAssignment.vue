@@ -7,7 +7,12 @@
           :data="content"
           highlight-current-row
           @current-change="seleted_class"
+          @selection-change="handleSelectionChange"
           style="width: 100%">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
             prop="assignment_name"
             label="作業名稱"
@@ -40,16 +45,23 @@
           </el-table-column>
         </el-table>
       </el-row>
+      <div id="footer-left">
+      <el-tooltip class="item" effect="dark" content="勾選作業並刪除" placement="top">
+        <el-button type="text"  icon="el-icon-question" circle></el-button>
+      </el-tooltip>
+      <el-button  @click='Delete'>刪除作業</el-button>
+    </div>
     </el-main>
   </el-container>
 </template>
 
 <script>
-import { getAllAssignments } from '@/api/assignment'
+import {getAllAssignments, DeleteAssignment} from '@/api/assignment'
 export default {
   name: 'ShowAssignment',
   data () {
     return {
+      multipleSelection: [],
       content: []
     }
   },
@@ -122,8 +134,33 @@ export default {
         path: '/UpdateAssignment'
       })
     },
+    handleSelectionChange (theval) {
+      this.multipleSelection = theval
+    },
     filterTag (value, row) {
       return row.release_or_not === value
+    },
+    Delete () {
+      if (this.multipleSelection) {
+        for (let j = 0; j < this.multipleSelection.length; j++) {
+          console.log(this.multipleSelection[j])
+          getAllAssignments({
+            cid: this.$store.state.class_id
+          }).then(res => {
+            let tmp = res.data.data.Assignments
+            for (let i = 0; i < tmp.length; i++) {
+              if (tmp[i].assignment_name === this.multipleSelection[j].assignment_name) {
+                DeleteAssignment({
+                  cid: this.$store.state.class_id,
+                  qid: tmp[i].question_id,
+                  created_time: tmp[i].created_time
+                })
+              }
+            }
+          })
+        }
+        location.reload()
+      }
     }
   },
   computed: {
@@ -157,4 +194,10 @@ export default {
   margin-bottom: 20px;
   font-family: "Microsoft YaHei";
 }
+#footer-left{
+  clear:both;
+  text-align:center;
+  line-height:80px;
+  float:right;
+  }
 </style>

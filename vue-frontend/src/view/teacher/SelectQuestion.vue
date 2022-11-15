@@ -19,10 +19,10 @@
           <el-table-column prop="question_name" label="題目名稱"></el-table-column>
           <el-table-column
             fixed="right"
-            label="修改現有題目"
+            label="複製並修改題目"
           >
             <template slot-scope="scope">
-              <el-button @click="revise1(scope.row)" type="text" size="small">修改該題</el-button>
+              <el-button @click="revise1(scope.row)" type="text" size="small">選擇該題</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -61,10 +61,10 @@
           <el-table-column prop="teacher" label="出題老師"></el-table-column>
           <el-table-column
             fixed="right"
-            label="修改現有題目"
+            label="複製並修改題目"
           >
             <template slot-scope="scope">
-              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -102,10 +102,10 @@
           <el-table-column prop="question_name" label="題目名稱"></el-table-column>
           <el-table-column
             fixed="right"
-            label="修改現有題目"
+            label="複製並修改題目"
           >
             <template slot-scope="scope">
-              <el-button @click="revise2(scope.row)" type="text" size="small">修改該題</el-button>
+              <el-button @click="revise2(scope.row)" type="text" size="small">選擇該題</el-button>
             </template>
           </el-table-column>
           <el-table-column
