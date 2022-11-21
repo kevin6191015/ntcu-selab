@@ -246,7 +246,7 @@ export default {
       let { href } = this.$router.resolve({
         name: 'ShowSuggestion'
       })
-      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=400')
       this.$store.commit('SET_PROJECT_NAME', temp)
     },
     Seequestion () {
@@ -296,7 +296,7 @@ canvas{
 
 .container2 {
   background-color: #EDEDED;
-  height: 655px;
+  height: 685px;
 }
 
 .sa1 {

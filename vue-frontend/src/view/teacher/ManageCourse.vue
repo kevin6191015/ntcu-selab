@@ -366,6 +366,6 @@ export default {
 <style>
 .iner1 {
   background-color: #EDEDED;
-  height: 655px
+  height: 685px
 }
 </style>

@@ -81,7 +81,7 @@ export default {
 <style>
 .container2 {
   background-color: #EDEDED;
-  height: 655px;
+  height: 685px;
 }
 .button1 {
   width: 6%;

@@ -232,7 +232,7 @@ export default {
 
 .iner2 {
   background-color: #EDEDED;
-  height: 655px
+  height: 685px
 }
 
 .button3{

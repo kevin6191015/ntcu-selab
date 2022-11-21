@@ -40,6 +40,7 @@ export default {
     width:100%;
     margin:0 auto;
     font-size:20px;
+    height:420px;
     background-color: rgba(111, 122, 144, 0.555);
   }
   #header{

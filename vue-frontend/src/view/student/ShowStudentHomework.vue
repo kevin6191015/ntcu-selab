@@ -134,7 +134,7 @@ export default {
 <style>
 .container2 {
   background-color: #EDEDED;
-  height: 655px;
+  height: 685px;
 }
 
 .d-flex1 {
