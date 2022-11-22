@@ -3,7 +3,7 @@
       <div  style="height: 1250px">
         <div class="item" align="center">
             <div id="qname-green">
-              <h3>班級作答人數曲線圖</h3>
+              <h3>班級作答人數累積圖</h3>
             </div>
             <canvas id="myChart" class="item"></canvas>
         </div>
