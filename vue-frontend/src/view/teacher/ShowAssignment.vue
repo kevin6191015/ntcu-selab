@@ -142,14 +142,15 @@ export default {
     },
     Delete () {
       if (this.multipleSelection) {
+        var temp = this.content
+        var multi = this.multipleSelection
         for (let j = 0; j < this.multipleSelection.length; j++) {
-          console.log(this.multipleSelection[j])
           getAllAssignments({
             cid: this.$store.state.class_id
           }).then(res => {
             let tmp = res.data.data.Assignments
             for (let i = 0; i < tmp.length; i++) {
-              if (tmp[i].assignment_name === this.multipleSelection[j].assignment_name) {
+              if (tmp[i].assignment_name === multi[j].assignment_name) {
                 DeleteAssignment({
                   cid: this.$store.state.class_id,
                   qid: tmp[i].question_id,
@@ -159,7 +160,17 @@ export default {
             }
           })
         }
-        location.reload()
+        for (let j = 0; j < this.multipleSelection.length; j++) {
+          var temp2 = []
+          for (let k = 0; k < temp.length; k++) {
+            if (temp[k].assignment_name !== this.multipleSelection[j].assignment_name) {
+              temp2.push(temp[k])
+            }
+          }
+          temp = temp2
+        }
+        // location.reload()
+        this.content = temp
       }
     }
   },
