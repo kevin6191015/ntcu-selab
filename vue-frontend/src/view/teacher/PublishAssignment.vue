@@ -37,7 +37,7 @@
         <div id="footer-left">
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
-        <div id="tooltip">
+        <div id="tooltip1">
           <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
             <el-button type="text"  icon="el-icon-question" circle></el-button>
         </el-tooltip>
@@ -390,7 +390,7 @@ export default {
     text-align:left;
     float: left;
   }
-  #tooltip{
+  #tooltip1{
     text-align:left;
     float: right;
     margin-top: 10px;

@@ -268,8 +268,8 @@ export default {
       let image1 = ''
       let image2 = ''
       if (this.Revise_Quesition_Mode) {
-        image1 = this.srcList[1]
-        image2 = this.srcList[2]
+        image1 = this.srcList[0]
+        image2 = this.srcList[1]
       } else {
         if (this.$store.state.imagelink.indexOf(',') >= 0) {
           image1 = this.$store.state.imagelink.slice(this.$store.state.imagelink.indexOf(',') + 1)
