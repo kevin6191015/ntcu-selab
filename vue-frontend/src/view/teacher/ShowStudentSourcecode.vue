@@ -25,7 +25,7 @@ export default {
   },
   created () {
     this.questionname = this.$store.state.assignment.question_name
-    this.sourcecode = this.$store.state.project_name
+    this.sourcecode = this.$store.state.project_name.replaceAll('`', '+')
   },
   methods: {
     goback () {

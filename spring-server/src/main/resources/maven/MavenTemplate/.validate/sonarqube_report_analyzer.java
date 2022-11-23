@@ -178,7 +178,7 @@ public class sonarqube_report_analyzer
           }
           reader.close();
           sonar_property[7] = "source_code";
-          sonar_value[7]=responseContent.toString();
+          sonar_value[7]=responseContent.toString().replaceAll("\\+","`");
      }
      private void GetSonarIssue(String name)throws Exception{
           BufferedReader reader;

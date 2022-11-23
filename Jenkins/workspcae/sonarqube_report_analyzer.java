@@ -157,7 +157,7 @@ public class sonarqube_report_analyzer
      public void GetSourceCode(String name)throws Exception{
           BufferedReader reader;
 		int line;
-		StringBuilder responseContent = new StringBuilder();
+		String  responseContent =null;
           String urls = "http://120.108.204.152:9000/api/sources/raw?key=edu.selab:"+name+":src/main/java/edu/selab/App.java";
           String token = "ef304f59cfec3c82accdd9ade9983d97dd81cf36"+":";
           String basicAuth = "Basic "+new String(Base64.getEncoder().encode(token.getBytes("UTF-8")));
@@ -165,15 +165,15 @@ public class sonarqube_report_analyzer
           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
           conn.setRequestProperty("Authorization", basicAuth);
           conn.setRequestMethod("GET");
-		conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
-		conn.setReadTimeout(5000);
+          conn.setConnectTimeout(5000);// 5000 milliseconds = 5 seconds
+          conn.setReadTimeout(5000);
           reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		while ((line = reader.read()) != -1) {
-			responseContent.append((char)line);
-		}
-		reader.close();
+          while ((line = reader.read()) != -1) {
+               responseContent+= (char)line;
+          }
+          reader.close();
           sonar_property[7] = "source_code";
-          sonar_value[7]=responseContent.toString();
+          System.out.println(responseContent);
      }
      private void GetSonarIssue(String name)throws Exception{
           BufferedReader reader;
