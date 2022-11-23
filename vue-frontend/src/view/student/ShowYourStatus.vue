@@ -125,9 +125,15 @@ export default {
           this.labels1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
           this.labels2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
           this.labels3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].submit_times)
-          this.data1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].bugs)
-          this.data2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].vulnerabilities)
-          this.data3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].code_smells)
+          if (tmp1[i].compile_result === 'compile error') {
+            this.data1.push('0')
+            this.data2.push('0')
+            this.data3.push('0')
+          } else {
+            this.data1.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].bugs)
+            this.data2.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].vulnerabilities)
+            this.data3.push(res.data.data['Sonarqube Report'][tmp1.length - i - 1].code_smells)
+          }
           if (tmp1[i].unit_test_score <= 60) {
             tmp1[i].color = 'https://i.imgur.com/HJGBB1X.jpg'
           } else if (tmp1[i].unit_test_score > 60 && tmp1[i].unit_test_score <= 90) {
@@ -240,14 +246,21 @@ export default {
       this.$store.commit('SET_PROJECT_NAME', temp)
     },
     Seequestion2 (row) {
-      let temp = this.$store.state.project_name
-      let suggestion = row.report_suggestion
-      this.$store.commit('SET_PROJECT_NAME', suggestion)
-      let { href } = this.$router.resolve({
-        name: 'ShowSuggestion'
-      })
-      window.open(href, '_blank', 'toolbar=yes, width=1000, height=400')
-      this.$store.commit('SET_PROJECT_NAME', temp)
+      if (row.compile_result === 'compile error') {
+        this.$notify({
+          title: '注意!!',
+          message: ('i', {style: 'color: teal'}, '請先編譯成功再觀看程式碼建議!')
+        })
+      } else {
+        let temp = this.$store.state.project_name
+        let suggestion = row.report_suggestion
+        this.$store.commit('SET_PROJECT_NAME', suggestion)
+        let { href } = this.$router.resolve({
+          name: 'ShowSuggestion'
+        })
+        window.open(href, '_blank', 'toolbar=yes, width=1000, height=400')
+        this.$store.commit('SET_PROJECT_NAME', temp)
+      }
     },
     Seequestion () {
       let assignment = this.$store.state.assignment
