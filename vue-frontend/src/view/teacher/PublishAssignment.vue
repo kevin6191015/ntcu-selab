@@ -38,7 +38,11 @@
           <el-button type="success" @click='addquestion'>自行出題</el-button>
         </div>
         <div id="tooltip1">
+<<<<<<< HEAD
           <el-tooltip class="item" effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
+=======
+          <el-tooltip effect="dark" content="可以從題庫選題或修改已有題目" placement="top">
+>>>>>>> 554adeceee1cc18f3c9a117755cc9ab757bd694c
             <el-button type="text"  icon="el-icon-question" circle></el-button>
         </el-tooltip>
         </div>

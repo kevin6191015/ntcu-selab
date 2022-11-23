@@ -161,10 +161,12 @@ public class UserService {
 
             User user = dbManager.getUserInfo(newUser.getId());
             //將user的資料同步到gitlab
-            gitlabService.updateEmail(user.getEmail(), user.getName());
-            gitlabService.updateName(newUser.getName(), user.getName());
-            gitlabService.updatePassword(newUser.getPassword(), user.getName());
-            gitlabService.updateUserName(newUser.getUserName(), user.getUserName());
+            if(!user.getRole().equals("ROOT")){
+                gitlabService.updateEmail(user.getEmail(), user.getName());
+                gitlabService.updateName(newUser.getName(), user.getName());
+                gitlabService.updatePassword(newUser.getPassword(), user.getName());
+                gitlabService.updateUserName(newUser.getUserName(), user.getUserName());
+            }
 
             //將user的資料同步到student(如果是學生)
             if(user.getRole().equals("student") && !user.getClasses().equals("")){

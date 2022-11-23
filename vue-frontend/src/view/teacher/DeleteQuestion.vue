@@ -98,7 +98,7 @@ export default {
       let { href } = this.$router.resolve({
         name: 'ShowQuestion'
       })
-      window.open(href, '_blank', 'toolbar=yes, width=1000, height=700')
+      window.open(href, '_blank', 'toolbar=yes, width=1000, height=477')
       this.$store.commit('REMOVE_QUESTION_TO_SHOW')
     },
     SeeCode2 (row) {

@@ -45,7 +45,9 @@ public class testfile_generator
         }
 		for(int i=1; i<=input_num;i++){
 			testinput[i]=testinput[i].replaceAll("\\\n"," ");
+			testinput[i]=testinput[i].trim();
 			testoutput[i]=testoutput[i].replaceAll("\\\n"," ");
+			testoutput[i]=testoutput[i].trim();
 		}
 
 		for(int i=1 ;i<=input_num; i++){
