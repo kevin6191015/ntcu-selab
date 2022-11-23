@@ -1,5 +1,5 @@
 <template>
-  <el-container id="sitebody" :style="{height: this.height}">
+  <el-container id="sitebody">
     <el-main>
       <el-row id="header">
         <div v-if="this.Revise_Quesition_Mode">
@@ -522,6 +522,7 @@ export default {
   width:100%;
   margin:0 auto;
   font-size:13px;
+  height: 855px;
 }
 #header{
   width: 70%;

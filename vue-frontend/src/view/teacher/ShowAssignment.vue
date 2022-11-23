@@ -45,8 +45,8 @@
           </el-table-column>
         </el-table>
       </el-row>
-      <div id="footer-left">
-      <el-tooltip class="item" effect="dark" content="勾選作業並刪除" placement="top">
+      <div id="footer-left2">
+      <el-tooltip effect="dark" content="勾選作業並刪除" placement="top">
         <el-button type="text"  icon="el-icon-question" circle></el-button>
       </el-tooltip>
       <el-button  @click='Delete'>刪除作業</el-button>
@@ -205,7 +205,7 @@ export default {
   margin-bottom: 20px;
   font-family: "Microsoft YaHei";
 }
-#footer-left{
+#footer-left2{
   clear:both;
   text-align:center;
   line-height:80px;

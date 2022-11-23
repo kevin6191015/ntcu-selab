@@ -14,7 +14,7 @@
             ref="multipleTable"
             :data="not_class_student"
             tooltip-effect="dark"
-            style="min-height: 400px;"
+            height="400"
             @selection-change="not_in_Course">
             <el-table-column
               type="selection"
@@ -53,7 +53,7 @@
             ref="multipleTable"
             :data="class_student"
             tooltip-effect="dark"
-            style="min-height: 400px;"
+            height="400"
             @selection-change="in_Course">
             <el-table-column
               type="selection"
