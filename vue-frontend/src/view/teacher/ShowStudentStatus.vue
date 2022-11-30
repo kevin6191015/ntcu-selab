@@ -30,7 +30,27 @@
             width="60"
             align="center">
             <template slot-scope="scope">
-              <img :src="scope.row.color" width="20px" height="20px" />
+              <div v-if="scope.row.unit_test_score < 60">
+                <el-tooltip content='分數低於60分' placement="top-start">
+                  <div>
+                    <img :src="scope.row.color" width="20px" height="20px" />
+                  </div>
+                </el-tooltip>
+              </div>
+              <div v-else-if="scope.row.unit_test_score <= 90">
+                <el-tooltip content='分數60~90分' placement="top-start">
+                  <div>
+                    <img :src="scope.row.color" width="20px" height="20px" />
+                  </div>
+                </el-tooltip>
+              </div>
+              <div v-else-if="scope.row.unit_test_score <= 100">
+                <el-tooltip content='分數高於90分' placement="top-start">
+                  <div>
+                    <img :src="scope.row.color" width="20px" height="20px" />
+                  </div>
+                </el-tooltip>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
