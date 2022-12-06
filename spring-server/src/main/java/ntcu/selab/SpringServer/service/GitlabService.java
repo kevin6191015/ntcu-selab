@@ -28,6 +28,7 @@ public class GitlabService {
     MysqlConfig mysqlConfig = MysqlConfig.getObject();
     private final GitlabAPI gitlab;
     private String hostUrl;
+    private String rootUrl;
     private String apiToken;
     private final TokenType tokenType = TokenType.PRIVATE_TOKEN;
     private final AuthMethod authMethod = AuthMethod.URL_PARAMETER;
@@ -36,7 +37,7 @@ public class GitlabService {
     public GitlabService() {
         try {
             hostUrl = gitlabConfig.getGitlabHostUrl();
-            gitlabConfig.getGitlabRootUrl();
+            rootUrl = gitlabConfig.getGitlabRootUrl();
             apiToken = gitlabConfig.getGitlabApiToken();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -381,7 +382,7 @@ public class GitlabService {
      * get project url
      */
     public String getProjectUrl(String username, String projectName) {
-        return hostUrl + "/" + username + "/" + projectName + ".git";
+        return rootUrl + "/" + username + "/" + projectName + ".git";
     }
 
     /**
@@ -547,6 +548,7 @@ public class GitlabService {
 
     public void pushProject(String pushDirectoryPath,String proName) {
         String url = getProjectUrl("root",proName);
+
         Linux linux = new Linux();
         String[] addCommand = {"git", "add", "."};
         linux.execLinuxCommandInFile(addCommand, pushDirectoryPath);

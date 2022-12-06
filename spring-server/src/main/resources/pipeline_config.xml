@@ -48,7 +48,7 @@
             String compile_result = &quot;&quot;;
             String test_result=&quot;&quot;;
             }
-            stage(&apos;Clone the Git&apos;) {
+            stage(&apos;Git Clone&apos;) {
             if (env.BUILD_NUMBER .equals(&quot;1&quot;)) {
             currentBuild.result = 'UNSTABLE'
             error('Stopping early…')
@@ -57,7 +57,7 @@
             String url = &quot;{GitLab-url}/root/&quot;+ env.JOB_BASE_NAME +&quot;.git&quot;
             git branch: &apos;main&apos;, credentialsId: &apos;	gitlab-cridential&apos;, url: url
             }
-            stage(&apos;Prepare testfile&apos;){
+            stage(&apos;Prepare Testfile&apos;){
 
 
             //get project name
@@ -147,14 +147,14 @@
             }
             }
             }
-            stage(&apos;SonarQube analysis&apos;) {
+            stage(&apos;SonarQube Analysis&apos;) {
             def scannerHome = tool &apos;sonarqube&apos;;
             def mvnHome = tool name: &apos;maven&apos;,type : &apos;maven&apos;
             withSonarQubeEnv(&apos;sonarqube&apos;) {
             sh &quot;${mvnHome}/bin/mvn sonar:sonar&quot;
             }
             }
-            stage(&apos;Get Sonar report&apos;){
+            stage(&apos;Get Sonar Report&apos;){
             //echo &apos;${env.WORKSPACE}/target/surefire-reports/TEST-*.xml&apos;
             def summary = junit allowEmptyResults: true,testResults: &apos;**/target/surefire-reports/TEST-*.xml&apos;
             echo &quot;${summary.totalCount}&quot;
@@ -172,7 +172,7 @@
             }
             }
             }
-            stage(&apos;Post Process&apos;){
+            stage(&apos;Clean Workspace&apos;){
             String NAME =  env.JOB_BASE_NAME
             cleanWs()
             dir(&apos;../&apos;){
