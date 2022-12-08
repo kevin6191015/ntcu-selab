@@ -113,6 +113,7 @@
 </template>
 
 <script scoped>
+// import store from '@/store'
 import { AddQuestionbank2, AddSourceocde, ShowSelectedQuestion1, ShowSelectedQuestion2, getLatestQuestionID, ShowQuestion2 } from '@/api/question'
 export default {
   name: 'AddQuestion',
@@ -428,6 +429,7 @@ export default {
       var img = new Image()
       img.crossOrigin = 'Anonymous'
       img.src = url
+      var _this = this
       img.onload = function () {
         canvas.height = img.height
         canvas.width = img.width
@@ -436,7 +438,7 @@ export default {
         canvas = null
         // upload to imgur
         var myHeaders = new Headers()
-        myHeaders.append('Authorization', 'Client-ID de2ed01ef5866f3')
+        myHeaders.append('Authorization', 'Client-ID e513b6df4142b1c')
         var formdata = new FormData()
         formdata.append('image', dataURL.replace('data:image/png;base64,', ''))
 
@@ -450,10 +452,10 @@ export default {
         fetch('https://api.imgur.com/3/image', requestOptions)
           .then(response => response.text())
           .then(result => {
-            if (this.$store.state.imagelink) {
-              this.$store.commit('SET_IMAGELINK', this.$store.state.imagelink + ',' + JSON.parse(result).data.link)
+            if (_this.$store.state.imagelink) {
+              _this.$store.commit('SET_IMAGELINK', _this.$store.state.imagelink + ',' + JSON.parse(result).data.link)
             } else {
-              this.$store.commit('SET_IMAGELINK', JSON.parse(result).data.link)
+              _this.$store.commit('SET_IMAGELINK', JSON.parse(result).data.link)
             }
           })
           .catch(error => console.log('error', error))
